@@ -1,0 +1,876 @@
+/*
+==========================================
+FinanceFlow
+Archivo: responsive-final.css
+
+Ajustes FINALES de adaptación (celular, tablet y escritorio)
+y de rendimiento. Se carga al final de todos los CSS y solo
+corrige tamaños, ubicación y efectos costosos en pantallas
+pequeñas. No cambia funcionalidad ni datos.
+
+Contenido:
+  1. Base segura (sin desbordes horizontales)
+  2. Navegación: barra inferior con las 10 secciones (celular)
+     y menú lateral desplazable (tablet / celular horizontal)
+  3. Dashboard fluido en ≤ 1200 px (la página hace scroll normal)
+  4. Dashboard en celular (tarjetas compactas, 2 columnas)
+  5. Resto de páginas en celular
+  6. Rendimiento en pantallas táctiles / pequeñas
+==========================================
+*/
+
+
+/* =========================================================
+   1. BASE SEGURA
+========================================================= */
+
+html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+
+body {
+    overflow-x: hidden;
+}
+
+img,
+svg,
+video,
+canvas {
+    max-width: 100%;
+}
+
+/* Un grid/flex hijo nunca debe empujar más allá de su contenedor */
+.main-content,
+.main-content > * {
+    min-width: 0;
+}
+
+/* Objetivos táctiles cómodos */
+@media (hover: none) and (pointer: coarse) {
+    button,
+    [role="button"],
+    .sidebar-menu li,
+    select {
+        touch-action: manipulation;
+    }
+}
+
+
+/* =========================================================
+   2. NAVEGACIÓN
+========================================================= */
+
+/* 2a. Tablet (601–900 px) y celular horizontal: el menú lateral
+       puede desplazarse si no caben las 10 secciones */
+@media (max-width: 900px) and (min-width: 601px) {
+    .sidebar-menu {
+        overflow-y: auto;
+        overflow-x: hidden;
+        scrollbar-width: none;
+        min-height: 0;
+    }
+
+    .sidebar-menu::-webkit-scrollbar {
+        display: none;
+    }
+}
+
+/* 2b. Celular: barra inferior con TODAS las secciones,
+       desplazable en horizontal */
+@media (max-width: 600px) {
+
+    .sidebar {
+        padding-bottom: calc(8px + env(safe-area-inset-bottom, 0px));
+        height: calc(68px + env(safe-area-inset-bottom, 0px));
+    }
+
+    /* Antes Crédito, Préstamos, Análisis y Reportes estaban ocultos */
+    .sidebar-menu li[data-view="credit"],
+    .sidebar-menu li[data-view="loans"],
+    .sidebar-menu li[data-view="analysis"],
+    .sidebar-menu li[data-view="reports"] {
+        display: flex !important;
+        margin-top: 0;
+    }
+
+    .sidebar-menu {
+        overflow-x: auto;
+        overflow-y: hidden;
+        scrollbar-width: none;
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior-x: contain;
+        scroll-snap-type: x proximity;
+    }
+
+    .sidebar-menu::-webkit-scrollbar {
+        display: none;
+    }
+
+    .sidebar-menu ul {
+        width: max-content;
+        min-width: 100%;
+        justify-content: flex-start;
+        gap: 4px;
+        padding: 0 2px;
+    }
+
+    .sidebar-menu li {
+        flex: 0 0 48px !important;
+        min-width: 48px;
+        scroll-snap-align: center;
+    }
+
+    /* La línea separadora de "Crédito" no aplica en horizontal */
+    .sidebar-menu li[data-view="credit"]::after {
+        display: none;
+    }
+
+    .main-content {
+        padding-bottom: calc(92px + env(safe-area-inset-bottom, 0px));
+    }
+}
+
+
+/* =========================================================
+   3. DASHBOARD FLUIDO (≤ 1200 px)
+   El encabezado deja de ser fijo y todo el Dashboard hace
+   scroll como una página normal: se aprovecha toda la pantalla.
+========================================================= */
+
+@media (max-width: 1200px) {
+
+    html:has(#dashboardView.active) {
+        overflow-y: auto;
+        scroll-snap-type: none !important;
+    }
+
+    body:has(#dashboardView.active) .main-content {
+        height: auto;
+        min-height: 100vh;
+        overflow: visible;
+        display: block;
+    }
+
+    #dashboardView.active {
+        display: block;
+    }
+
+    #dashboardView.active > .dashboard-summary-grid {
+        overflow: visible;
+        scroll-snap-type: none;
+        margin: 0;
+        padding: 0 0 24px;
+        min-height: 0;
+    }
+
+    #dashboardView .dashboard-hero {
+        position: relative;
+        margin-bottom: 14px;
+    }
+
+    /* Las filas se ajustan a su contenido */
+    #dashboardView .dashboard-summary-grid {
+        grid-template-rows: none;
+        grid-auto-rows: auto;
+    }
+
+    /* Tarjetas del dashboard: mismo ritmo vertical */
+    #dashboardView .dashboard-summary-grid > * {
+        scroll-snap-align: none;
+    }
+
+    #dashboardView .dashboard-summary-card {
+        min-height: 0;
+    }
+}
+
+/* Tablet (601–1200): tarjetas de resumen en 2 columnas */
+@media (max-width: 1200px) and (min-width: 721px) {
+    #dashboardView .dashboard-summary-grid > .income-expense-flip-card {
+        grid-column: 1 / -1 !important;
+    }
+
+    #dashboardView .dashboard-summary-grid > .savings-card,
+    #dashboardView .dashboard-summary-grid > .available-card {
+        grid-column: span 6 !important;
+    }
+
+    #dashboardView .dashboard-summary-grid .net-worth-card {
+        grid-column: 1 / -1 !important;
+    }
+}
+
+
+/* =========================================================
+   4. DASHBOARD EN CELULAR (≤ 720 px)
+========================================================= */
+
+@media (max-width: 720px) {
+
+    /* ---- Encabezado compacto ---- */
+    #dashboardView .dashboard-hero {
+        padding: 14px 14px 12px;
+        border-radius: 20px;
+    }
+
+    #dashboardView .dashboard-hero-greeting h1,
+    #dashboardView .dashboard-hero-greeting h2 {
+        font-size: 1.25rem;
+        line-height: 1.2;
+    }
+
+    /* Acciones rápidas: 3 columnas × 2 filas, solo icono + texto corto */
+    #dashboardView .dashboard-hero .quick-actions-row {
+        gap: 10px;
+    }
+
+    #dashboardView .dashboard-hero .quick-actions-row .quick-actions-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 8px;
+    }
+
+    #dashboardView .dashboard-hero .quick-actions-grid button {
+        flex-direction: column;
+        gap: 4px;
+        min-height: 62px;
+        padding: 8px 4px;
+        font-size: 0.7rem;
+        line-height: 1.15;
+        text-align: center;
+    }
+
+    #dashboardView .dashboard-hero .quick-actions-grid button span:last-child {
+        white-space: normal;
+    }
+
+    #dashboardView .dashboard-hero .quick-actions-row .dashboard-hero-date {
+        min-height: 0;
+        padding: 6px 4px 0;
+    }
+
+    /* ---- Cuadrícula de resumen ---- */
+    #dashboardView .dashboard-summary-grid {
+        gap: 12px;
+    }
+
+    #dashboardView .dashboard-summary-grid > .income-expense-flip-card {
+        grid-column: 1 / -1 !important;
+    }
+
+    /* Ahorro y Disponible lado a lado */
+    #dashboardView .dashboard-summary-grid > .savings-card,
+    #dashboardView .dashboard-summary-grid > .available-card {
+        grid-column: span 6 !important;
+    }
+
+    #dashboardView .dashboard-summary-grid .net-worth-card {
+        grid-column: 1 / -1 !important;
+    }
+
+    #dashboardView .dashboard-summary-card {
+        padding: 14px;
+        border-radius: 16px;
+    }
+
+    #dashboardView .dashboard-summary-card .dashboard-card-header {
+        gap: 10px;
+    }
+
+    #dashboardView .dashboard-summary-card .dashboard-card-icon {
+        width: 34px;
+        height: 34px;
+        flex: 0 0 34px;
+        font-size: 0.95rem;
+    }
+
+    /* Montos: nunca se cortan; se reducen o pasan a otra línea */
+    #dashboardView .card-title-amount h2,
+    #dashboardView .dashboard-summary-card h2 {
+        font-size: clamp(1.05rem, 5.2vw, 1.35rem);
+        line-height: 1.15;
+        overflow-wrap: anywhere;
+        white-space: normal;
+    }
+
+    #dashboardView .dashboard-card-title {
+        font-size: 0.78rem;
+    }
+
+    /* Ingresos | Gastos: se mantienen lado a lado, más compactos */
+    #dashboardView .income-expense-cards {
+        gap: 10px !important;
+        padding: 0 10px 12px;
+    }
+
+    #dashboardView .income-expense-cards .dashboard-summary-card {
+        padding: 12px 10px;
+    }
+
+    #dashboardView .income-expense-cards .dashboard-card-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    /* ---- Control de gastos ---- */
+    #dashboardView .budget-card {
+        padding: 14px;
+    }
+
+    /* ---- Mis tarjetas ---- */
+    #dashboardView .ffc-distribution-panel {
+        padding: 14px;
+    }
+
+    #dashboardView .ffc-donut-wrap {
+        width: 130px;
+        height: 130px;
+    }
+
+    /* ---- Mis metas: carrusel más bajo ---- */
+    #dashboardView .ffc-goals-viewport {
+        height: 340px;
+    }
+
+    #dashboardView .ffc-goal-card[data-position="0"] {
+        transform: translate3d(0, -125px, -175px) scale(.74);
+    }
+
+    #dashboardView .ffc-goal-card[data-position="2"] {
+        transform: translate3d(0, 125px, -175px) scale(.74);
+    }
+
+    #dashboardView .ffc-goal-card {
+        padding: 20px 16px 44px;
+    }
+
+    /* ---- Últimos movimientos / Próximos eventos ---- */
+    #dashboardView .dashboard-cell-movements,
+    #dashboardView .dashboard-cell-events {
+        min-height: 0;
+    }
+}
+
+/* Celulares muy angostos */
+@media (max-width: 360px) {
+    #dashboardView .dashboard-hero .quick-actions-grid button {
+        font-size: 0.66rem;
+        min-height: 58px;
+    }
+
+    #dashboardView .income-expense-cards .dashboard-summary-card {
+        padding: 10px 8px;
+    }
+}
+
+
+/* =========================================================
+   4b. DASHBOARD MÓVIL · MÁS COMPACTO Y ORDENADO
+   (solo celular: el escritorio / laptop no cambia)
+========================================================= */
+
+@media (max-width: 720px) {
+
+    /* ---- Encabezado: título + campana/perfil, 6 acciones y fecha ---- */
+    #dashboardView .dashboard-hero {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        gap: 8px;
+        padding: 10px 12px 11px;
+        border-radius: 18px;
+        margin-bottom: 10px;
+    }
+
+    /* Los contenedores intermedios se "disuelven" para poder ordenar:
+       1) título  2) acciones  3) fecha */
+    #dashboardView .dashboard-hero-content,
+    #dashboardView .dashboard-hero-text,
+    #dashboardView .dashboard-hero .quick-actions-row {
+        display: contents;
+    }
+
+    #dashboardView .dashboard-hero-top {
+        order: 1;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        margin: 0;
+        padding: 0 0 8px;
+    }
+
+    #dashboardView .dashboard-hero .quick-actions-grid { order: 2; }
+    #dashboardView .dashboard-hero .dashboard-hero-date { order: 3; }
+
+    /* Título: ruta pequeña arriba y saludo en una sola línea */
+    #dashboardView .dashboard-hero-context {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+        gap: 0 5px;
+        min-width: 0;
+        flex: 1 1 auto;
+    }
+
+    #dashboardView .dashboard-hero-brand,
+    #dashboardView .dashboard-hero-separator,
+    #dashboardView .dashboard-hero-context h2 {
+        font-size: 0.68rem;
+        line-height: 1.2;
+        margin: 0;
+    }
+
+    #dashboardView .dashboard-hero-greeting {
+        flex: 0 0 100%;
+        min-width: 0;
+    }
+
+    #dashboardView .dashboard-hero-greeting p {
+        margin: 1px 0 0;
+        font-size: 1.02rem;
+        line-height: 1.25;
+        font-weight: 800;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    /* Campana y perfil más pequeños (el perfil queda solo con el avatar) */
+    #dashboardView .dashboard-hero-actions {
+        flex: 0 0 auto;
+        gap: 6px;
+    }
+
+    #dashboardView .header-icon-button {
+        width: 34px;
+        height: 34px;
+    }
+
+    #dashboardView .profile-button {
+        padding: 3px 7px 3px 3px;
+        gap: 4px;
+        min-height: 0;
+    }
+
+    #dashboardView .profile-button .profile-summary {
+        display: none;
+    }
+
+    #dashboardView .profile-button .profile-avatar {
+        width: 28px;
+        height: 28px;
+        font-size: 0.8rem;
+    }
+
+    /* Acciones rápidas: 3 × 2, icono + texto en una línea */
+    #dashboardView .dashboard-hero .quick-actions-row .quick-actions-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 6px;
+    }
+
+    #dashboardView .dashboard-hero .quick-actions-grid button {
+        flex-direction: row;
+        justify-content: flex-start;
+        gap: 5px;
+        min-height: 36px;
+        height: 36px;
+        padding: 0 7px;
+        border-radius: 11px;
+        font-size: 0.64rem;
+        font-weight: 700;
+        line-height: 1;
+        text-align: left;
+    }
+
+    #dashboardView .dashboard-hero .quick-actions-grid button span:first-child {
+        font-size: 0.95rem;
+        flex: 0 0 auto;
+        line-height: 1;
+    }
+
+    #dashboardView .dashboard-hero .quick-actions-grid button span:last-child {
+        font-size: clamp(0.54rem, 2.5vw, 0.68rem);
+        font-weight: 650;
+        letter-spacing: -0.01em;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        min-width: 0;
+    }
+
+    /* Fecha: una sola línea fina, sin recuadro */
+    #dashboardView .dashboard-hero .quick-actions-row .dashboard-hero-date {
+        flex-direction: row;
+        align-items: baseline;
+        justify-content: flex-start;
+        gap: 6px;
+        min-height: 0;
+        margin: 0;
+        padding: 2px 2px 0;
+        border: 0;
+        background: none;
+        box-shadow: none;
+        white-space: nowrap;
+    }
+
+    #dashboardView .dashboard-hero-date .dashboard-date-label {
+        font-size: 0.6rem;
+    }
+
+    #dashboardView .dashboard-hero-date strong {
+        font-size: 0.78rem;
+        font-weight: 700;
+    }
+
+    /* ---- Resumen más apretado ---- */
+    #dashboardView .dashboard-summary-grid {
+        gap: 10px;
+    }
+
+    #dashboardView .flip-card-header {
+        padding: 8px 14px 0;
+        min-height: 0;
+    }
+
+    /* Ingresos | Gastos: altura ajustada al contenido (antes 144 px) */
+    #dashboardView .income-expense-flip-card,
+    #dashboardView .income-expense-flip-card .flip-inner,
+    #dashboardView .income-expense-flip-card .flip-face {
+        min-height: 112px;
+    }
+
+    #dashboardView .income-expense-cards {
+        padding: 4px 10px 10px;
+    }
+
+    #dashboardView .income-expense-cards .dashboard-summary-card {
+        padding: 10px;
+    }
+
+    #dashboardView .income-expense-cards .dashboard-card-header {
+        flex-direction: row;
+        align-items: center;
+        gap: 8px;
+    }
+
+    #dashboardView .dashboard-summary-card {
+        padding: 10px 12px;
+    }
+
+    #dashboardView .dashboard-summary-card .dashboard-card-icon {
+        width: 30px;
+        height: 30px;
+        flex-basis: 30px;
+        border-radius: 9px;
+        font-size: 0.85rem;
+    }
+
+    #dashboardView .budget-card {
+        padding: 12px 14px;
+    }
+
+    /* ---- Mis tarjetas: gráfico y leyenda en horizontal ---- */
+    #dashboardView .ffc-financial-stage {
+        gap: 8px;
+    }
+
+    #dashboardView .ffc-distribution-panel {
+        padding: 12px;
+        display: grid;
+        grid-template-columns: 112px minmax(0, 1fr);
+        grid-template-areas:
+            "head head"
+            "donut legend";
+        align-items: center;
+        gap: 6px 12px;
+    }
+
+    #dashboardView .ffc-distribution-header { grid-area: head; margin: 0; }
+    #dashboardView .ffc-donut-wrap {
+        grid-area: donut;
+        width: 112px;
+        height: 112px;
+        margin: 0;
+    }
+    #dashboardView .ffc-distribution-legend {
+        grid-area: legend;
+        display: grid;
+        gap: 4px;
+        margin: 0;
+    }
+
+    #dashboardView .ffc-legend-item {
+        width: 100%;
+        padding: 4px 8px;
+    }
+
+    /* El carrusel trae aire vertical de sobra: se recorta para encajar */
+    #dashboardView .ffc-cards-carousel {
+        margin: -26px 0 -8px;
+    }
+
+    #dashboardView .ffc-active-card-info {
+        padding: 12px 14px;
+        gap: 8px 16px;
+    }
+
+    #dashboardView .ffc-active-details {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px 14px;
+    }
+
+    #dashboardView .ffc-cards-header,
+    #dashboardView .ffc-goals-header {
+        margin-bottom: 8px;
+    }
+
+    /* ---- Metas, movimientos y eventos ---- */
+    #dashboardView .ffc-goals-viewport {
+        height: 300px;
+    }
+
+    #dashboardView .ffc-goals-empty {
+        padding: 12px;
+    }
+
+    #dashboardView .dashboard-info-stack,
+    #dashboardView .dashboard-side-stack {
+        gap: 10px;
+    }
+
+    #dashboardView .dashboard-cell-movements .card-body,
+    #dashboardView .dashboard-cell-events .card-body {
+        padding-top: 4px;
+    }
+
+    #dashboardView .dashboard-cell-movements .empty-state,
+    #dashboardView .dashboard-cell-events .empty-state {
+        padding: 10px 8px;
+    }
+}
+
+@media (max-width: 360px) {
+    #dashboardView .dashboard-hero .quick-actions-grid button {
+        gap: 3px;
+        padding: 0 5px;
+    }
+}
+
+/* Pantallas de 340 px o menos: el texto completo es más importante que el icono */
+@media (max-width: 340px) {
+    #dashboardView .dashboard-hero .quick-actions-grid button span:first-child {
+        font-size: 0.8rem;
+    }
+
+    #dashboardView .dashboard-hero .quick-actions-grid button {
+        gap: 2px;
+        padding: 0 4px;
+    }
+
+    #dashboardView .dashboard-hero .quick-actions-grid button span:last-child {
+        font-size: 0.52rem;
+        letter-spacing: -0.02em;
+    }
+}
+
+
+/* =========================================================
+   5. RESTO DE PÁGINAS EN CELULAR
+========================================================= */
+
+@media (max-width: 600px) {
+
+    .page-header h1 {
+        font-size: 1.5rem;
+    }
+
+    /* Modales: caben en pantalla (con barra del navegador móvil),
+       con scroll interno y el botón de guardar siempre alcanzable */
+    .modal-overlay {
+        padding: 10px 10px calc(10px + env(safe-area-inset-bottom, 0px));
+    }
+
+    .modal {
+        max-height: 90vh;
+        max-height: calc(100dvh - 20px);
+        overscroll-behavior: contain;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* Tablas con scroll horizontal propio, sin romper la página */
+    .table-container {
+        max-width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+}
+
+@media (max-width: 720px) {
+
+    /* ---- Resúmenes (Cuentas, Movimientos, Metas…): 2 columnas;
+          si queda uno suelto, ocupa todo el ancho ---- */
+    .accounts-summary > :last-child:nth-child(odd) {
+        grid-column: 1 / -1;
+    }
+
+    .accounts-summary-item {
+        min-width: 0;
+    }
+
+    .accounts-summary-value {
+        font-size: clamp(1rem, 5vw, 1.3rem);
+        overflow-wrap: anywhere;
+    }
+
+    /* ---- Filtros: selectores en 2 columnas para ahorrar altura ---- */
+    #accountsView .accounts-filters,
+    .page-view .loans-filters,
+    #movementsView .movements-filters-card .movements-filters {
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 10px 12px;
+    }
+
+    .accounts-filters > .form-group,
+    .loans-filters > .form-group,
+    .movements-filters > .form-group {
+        margin: 0;
+        min-width: 0;
+    }
+
+    /* El campo de búsqueda (último) ocupa toda la fila */
+    .loans-filters > .form-group:last-child,
+    .movements-filters > .form-group:last-child {
+        grid-column: 1 / -1;
+    }
+
+    /* ---- Préstamos y Calendario: tarjetas de resumen compactas ---- */
+    #calendarView .summary-grid,
+    .page-view .loans-summary,
+    #creditView .credit-summary {
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 12px;
+    }
+
+    #calendarView .summary-grid > .card:last-child:nth-child(odd),
+    .page-view .loans-summary > .card:last-child:nth-child(odd),
+    #creditView .credit-summary > .card:last-child:nth-child(odd) {
+        grid-column: 1 / -1;
+    }
+
+    .page-view:not(#dashboardView) .summary-card .card-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .page-view:not(#dashboardView) .summary-card {
+        min-height: 0 !important;
+        padding: 14px !important;
+    }
+
+    .summary-card .card-title {
+        font-size: 0.7rem;
+        letter-spacing: 0.04em;
+        overflow-wrap: anywhere;
+    }
+
+    .summary-card .card-body h2 {
+        font-size: clamp(1.1rem, 5.4vw, 1.45rem);
+        overflow-wrap: anywhere;
+    }
+
+    .summary-card .card-description {
+        font-size: 0.78rem;
+        line-height: 1.35;
+    }
+
+    /* ---- Crédito ---- */
+    #creditView .credit-summary > .card {
+        min-height: 0 !important;
+        padding: 14px 14px 14px 18px !important;
+    }
+
+    .credit-summary .card-body h2 {
+        font-size: clamp(1.1rem, 5.4vw, 1.45rem);
+        overflow-wrap: anywhere;
+    }
+
+    /* ---- Análisis: tarjetas ajustadas a su contenido ---- */
+    #analysisView .analysis-sections {
+        gap: 12px;
+    }
+
+    #analysisView .analysis-sections > .card {
+        min-height: 0 !important;
+        height: auto !important;
+    }
+
+    /* ---- Estados vacíos más bajos ---- */
+    .empty-state {
+        padding: 22px 16px;
+    }
+
+    /* ---- Calendario ---- */
+    .ffcal-layout {
+        gap: 12px;
+    }
+
+    .ffcal-toolbar {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+}
+
+
+/* =========================================================
+   6. RENDIMIENTO
+   El desenfoque (backdrop-filter) sobre decenas de tarjetas es lo
+   más costoso para la GPU del celular. En pantallas táctiles /
+   pequeñas se sustituye por el mismo fondo translúcido sin blur,
+   y se conserva solo en la barra de navegación inferior.
+========================================================= */
+
+@media (max-width: 900px), (hover: none) and (pointer: coarse) {
+
+    *,
+    *::before,
+    *::after {
+        -webkit-backdrop-filter: none !important;
+        backdrop-filter: none !important;
+    }
+
+    /* Se conserva el blur SOLO donde hay texto detrás que tapar:
+       barra de navegación, panel de notificaciones, avisos y acceso */
+    .sidebar,
+    .notifications-panel,
+    .finance-notification,
+    .auth-card {
+        -webkit-backdrop-filter: blur(14px) !important;
+        backdrop-filter: blur(14px) !important;
+    }
+
+    /* Paneles flotantes: fondo casi sólido para que nada se transparente */
+    .notifications-panel {
+        background-color: var(--surface-color, #ffffff);
+    }
+
+    /* Animaciones infinitas que repintan sin parar */
+    .ffc-bank-card.is-active::before,
+    .chart-bar::after {
+        animation: none !important;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+    }
+}

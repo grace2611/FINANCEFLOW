@@ -1,0 +1,614 @@
+/*
+==========================================
+FinanceFlow
+Archivo: theme-dark.css
+
+Modo oscuro. Se activa con <html data-theme="dark"> (botón sol/luna
+al final del sidebar, js/theme.js).
+
+1. Variables globales → todo lo que ya usa var(--…) cambia solo.
+2. Ajustes puntuales → zonas que tenían colores fijos (blanco, gris…).
+
+Se carga al final: para quitar el modo oscuro basta con quitar su <link>.
+==========================================
+*/
+
+
+/* =========================================================
+   1. VARIABLES
+========================================================= */
+
+:root[data-theme="dark"] {
+
+    color-scheme: dark;
+
+    --background-color: #0A0F1E;
+    --surface-color: #121A2E;
+
+    --text-primary: #E8ECF6;
+    --text-secondary: #94A3B8;
+
+    --border-color: rgba(148, 163, 184, 0.16);
+
+    --primary-color: #4F8BFF;
+    --primary-dark: #2F6DF0;
+    --primary-light: rgba(79, 139, 255, 0.16);
+
+    --success-color: #34D399;
+    --success-light: rgba(52, 211, 153, 0.14);
+
+    --warning-color: #FBBF24;
+    --warning-light: rgba(251, 191, 36, 0.14);
+
+    --danger-color: #F87171;
+    --danger-light: rgba(248, 113, 113, 0.14);
+
+    --goal-light: rgba(212, 160, 23, 0.16);
+
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.35);
+    --shadow-md: 0 10px 28px rgba(0, 0, 0, 0.40);
+    --shadow-lg: 0 24px 60px rgba(0, 0, 0, 0.55);
+
+    /* tokens propios (glass) */
+    --dk-glass: rgba(20, 28, 48, 0.62);
+    --dk-glass-solid: rgba(20, 28, 48, 0.88);
+    --dk-glass-edge: rgba(255, 255, 255, 0.075);
+    --dk-soft: rgba(255, 255, 255, 0.055);
+    --dk-card: #131C31;
+    --dk-card-2: #182339;
+}
+
+
+/* Transición suave solo mientras se cambia de tema */
+html.theme-changing,
+html.theme-changing *,
+html.theme-changing *::before,
+html.theme-changing *::after {
+    transition:
+        background-color 0.35s ease,
+        border-color 0.35s ease,
+        color 0.35s ease,
+        box-shadow 0.35s ease,
+        fill 0.35s ease,
+        stroke 0.35s ease !important;
+}
+
+
+/* =========================================================
+   2. BASE
+========================================================= */
+
+:root[data-theme="dark"] body {
+    background: var(--background-color);
+    color: var(--text-primary);
+}
+
+:root[data-theme="dark"] ::-webkit-scrollbar-thumb {
+    background: rgba(148, 163, 184, 0.28);
+}
+
+:root[data-theme="dark"] ::selection {
+    background: rgba(79, 139, 255, 0.35);
+}
+
+
+/* =========================================================
+   3. SIDEBAR
+========================================================= */
+
+:root[data-theme="dark"] .sidebar {
+
+    --sidebar-text: #94A3B8;
+    --sidebar-text-strong: #F1F5F9;
+    --sidebar-hover: rgba(255, 255, 255, 0.06);
+
+    --sm-glass: rgba(12, 18, 34, 0.62);
+    --sm-glass-edge: rgba(255, 255, 255, 0.07);
+    --sm-chip: rgba(255, 255, 255, 0.05);
+    --sm-divider: rgba(255, 255, 255, 0.09);
+
+    box-shadow:
+        12px 0 44px rgba(0, 0, 0, 0.35),
+        inset -1px 0 0 rgba(255, 255, 255, 0.04);
+}
+
+:root[data-theme="dark"] .sidebar-menu li:hover .nav-icon {
+    background: rgba(79, 139, 255, 0.18);
+    color: #93B8FF;
+}
+
+:root[data-theme="dark"] .theme-seg-knob {
+    background: rgba(99, 132, 255, 0.28);
+    box-shadow:
+        0 4px 14px rgba(0, 0, 0, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.14);
+}
+
+:root[data-theme="dark"] .sidebar-toggle {
+    background: #1B2640;
+    color: #E2E8F0;
+    border-color: rgba(255, 255, 255, 0.10);
+}
+
+
+/* =========================================================
+   4. DASHBOARD
+========================================================= */
+
+:root[data-theme="dark"] #dashboardView {
+    --dr-surface: var(--dk-glass);
+    --dr-surface-solid: var(--dk-glass-solid);
+    --dr-border: 1px solid var(--dk-glass-edge);
+    --dr-shadow: 0 18px 50px rgba(0, 0, 0, 0.38);
+    --dr-shadow-hover: 0 24px 60px rgba(0, 0, 0, 0.5);
+    --dr-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    --dr-divider: rgba(255, 255, 255, 0.08);
+    --dr-soft: rgba(255, 255, 255, 0.06);
+    --dr-muted: #7C8BA5;
+}
+
+:root[data-theme="dark"] #dashboardView .dashboard-hero {
+    background: var(--dk-glass);
+}
+
+:root[data-theme="dark"] .dashboard-card-title,
+:root[data-theme="dark"] .flip-card-kicker,
+:root[data-theme="dark"] .chart-label,
+:root[data-theme="dark"] .dashboard-card-description {
+    color: var(--text-secondary);
+}
+
+:root[data-theme="dark"] .card-title-amount h2,
+:root[data-theme="dark"] .dashboard-card-body h2,
+:root[data-theme="dark"] .flip-card-title,
+:root[data-theme="dark"] .chart-value,
+:root[data-theme="dark"] .income-expense-cards .card-title-amount h2 {
+    color: var(--text-primary);
+}
+
+:root[data-theme="dark"] .dashboard-card-icon {
+    background:
+        color-mix(
+            in srgb,
+            var(--dashboard-accent) 22%,
+            transparent
+        );
+}
+
+:root[data-theme="dark"] .quick-actions-grid button {
+    color: var(--text-primary);
+}
+
+:root[data-theme="dark"] #dashboardView .quick-actions-grid button:hover {
+    background: rgba(255, 255, 255, 0.11);
+    border-color: rgba(79, 139, 255, 0.4);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+}
+
+:root[data-theme="dark"] .dashboard-hero h1,
+:root[data-theme="dark"] .dashboard-hero-date strong,
+:root[data-theme="dark"] .profile-summary strong {
+    color: var(--text-primary);
+}
+
+:root[data-theme="dark"] .header-icon-button,
+:root[data-theme="dark"] .profile-button {
+    background: var(--dk-soft);
+    color: var(--text-primary);
+}
+
+:root[data-theme="dark"] .header-icon-button:hover,
+:root[data-theme="dark"] .profile-button:hover {
+    background: rgba(255, 255, 255, 0.10);
+}
+
+/* Control de gastos */
+:root[data-theme="dark"] .budget-progress-track {
+    background: rgba(255, 255, 255, 0.06);
+}
+
+:root[data-theme="dark"] .budget-progress-marker {
+    background: #E8ECF6;
+    color: #0A0F1E;
+    border-color: #0A0F1E;
+}
+
+:root[data-theme="dark"] #dashboardView .budget-message-good    { background: rgba(52, 211, 153, 0.12); }
+:root[data-theme="dark"] #dashboardView .budget-message-warning { background: rgba(251, 191, 36, 0.12); }
+:root[data-theme="dark"] #dashboardView .budget-message-danger  { background: rgba(248, 113, 113, 0.12); }
+
+:root[data-theme="dark"] .budget-amount-row strong,
+:root[data-theme="dark"] .budget-limit-block strong,
+:root[data-theme="dark"] .budget-detail-item strong {
+    color: var(--text-primary);
+}
+
+/* Movimientos / eventos */
+:root[data-theme="dark"] .movement-name,
+:root[data-theme="dark"] .timeline-content strong {
+    color: var(--text-primary);
+}
+
+:root[data-theme="dark"] #dashboardView .dashboard-cell-movements .movement-icon,
+:root[data-theme="dark"] #dashboardView .timeline-date {
+    background: var(--dk-soft);
+    color: var(--text-primary);
+}
+
+:root[data-theme="dark"] .timeline-delete:hover {
+    background: var(--dk-soft);
+}
+
+:root[data-theme="dark"] .empty-state {
+    background: transparent;
+    border-color: var(--border-color);
+}
+
+:root[data-theme="dark"] .empty-state h4 {
+    color: var(--text-primary);
+}
+
+
+/* =========================================================
+   5. MIS TARJETAS + MIS METAS
+========================================================= */
+
+:root[data-theme="dark"] .ffc-carousels-root {
+    --background: #0A0F1E;
+    --text-main: #E8ECF6;
+    --text-muted: #94A3B8;
+    --surface: rgba(20, 28, 48, 0.62);
+}
+
+:root[data-theme="dark"] .ffc-carousels-root h1,
+:root[data-theme="dark"] .ffc-carousels-root h2,
+:root[data-theme="dark"] .ffc-carousels-root h3,
+:root[data-theme="dark"] .ffc-carousels-root h4,
+:root[data-theme="dark"] .ffc-carousels-root strong,
+:root[data-theme="dark"] .ffc-card-counter,
+:root[data-theme="dark"] .ffc-goal-counter,
+:root[data-theme="dark"] .ffc-donut-center span,
+:root[data-theme="dark"] .ffc-donut-center strong {
+    color: var(--text-primary);
+}
+
+:root[data-theme="dark"] .ffc-eyebrow,
+:root[data-theme="dark"] .ffc-mini-label,
+:root[data-theme="dark"] .ffc-info-label,
+:root[data-theme="dark"] .ffc-money-label,
+:root[data-theme="dark"] .ffc-donut-center small,
+:root[data-theme="dark"] .ffc-counter-divider {
+    color: #7C8BA5;
+}
+
+:root[data-theme="dark"] .ffc-goal-card {
+    border-color: var(--dk-glass-edge);
+    background: rgba(20, 28, 48, 0.78);
+    box-shadow:
+        0 24px 65px rgba(0, 0, 0, 0.45),
+        inset 0 1px rgba(255, 255, 255, 0.06);
+}
+
+:root[data-theme="dark"] .ffc-goal-card[data-position="1"] {
+    box-shadow:
+        0 36px 95px rgba(0, 0, 0, 0.6),
+        0 8px 24px rgba(0, 0, 0, 0.3),
+        inset 0 1px rgba(255, 255, 255, 0.07);
+}
+
+:root[data-theme="dark"] .ffc-goal-icon,
+:root[data-theme="dark"] .ffc-goal-tag,
+:root[data-theme="dark"] .ffc-goal-control,
+:root[data-theme="dark"] .ffc-carousel-button {
+    background: rgba(255, 255, 255, 0.09);
+    color: var(--text-primary);
+    border-color: var(--dk-glass-edge);
+}
+
+:root[data-theme="dark"] .ffc-goal-dot.active,
+:root[data-theme="dark"] .ffc-carousel-dot.active {
+    background: #E8ECF6;
+}
+
+:root[data-theme="dark"] .ffc-goals-viewport::before {
+    background: linear-gradient(to bottom, #0A0F1E 0%, rgba(10, 15, 30, 0.8) 48%, transparent 100%);
+}
+
+:root[data-theme="dark"] .ffc-goals-viewport::after {
+    background: linear-gradient(to top, #0A0F1E 0%, rgba(10, 15, 30, 0.8) 48%, transparent 100%);
+}
+
+:root[data-theme="dark"] .ffc-distribution-panel,
+:root[data-theme="dark"] .ffc-active-card-info {
+    border-color: var(--dk-glass-edge);
+    background: var(--dk-glass);
+    box-shadow: 0 18px 50px rgba(0, 0, 0, 0.35);
+}
+
+:root[data-theme="dark"] .ffc-distribution-panel::before {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+:root[data-theme="dark"] .ffc-legend-item.is-active {
+    background: rgba(255, 255, 255, 0.09);
+}
+
+:root[data-theme="dark"] .ffc-donut-track {
+    stroke: rgba(255, 255, 255, 0.07);
+}
+
+:root[data-theme="dark"] .ffc-scroll-hint::after {
+    background: transparent;
+}
+
+
+/* =========================================================
+   6. OTRAS PÁGINAS (tarjetas, filtros, listas, formularios)
+========================================================= */
+
+:root[data-theme="dark"] .page-view:not(#dashboardView) .card,
+:root[data-theme="dark"] .settings-card,
+:root[data-theme="dark"] .page-view:not(#dashboardView) .accounts-summary-item,
+:root[data-theme="dark"] .account-card,
+:root[data-theme="dark"] .goal-card,
+:root[data-theme="dark"] .calendar-event,
+:root[data-theme="dark"] .loan-card,
+:root[data-theme="dark"] #accountsSummary > *,
+:root[data-theme="dark"] #accountsGrid .account-card,
+:root[data-theme="dark"] #accountsView .accounts-filter-card,
+:root[data-theme="dark"] #accountsView #openTransferModal,
+:root[data-theme="dark"] #movementsView .summary-card,
+:root[data-theme="dark"] #movementsView .movements-filters-card,
+:root[data-theme="dark"] #movementsView .movements-list-card {
+    background: var(--dk-glass-solid) !important;
+    border-color: var(--dk-glass-edge) !important;
+    color: var(--text-primary);
+    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.32) !important;
+}
+
+:root[data-theme="dark"] #accountsView #openTransferModal::before {
+    background: rgba(255, 255, 255, 0.06);
+}
+
+:root[data-theme="dark"] #movementsView .movement-item,
+:root[data-theme="dark"] .movements-list .movement-item {
+    background: transparent !important;
+    border-color: var(--border-color) !important;
+}
+
+:root[data-theme="dark"] #movementsView .movement-item:hover {
+    background: rgba(255, 255, 255, 0.05) !important;
+}
+
+:root[data-theme="dark"] #movementsView .movement-icon,
+:root[data-theme="dark"] .settings-row > span {
+    background: var(--dk-soft) !important;
+}
+
+:root[data-theme="dark"] .report-item,
+:root[data-theme="dark"] .settings-row,
+:root[data-theme="dark"] #movementsView .movements-list-header {
+    border-color: var(--border-color) !important;
+}
+
+:root[data-theme="dark"] .dashboard .progress-bar,
+:root[data-theme="dark"] .progress-bar {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+:root[data-theme="dark"] .page-heading h2,
+:root[data-theme="dark"] .page-header h2,
+:root[data-theme="dark"] h1,
+:root[data-theme="dark"] h2,
+:root[data-theme="dark"] h3,
+:root[data-theme="dark"] h4 {
+    color: var(--text-primary);
+}
+
+:root[data-theme="dark"] .page-heading p,
+:root[data-theme="dark"] .page-header p,
+:root[data-theme="dark"] .card-description,
+:root[data-theme="dark"] p {
+    color: var(--text-secondary);
+}
+
+/* Formularios */
+:root[data-theme="dark"] input,
+:root[data-theme="dark"] select,
+:root[data-theme="dark"] textarea,
+:root[data-theme="dark"] .page-view input,
+:root[data-theme="dark"] .page-view select,
+:root[data-theme="dark"] #accountsView .accounts-filters select,
+:root[data-theme="dark"] #movementsView .movements-filters input,
+:root[data-theme="dark"] #movementsView .movements-filters select {
+    background: rgba(255, 255, 255, 0.05) !important;
+    border-color: var(--border-color) !important;
+    color: var(--text-primary) !important;
+}
+
+:root[data-theme="dark"] input::placeholder,
+:root[data-theme="dark"] #movementsView .movements-filters input::placeholder {
+    color: #64748B;
+}
+
+:root[data-theme="dark"] select option {
+    background: #121A2E;
+    color: #E8ECF6;
+}
+
+:root[data-theme="dark"] .money-input span {
+    color: var(--text-secondary);
+}
+
+:root[data-theme="dark"] .btn-secondary,
+:root[data-theme="dark"] #accountsGrid .account-actions button {
+    background: rgba(255, 255, 255, 0.06) !important;
+    border-color: var(--border-color) !important;
+    color: var(--text-primary) !important;
+}
+
+:root[data-theme="dark"] .btn-secondary:hover,
+:root[data-theme="dark"] #accountsGrid .account-actions button:hover {
+    background: rgba(255, 255, 255, 0.11) !important;
+}
+
+/* Tablas */
+:root[data-theme="dark"] .transactions-table th {
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--text-secondary);
+}
+
+:root[data-theme="dark"] .transactions-table td {
+    border-color: var(--border-color);
+}
+
+
+/* =========================================================
+   7. MODALES, NOTIFICACIONES Y AVISOS
+========================================================= */
+
+:root[data-theme="dark"] .modal-overlay {
+    background: rgba(3, 6, 15, 0.62);
+}
+
+:root[data-theme="dark"] .modal {
+    background: #121A2E;
+    border: 1px solid var(--dk-glass-edge);
+    color: var(--text-primary);
+}
+
+:root[data-theme="dark"] .modal-close {
+    color: var(--text-secondary);
+}
+
+:root[data-theme="dark"] .notifications-panel {
+    background: rgba(18, 26, 46, 0.82);
+    border-color: var(--dk-glass-edge);
+    box-shadow: 0 28px 70px rgba(0, 0, 0, 0.6);
+}
+
+:root[data-theme="dark"] .notification-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+:root[data-theme="dark"] .notification-item.is-unread {
+    background: rgba(79, 139, 255, 0.12);
+}
+
+:root[data-theme="dark"] .notification-content strong {
+    color: var(--text-primary);
+}
+
+:root[data-theme="dark"] .finance-notification {
+    background: #182339;
+    color: var(--text-primary);
+}
+
+:root[data-theme="dark"] .profile-panel {
+    background: #121A2E;
+    color: var(--text-primary);
+}
+
+
+/* =========================================================
+   8. AJUSTES FINOS
+========================================================= */
+
+:root[data-theme="dark"] #accountsGrid .account-status {
+    background: rgba(52, 211, 153, 0.14);
+    color: #34D399;
+}
+
+:root[data-theme="dark"] #accountsGrid .account-actions button[data-action="deactivate-account"],
+:root[data-theme="dark"] #accountsGrid .account-actions button[data-action="activate-account"] {
+    background: rgba(255, 255, 255, 0.06) !important;
+    color: var(--text-primary) !important;
+}
+
+:root[data-theme="dark"] .account-status {
+    background: rgba(52, 211, 153, 0.14);
+    color: #34D399;
+}
+
+
+/* Líneas divisorias suaves (antes quedaban blancas) */
+:root[data-theme="dark"] [class*="-header"],
+:root[data-theme="dark"] [class*="header-"],
+:root[data-theme="dark"] .card-header,
+:root[data-theme="dark"] .settings-card-header,
+:root[data-theme="dark"] .modal-header {
+    border-color: var(--border-color) !important;
+}
+
+:root[data-theme="dark"] hr {
+    border-color: var(--border-color);
+}
+
+
+/* =========================================================
+   Cuentas · botones Editar / Desactivar / Activar (oscuro)
+========================================================= */
+
+:root[data-theme="dark"] #accountsGrid .account-card-actions button[data-action="edit-account"] {
+    background: rgba(79, 139, 255, 0.14) !important;
+    border-color: rgba(79, 139, 255, 0.28) !important;
+    color: #8FB4FF !important;
+}
+
+:root[data-theme="dark"] #accountsGrid .account-card-actions button[data-action="deactivate-account"] {
+    background: rgba(248, 113, 113, 0.12) !important;
+    border-color: rgba(248, 113, 113, 0.26) !important;
+    color: #F87171 !important;
+}
+
+:root[data-theme="dark"] #accountsGrid .account-card-actions button[data-action="reactivate-account"] {
+    background: rgba(52, 211, 153, 0.12) !important;
+    border-color: rgba(52, 211, 153, 0.26) !important;
+    color: #34D399 !important;
+}
+
+:root[data-theme="dark"] #accountsGrid .account-card-actions button:hover {
+    color: #ffffff !important;
+    border-color: transparent !important;
+}
+
+:root[data-theme="dark"] #accountsGrid .account-card-actions button[data-action="edit-account"]:hover {
+    background: linear-gradient(135deg, #2563EB, #7C3AED) !important;
+}
+
+:root[data-theme="dark"] #accountsGrid .account-card-actions button[data-action="deactivate-account"]:hover {
+    background: #DC2626 !important;
+}
+
+:root[data-theme="dark"] #accountsGrid .account-card-actions button[data-action="reactivate-account"]:hover {
+    background: #059669 !important;
+}
+
+
+/* =========================================================
+   GRÁFICO COMPARATIVO (anillo + balance)
+========================================================= */
+
+:root[data-theme="dark"] .chart-ring-text {
+    color: var(--text-primary);
+}
+
+:root[data-theme="dark"] .chart-ring-bg {
+    stroke: rgba(148, 163, 184, 0.22);
+}
+
+:root[data-theme="dark"] .chart-ring[data-level="good"]   { --ring-color: #34D399; }
+:root[data-theme="dark"] .chart-ring[data-level="warn"]   { --ring-color: #FBBF24; }
+:root[data-theme="dark"] .chart-ring[data-level="danger"] { --ring-color: #F87171; }
+
+:root[data-theme="dark"] .chart-balance-label,
+:root[data-theme="dark"] .chart-balance small {
+    color: var(--text-secondary);
+}
+
+:root[data-theme="dark"] .chart-balance strong        { color: #34D399; }
+:root[data-theme="dark"] .chart-balance strong.is-negative { color: #F87171; }
+
+:root[data-theme="dark"] .chart-summary {
+    border-left-color: rgba(148, 163, 184, 0.18);
+}

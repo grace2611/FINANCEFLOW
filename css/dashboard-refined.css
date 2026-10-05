@@ -1,0 +1,1767 @@
+/*
+==========================================
+FinanceFlow
+Archivo: dashboard-refined.css
+
+Descripción:
+Capa de DISEÑO del Dashboard, inspirada en Mis tarjetas /
+Mis metas: superficies blancas suaves, esquinas amplias,
+sombra difusa y muy poca decoración.
+
+- Solo cambia apariencia (color, bordes, sombras, tipografía,
+  espacio). No cambia estructura, tamaños de columnas ni JS.
+- Todo va dentro de #dashboardView, así que no afecta a las
+  demás páginas.
+- Se carga al FINAL. Para volver al diseño anterior basta con
+  quitar su <link> en index.html.
+==========================================
+*/
+
+
+/* =========================================================
+   0. TOKENS DE DISEÑO (editar aquí para ajustar todo)
+========================================================= */
+
+#dashboardView {
+    --dr-radius: 26px;
+    --dr-radius-sm: 16px;
+
+    --dr-surface: rgba(255, 255, 255, 0.92);
+    --dr-border: 1px solid rgba(226, 232, 240, 0.75);
+    --dr-shadow: 0 16px 44px rgba(15, 23, 42, 0.07);
+    --dr-shadow-hover: 0 22px 54px rgba(15, 23, 42, 0.10);
+
+    --dr-divider: rgba(226, 232, 240, 0.8);
+    --dr-soft: #F1F5F9;          /* fondo suave de chips y botones */
+    --dr-muted: #94A3B8;         /* texto terciario */
+
+    --dr-gap: 20px;
+}
+
+
+/* =========================================================
+   1. SUPERFICIE ÚNICA PARA TODAS LAS TARJETAS
+========================================================= */
+
+#dashboardView .dashboard-hero,
+#dashboardView .flip-face,
+#dashboardView .dashboard-summary-grid > .dashboard-summary-card,
+#dashboardView .dashboard-side-stack > .dashboard-summary-card,
+#dashboardView .budget-card,
+#dashboardView .dashboard-side-stack > .card {
+    border: var(--dr-border);
+    border-radius: var(--dr-radius);
+    background: var(--dr-surface);
+    box-shadow: var(--dr-shadow);
+}
+
+/* Sin barras de color arriba */
+#dashboardView .dashboard-summary-card,
+#dashboardView .flip-face {
+    border-top: var(--dr-border);
+}
+
+#dashboardView .budget-card::before {
+    display: none;
+}
+
+/* Un solo círculo decorativo, muy tenue (como en Mis metas) */
+#dashboardView .dashboard-summary-card::after,
+#dashboardView .flip-face::after,
+#dashboardView .dashboard-hero::after {
+    display: none;
+}
+
+#dashboardView .dashboard-summary-card::before,
+#dashboardView .flip-face::before {
+    opacity: 0.05;
+}
+
+#dashboardView .dashboard-hero::before {
+    display: none;
+}
+
+/* Movimiento más calmado al pasar el mouse */
+#dashboardView .dashboard-summary-grid > .dashboard-summary-card:hover,
+#dashboardView .dashboard-side-stack > .dashboard-summary-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(203, 213, 225, 0.9);
+    box-shadow: var(--dr-shadow-hover);
+}
+
+#dashboardView .dashboard-summary-card:hover::before {
+    transform: none;
+    opacity: 0.05;
+}
+
+/* Más aire entre tarjetas */
+#dashboardView .dashboard-summary-grid {
+    gap: var(--dr-gap);
+}
+
+#dashboardView .dashboard-side-stack {
+    gap: var(--dr-gap);
+}
+
+
+/* =========================================================
+   2. TARJETAS DE RESUMEN (Ahorro, Disponible, Patrimonio…)
+========================================================= */
+
+#dashboardView .dashboard-card-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 14px;
+    box-shadow: none;
+    font-size: 1.05rem;
+}
+
+#dashboardView .dashboard-summary-card:hover .dashboard-card-icon {
+    transform: none;
+    box-shadow: none;
+}
+
+#dashboardView .dashboard-card-title {
+    color: var(--text-secondary);
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0;
+}
+
+#dashboardView .card-title-amount h2 {
+    font-size: clamp(1.4rem, 1.9vw, 1.65rem);
+    font-weight: 800;
+    letter-spacing: -0.04em;
+}
+
+#dashboardView .dashboard-summary-card:hover .card-title-amount h2 {
+    transform: none;
+}
+
+/* Sin la rayita de color bajo el monto */
+#dashboardView .dashboard-card-body::after {
+    display: none;
+}
+
+#dashboardView .dashboard-card-body {
+    padding-top: 0;
+}
+
+
+/* =========================================================
+   3. INGRESOS Y GASTOS · sin tarjetas dentro de tarjetas
+========================================================= */
+
+#dashboardView .flip-card-header {
+    padding: 16px 28px 0;
+}
+
+#dashboardView .income-expense-cards {
+    padding: 4px 14px 16px;
+}
+
+#dashboardView .flip-card-kicker {
+    color: var(--dr-muted);
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+}
+
+#dashboardView .income-expense-cards .dashboard-summary-card {
+    border: none;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+}
+
+#dashboardView .income-expense-cards .dashboard-summary-card::before,
+#dashboardView .income-expense-cards .dashboard-summary-card::after {
+    display: none;
+}
+
+#dashboardView .income-expense-cards .dashboard-summary-card:hover {
+    transform: none;
+}
+
+/* Una línea fina separa Ingresos de Gastos */
+#dashboardView .income-expense-cards {
+    gap: 0 !important;
+}
+
+#dashboardView .income-expense-cards .expense-card {
+    padding-left: 28px;
+    border-left: 1px solid var(--dr-divider);
+}
+
+#dashboardView .income-expense-cards .income-card {
+    padding-right: 28px;
+}
+
+#dashboardView .statistics-button {
+    border: none;
+    background: var(--dr-soft);
+    box-shadow: none;
+}
+
+#dashboardView .statistics-button:hover {
+    transform: none;
+    background: var(--primary-light);
+    box-shadow: none;
+}
+
+/* Cara trasera: barras más finas y suaves */
+#dashboardView .chart-track {
+    background: var(--dr-soft);
+}
+
+#dashboardView .chart-bar::after {
+    display: none;
+}
+
+
+/* =========================================================
+   4. ENCABEZADO + ACCIONES RÁPIDAS
+========================================================= */
+
+#dashboardView .dashboard-hero {
+    padding: 8px 28px 26px;
+    margin-bottom: var(--dr-gap);
+}
+
+#dashboardView .dashboard-hero-top {
+    border-bottom-color: var(--dr-divider);
+}
+
+#dashboardView .dashboard-eyebrow {
+    margin-bottom: 10px;
+    color: var(--dr-muted);
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+}
+
+#dashboardView .dashboard-eyebrow::before {
+    width: 6px;
+    height: 6px;
+    box-shadow: none;
+}
+
+/* Botones planos, sin sombras ni círculos */
+#dashboardView .quick-actions-grid button {
+    border: 1px solid transparent;
+    border-radius: var(--dr-radius-sm);
+    background: var(--dr-soft);
+    box-shadow: none;
+    font-weight: 650;
+}
+
+#dashboardView .quick-actions-grid button::after {
+    display: none;
+}
+
+#dashboardView .quick-actions-grid button:hover {
+    transform: translateY(-1px);
+    border-color: rgba(37, 99, 235, 0.22);
+    background: #ffffff;
+    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.07);
+}
+
+/* Fecha: texto limpio, sin caja */
+#dashboardView .quick-actions-row .dashboard-hero-date {
+    min-width: 0;
+    padding: 0 6px 0 20px;
+    border: none;
+    border-left: 1px solid var(--dr-divider);
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    backdrop-filter: none;
+}
+
+#dashboardView .dashboard-date-label {
+    color: var(--dr-muted);
+}
+
+#dashboardView .header-icon-button,
+#dashboardView .profile-button {
+    border-color: var(--dr-divider);
+    box-shadow: none;
+}
+
+
+/* =========================================================
+   5. CONTROL DE GASTOS
+========================================================= */
+
+#dashboardView .budget-card {
+    padding: 28px 30px;
+}
+
+#dashboardView .budget-card-kicker {
+    color: var(--dr-muted);
+    letter-spacing: 0.14em;
+}
+
+#dashboardView .budget-numbers {
+    margin-top: 26px;
+}
+
+/* Escala neutra: solo el porcentaje activo llama la atención */
+#dashboardView .budget-progress-scale span,
+#dashboardView .budget-scale-green,
+#dashboardView .budget-scale-yellow,
+#dashboardView .budget-scale-red {
+    color: var(--dr-muted);
+    font-weight: 600;
+}
+
+#dashboardView .budget-progress-track {
+    box-shadow: none;
+}
+
+/* Mensaje de estado: mismo color, mucho más ligero */
+#dashboardView .budget-status-message {
+    margin-top: 22px;
+    padding: 13px 16px;
+    border-radius: var(--dr-radius-sm);
+}
+
+#dashboardView .budget-message-good    { background: rgba(220, 252, 231, 0.55); }
+#dashboardView .budget-message-warning { background: rgba(254, 243, 199, 0.55); }
+#dashboardView .budget-message-danger  { background: rgba(254, 226, 226, 0.55); }
+
+#dashboardView .budget-message-icon {
+    background: transparent;
+}
+
+/* Detalle inferior sin emojis, solo datos */
+#dashboardView .budget-detail-icon {
+    display: none;
+}
+
+#dashboardView .budget-details {
+    margin-top: 22px;
+    padding-top: 18px;
+    border-top-color: var(--dr-divider);
+}
+
+#dashboardView .budget-detail-item small {
+    color: var(--dr-muted);
+    font-weight: 600;
+}
+
+#dashboardView .budget-detail-item strong {
+    font-size: 0.86rem;
+}
+
+
+/* =========================================================
+   6. ÚLTIMOS MOVIMIENTOS + PRÓXIMOS EVENTOS
+========================================================= */
+
+#dashboardView .dashboard-side-stack > .card .card-header {
+    border-bottom: none;
+}
+
+#dashboardView .dashboard-side-stack > .card .card-header h3 {
+    color: var(--text-primary);
+    font-size: 0.95rem;
+    font-weight: 750;
+}
+
+/* Estados vacíos: sin caja punteada */
+#dashboardView .dashboard-side-stack .empty-state {
+    padding: 18px 12px;
+    border: none;
+    background: transparent;
+}
+
+#dashboardView .dashboard-side-stack .empty-icon {
+    font-size: 1.6rem;
+    opacity: 0.75;
+}
+
+#dashboardView .dashboard-side-stack .empty-state h4 {
+    font-size: 0.9rem;
+}
+
+#dashboardView .dashboard-side-stack .empty-state p {
+    font-size: 0.78rem;
+}
+
+/* Filas de movimientos */
+#dashboardView .dashboard-cell-movements .movement-item {
+    border-bottom-color: var(--dr-divider);
+}
+
+#dashboardView .dashboard-cell-movements .movement-item:last-child {
+    border-bottom: none;
+}
+
+#dashboardView .dashboard-cell-movements .movement-icon {
+    background: var(--dr-soft);
+}
+
+#dashboardView .dashboard-cell-movements .movement-name {
+    font-size: 0.9rem;
+}
+
+#dashboardView .dashboard-cell-movements .movement-date {
+    color: var(--dr-muted);
+    font-size: 0.76rem;
+}
+
+/* Eventos */
+#dashboardView .timeline-item {
+    border-bottom-color: var(--dr-divider);
+}
+
+#dashboardView .timeline-date {
+    background: var(--dr-soft);
+    color: var(--text-primary);
+}
+
+/* Botones "Ver historial" / "Ver calendario": discretos */
+#dashboardView .recent-movements-footer,
+#dashboardView .events-footer {
+    border-top: none;
+}
+
+#dashboardView .recent-movements-button,
+#dashboardView .events-footer .btn-secondary {
+    border: none;
+    background: var(--dr-soft);
+    color: var(--text-secondary);
+    font-weight: 650;
+}
+
+#dashboardView .recent-movements-button:hover,
+#dashboardView .events-footer .btn-secondary:hover {
+    background: var(--primary-light);
+    color: var(--primary-color);
+}
+
+
+/* =========================================================
+   7. AJUSTE DE ALTURA MÍNIMA (evita recortes en pantallas
+      angostas, donde Ingresos y Gastos ya no se estiran)
+========================================================= */
+
+#dashboardView .income-expense-flip-card,
+#dashboardView .income-expense-flip-card .flip-inner,
+#dashboardView .income-expense-flip-card .flip-face {
+    min-height: 144px;
+}
+
+
+/* =========================================================
+   8. ESTILO ELEGANTE · fondo ambiental + efecto blur (vidrio)
+========================================================= */
+
+/* Luces suaves detrás de todo: dan profundidad al vidrio */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+
+    background:
+        radial-gradient(900px 520px at 88% -8%, rgba(99, 102, 241, 0.17), transparent 62%),
+        radial-gradient(720px 520px at 4% 100%, rgba(14, 165, 233, 0.13), transparent 62%),
+        radial-gradient(620px 420px at 58% 58%, rgba(168, 85, 247, 0.07), transparent 62%);
+}
+
+:root[data-theme="dark"] body::before {
+    background:
+        radial-gradient(900px 520px at 88% -8%, rgba(99, 102, 241, 0.26), transparent 62%),
+        radial-gradient(720px 520px at 4% 100%, rgba(14, 165, 233, 0.16), transparent 62%),
+        radial-gradient(620px 420px at 58% 58%, rgba(168, 85, 247, 0.12), transparent 62%);
+}
+
+/* Superficies de vidrio */
+#dashboardView {
+    --dr-surface: rgba(255, 255, 255, 0.68);
+    --dr-border: 1px solid rgba(255, 255, 255, 0.75);
+    --dr-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+#dashboardView .dashboard-hero,
+#dashboardView .dashboard-summary-grid > .dashboard-summary-card,
+#dashboardView .dashboard-side-stack > .dashboard-summary-card,
+#dashboardView .budget-card,
+#dashboardView .dashboard-side-stack > .card {
+    -webkit-backdrop-filter: blur(18px) saturate(150%);
+    backdrop-filter: blur(18px) saturate(150%);
+
+    box-shadow: var(--dr-shadow), var(--dr-highlight);
+}
+
+/* Cara del flip: casi opaca (el vidrio real se rompe al girar en 3D) */
+#dashboardView .flip-face {
+    background: var(--dr-surface-solid, rgba(255, 255, 255, 0.86));
+    box-shadow: var(--dr-shadow), var(--dr-highlight);
+}
+
+/* Saludo más protagonista */
+#dashboardView .dashboard-hero-greeting p {
+    color: var(--text-primary);
+    font-size: 1.32rem;
+    font-weight: 750;
+    letter-spacing: -0.03em;
+}
+
+/* Tipografía numérica más fina */
+#dashboardView .card-title-amount h2,
+#dashboardView .budget-amount-row strong,
+#dashboardView .budget-limit-block strong {
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.045em;
+}
+
+/* Iconos de las tarjetas: degradado suave */
+#dashboardView .dashboard-card-icon {
+    background:
+        linear-gradient(
+            145deg,
+            color-mix(in srgb, var(--dashboard-accent) 20%, transparent),
+            color-mix(in srgb, var(--dashboard-accent) 8%, transparent)
+        );
+}
+
+/* Barra de progreso con degradado */
+#dashboardView .budget-progress-good {
+    background: linear-gradient(90deg, #10B981, #34D399);
+}
+
+#dashboardView .budget-progress-warning {
+    background: linear-gradient(90deg, #F59E0B, #FBBF24);
+}
+
+#dashboardView .budget-progress-danger {
+    background: linear-gradient(90deg, #EF4444, #F87171);
+}
+
+/* Botones principales con degradado (mismo tono que el sidebar) */
+.btn-primary {
+    background: linear-gradient(135deg, #2563EB, #6D5DFC);
+    border: none;
+    box-shadow: 0 8px 20px rgba(79, 70, 229, 0.25);
+}
+
+.btn-primary:hover {
+    filter: brightness(1.06);
+    box-shadow: 0 12px 26px rgba(79, 70, 229, 0.32);
+}
+
+#dashboardView .quick-actions-grid button.btn-primary {
+    background: var(--dr-soft);
+    box-shadow: none;
+    color: var(--text-primary);
+}
+
+/* Blur también en paneles flotantes y modales */
+.notifications-panel {
+    background: rgba(255, 255, 255, 0.78);
+    -webkit-backdrop-filter: blur(22px) saturate(170%);
+    backdrop-filter: blur(22px) saturate(170%);
+}
+
+.modal-overlay {
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+}
+
+.finance-notification {
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+}
+
+
+/* =========================================================
+   9. CONTROL DE GASTOS · versión compacta
+   - Mismo ancho que "Mis tarjetas" (6 columnas).
+   - Solo lo importante: gastado, % , tope, barra y lo que queda.
+   - Se ocultan (sin borrarlos) el mensaje largo, la escala de
+     porcentajes y los detalles repetidos: el JS sigue
+     actualizándolos, solo no se ven.
+========================================================= */
+
+@media (min-width: 1201px) {
+
+    /* Ancho de Mis tarjetas */
+    .dashboard-summary-grid > .dashboard-cell-budget {
+        grid-column: 1 / span var(--dash-cards-span, 6);
+        grid-row: 2;
+    }
+
+    /* Mis metas sube y ocupa el hueco que deja al lado (filas 2 y 3) */
+    .dashboard-summary-grid .ffc-goals-section {
+        grid-row: 2 / span 2;
+    }
+
+    /* La fila de Control de gastos conserva su altura compacta;
+       el espacio extra que piden Mis metas y la columna derecha
+       lo absorbe la fila de Mis tarjetas. */
+    .dashboard-summary-grid {
+        grid-template-rows: auto auto minmax(0, 1fr);
+    }
+
+}
+
+#dashboardView .budget-card {
+    padding: 18px 22px 16px;
+    border-radius: 22px;
+}
+
+/* --- Fila superior: título + estado --- */
+
+#dashboardView .budget-card-header {
+    align-items: center;
+}
+
+#dashboardView .budget-card-kicker {
+    margin: 0;
+    font-size: 0.66rem;
+}
+
+#dashboardView .budget-status-pill {
+    padding: 4px 10px;
+    font-size: 0.68rem;
+}
+
+/* --- Cifra principal --- */
+
+#dashboardView .budget-numbers {
+    align-items: baseline;
+    gap: 14px;
+    margin-top: 8px;
+}
+
+#dashboardView .budget-spent-block > span,
+#dashboardView .budget-limit-block > span {
+    display: none;          /* "Has gastado" / "Ingresos del mes" */
+}
+
+#dashboardView .budget-amount-row {
+    align-items: baseline;
+    gap: 8px;
+}
+
+#dashboardView .budget-amount-row strong {
+    font-size: 1.75rem;
+    font-weight: 800;
+    line-height: 1.1;
+}
+
+#dashboardView .budget-amount-row > span {
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: var(--dr-soft);
+    color: var(--text-secondary);
+    font-size: 0.72rem;
+    font-weight: 700;
+}
+
+#dashboardView .budget-limit-block {
+    text-align: right;
+}
+
+#dashboardView .budget-limit-block strong {
+    color: var(--text-secondary);
+    font-size: 0.86rem;
+    font-weight: 600;
+}
+
+#dashboardView .budget-limit-block strong::before {
+    content: "de ";
+    font-weight: 500;
+    opacity: 0.8;
+}
+
+/* --- Barra fina con marcas en 70 % y 90 % --- */
+
+#dashboardView .budget-progress-area {
+    margin-top: 12px;
+}
+
+#dashboardView .budget-progress-track {
+    height: 8px;
+    background: var(--dr-soft);
+    box-shadow: none;
+}
+
+#dashboardView .budget-progress-track::before,
+#dashboardView .budget-progress-track::after {
+    content: "";
+    position: absolute;
+    top: -3px;
+    bottom: -3px;
+    width: 1.5px;
+    border-radius: 2px;
+    background: var(--dr-divider);
+    z-index: 1;
+}
+
+#dashboardView .budget-progress-track::before { left: 70%; }
+#dashboardView .budget-progress-track::after  { left: 90%; }
+
+#dashboardView .budget-progress-fill {
+    box-shadow: none;
+}
+
+/* El marcador pasa a ser un punto limpio (el % ya está arriba) */
+#dashboardView .budget-progress-marker {
+    z-index: 2;
+    width: 16px;
+    height: 16px;
+    border-width: 3px;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.25);
+}
+
+#dashboardView .budget-progress-marker span {
+    display: none;
+}
+
+/* --- Lo que se oculta --- */
+
+#dashboardView .budget-progress-scale,
+#dashboardView .budget-status-message {
+    display: none;
+}
+
+/* --- Pie: solo "Te queda …" --- */
+
+#dashboardView .budget-details {
+    display: flex;
+    justify-content: flex-start;
+    margin-top: 10px;
+    padding-top: 0;
+    border-top: none;
+}
+
+#dashboardView .budget-details > *:not(:nth-child(3)) {
+    display: none;
+}
+
+#dashboardView .budget-details .budget-detail-item {
+    align-items: baseline;
+    gap: 6px;
+}
+
+#dashboardView .budget-details .budget-detail-item small,
+#dashboardView .budget-details .budget-detail-item strong {
+    display: inline;
+    margin: 0;
+}
+
+#dashboardView .budget-details .budget-detail-item small {
+    font-size: 0.74rem;
+}
+
+#dashboardView .budget-details .budget-detail-item strong {
+    color: var(--text-primary);
+    font-size: 0.82rem;
+}
+
+/* Si te pasaste del tope, "Te queda" se marca en rojo */
+#dashboardView .budget-card:has(.budget-status-danger) .budget-details .budget-detail-item strong {
+    color: var(--danger-color);
+}
+
+
+/* =========================================================
+   10. SIN CONTADORES (01/04, 00/00) NI TÍTULO DE ACCIONES
+   Los elementos siguen en el HTML (el JS los actualiza) pero
+   no se ven ni ocupan espacio.
+========================================================= */
+
+#dashboardView .ffc-cards-header,
+#dashboardView .ffc-goals-header {
+    display: none;
+}
+
+#dashboardView .dashboard-hero-content {
+    padding-top: 10px;
+}
+
+
+/* =========================================================
+   11. SCROLL SNAP · ENCABEZADO DINÁMICO · NUEVA UBICACIÓN
+   - Movimientos + Eventos ocupan donde estaba Mis metas.
+   - Mis metas pasa debajo de Patrimonio total (más baja).
+   - El encabezado se compacta con el scroll (js/dashboard-scroll.js
+     escribe --hp: 0 = completo, 1 = compacto).
+========================================================= */
+
+:root {
+    --hero-compact-h: 74px;     /* alto del encabezado ya compacto */
+    --snap-gap: 14px;
+}
+
+/* ---------- 11.1 Ubicación (escritorio) ---------- */
+
+.dashboard-info-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    min-width: 0;
+}
+
+.dashboard-info-stack > .card {
+    min-width: 0;
+    margin: 0;
+    overflow: hidden;
+}
+
+@media (min-width: 1201px) {
+
+    /* Patrimonio + Metas ya no viajan juntos con la pila vieja */
+    #dashboardView .dashboard-side-stack {
+        display: contents;
+    }
+
+    #dashboardView .dashboard-side-stack > .net-worth-card {
+        grid-column: 10 / span 3 !important;
+        grid-row: 2;
+        align-self: start;
+        margin: 0;
+    }
+
+    /* Movimientos + eventos: la posición que tenía Mis metas */
+    #dashboardView .dashboard-side-stack > .dashboard-info-stack {
+        grid-column: calc(var(--dash-cards-span, 6) + 1) / span var(--dash-goals-span, 3);
+        grid-row: 2 / span 2;
+        align-self: stretch;
+    }
+
+    #dashboardView .dashboard-info-stack > .card {
+        flex: 1 1 0;
+    }
+
+    /* Mis metas: debajo de Patrimonio, con la altura de la fila de tarjetas */
+    #dashboardView .dashboard-summary-grid .ffc-goals-section {
+        grid-column: 10 / span 3;
+        grid-row: 3;
+        align-self: stretch;
+        min-height: 0;
+    }
+}
+
+/* ---------- 11.2 Mis metas más baja ---------- */
+
+#dashboardView .ffc-goal-card {
+    padding: 18px 18px 46px;
+}
+
+#dashboardView .ffc-goal-card h2,
+#dashboardView .ffc-goal-card h3 {
+    margin-bottom: 6px;
+}
+
+#dashboardView .ffc-goals-section [class*="ring"],
+#dashboardView .ffc-goals-section [class*="progress"] {
+    max-height: 150px;
+}
+
+
+/* ---------- 11.3 Scroll snap ---------- */
+
+html:has(#dashboardView.active) {
+    scroll-snap-type: y mandatory;
+    scroll-padding-top: calc(var(--hero-compact-h) + 22px);
+}
+
+#dashboardView .dashboard-hero {
+    scroll-snap-align: start;
+    scroll-margin-top: 0;
+}
+
+/* Segundo "diapositiva": fila de Tarjetas / Eventos / Metas */
+#dashboardView .ffc-cards-section {
+    scroll-snap-align: start;
+}
+
+@media (min-width: 1201px) {
+
+    /* La fila inferior llena la pantalla bajo el encabezado compacto,
+       así el snap deja la diapositiva completa y sin hueco al final */
+    #dashboardView .dashboard-summary-grid {
+        grid-template-rows:
+            auto auto
+            minmax(min(calc(100svh - var(--hero-compact-h) - 70px), 560px), auto);
+        padding-bottom: 26px;
+    }
+}
+
+@media (max-width: 1200px) {
+
+    html:has(#dashboardView.active) {
+        scroll-snap-type: y proximity;
+    }
+
+    /* En pantallas pequeñas cada tarjeta grande es un punto de snap */
+    #dashboardView .dashboard-summary-grid > .dashboard-cell-budget,
+    #dashboardView .dashboard-summary-grid .ffc-goals-section,
+    #dashboardView .dashboard-summary-grid .dashboard-cell-movements {
+        scroll-snap-align: start;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html:has(#dashboardView.active) {
+        scroll-snap-type: none;
+    }
+}
+
+
+/* ---------- 11.4 Encabezado dinámico ---------- */
+
+#dashboardView .dashboard-hero {
+    position: sticky;
+    top: 10px;
+    z-index: 60;
+    --hp: 0;
+    transition: box-shadow 0.25s ease;
+}
+
+#dashboardView .dashboard-hero-top {
+    overflow: hidden;
+    min-height: 0;
+    gap: 0;
+    max-height: calc((1 - var(--hp)) * 90px);
+    opacity: calc(1 - var(--hp) * 1.4);
+    margin-bottom: calc((1 - var(--hp)) * 0px);
+    padding-top: calc((1 - var(--hp)) * 10px);
+    padding-bottom: calc((1 - var(--hp)) * 14px);
+    border-bottom-width: calc((1 - var(--hp)) * 1px);
+    pointer-events: auto;
+}
+
+#dashboardView .dashboard-hero.is-compact .dashboard-hero-top {
+    visibility: hidden;
+    pointer-events: none;
+}
+
+#dashboardView .dashboard-hero {
+    padding-bottom: calc(26px - var(--hp) * 14px);
+    padding-top: calc(8px + var(--hp) * 0px);
+}
+
+#dashboardView .dashboard-hero-content {
+    padding-top: calc(10px - var(--hp) * 10px);
+}
+
+#dashboardView .dashboard-hero.is-compact {
+    box-shadow: 0 14px 38px rgba(15, 23, 42, 0.14);
+}
+
+@media (max-width: 900px) {
+
+    /* Compacto en móvil: una sola fila deslizable, solo iconos */
+    #dashboardView .dashboard-hero.is-compact .quick-actions-grid {
+        display: flex;
+        overflow-x: auto;
+        gap: 8px;
+        scrollbar-width: none;
+    }
+
+    #dashboardView .dashboard-hero.is-compact .quick-actions-grid::-webkit-scrollbar {
+        display: none;
+    }
+
+    #dashboardView .dashboard-hero.is-compact .quick-actions-grid button {
+        flex: 0 0 auto;
+        min-height: 40px;
+        padding: 6px 12px;
+    }
+
+    #dashboardView .dashboard-hero.is-compact .quick-actions-grid button span:last-child {
+        display: none;
+    }
+
+    #dashboardView .dashboard-hero.is-compact .quick-actions-row {
+        flex-direction: row;
+        align-items: center;
+    }
+
+    #dashboardView .dashboard-hero.is-compact .dashboard-hero-date {
+        display: none;
+    }
+}
+
+
+/* Cards section: la fila inferior reparte la altura sobrante */
+@media (min-width: 1201px) {
+    #dashboardView .ffc-cards-section {
+        display: flex;
+        flex-direction: column;
+        align-self: stretch;
+    }
+
+    #dashboardView .ffc-cards-section > .ffc-financial-stage {
+        flex: 1 1 auto;
+    }
+}
+
+@media (max-width: 1200px) {
+    #dashboardView .dashboard-side-stack > .dashboard-info-stack {
+        grid-column: 1 / -1;
+        order: 1;
+    }
+}
+
+
+/* =========================================================
+   12. MIS METAS · MENOS ALTA (mismo contenido y funciones)
+========================================================= */
+
+#dashboardView .ffc-goals-viewport {
+    --card-height: 300px;
+    height: 470px;
+}
+
+#dashboardView .ffc-goals-viewport::before,
+#dashboardView .ffc-goals-viewport::after {
+    height: 70px;
+}
+
+#dashboardView .ffc-goal-card {
+    min-height: 270px;
+    padding: 20px 22px 24px;
+    border-radius: 24px;
+}
+
+#dashboardView .ffc-goal-card[data-position="0"] {
+    transform: translate3d(0, -172px, -190px) scale(.78);
+}
+
+#dashboardView .ffc-goal-card[data-position="2"] {
+    transform: translate3d(0, 172px, -190px) scale(.78);
+}
+
+#dashboardView .ffc-goal-body {
+    margin-top: 20px;
+}
+
+#dashboardView .ffc-goal-footer {
+    margin-top: 18px;
+    padding-top: 14px;
+}
+
+#dashboardView .ffc-goal-title {
+    font-size: clamp(22px, 2.4vw, 30px);
+}
+
+#dashboardView .ffc-goal-controls {
+    margin-top: 4px;
+}
+
+@media (max-width: 720px) {
+    #dashboardView .ffc-goals-viewport {
+        height: 440px;
+    }
+    #dashboardView .ffc-goal-card[data-position="0"] {
+        transform: translate3d(0, -160px, -175px) scale(.74);
+    }
+    #dashboardView .ffc-goal-card[data-position="2"] {
+        transform: translate3d(0, 160px, -175px) scale(.74);
+    }
+}
+
+/* Encabezado compacto en pantallas medianas: 6 acciones en una fila */
+@media (min-width: 901px) {
+    #dashboardView .dashboard-hero.is-compact .quick-actions-grid {
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+        gap: 8px;
+    }
+
+    #dashboardView .dashboard-hero.is-compact .quick-actions-grid button {
+        min-height: 46px;
+        padding: 6px 8px;
+        gap: 6px;
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 1200px) {
+    /* En tablet/móvil el inicio de la página no atrae el scroll:
+       solo las tarjetas grandes actúan como puntos de encaje */
+    #dashboardView .dashboard-hero {
+        scroll-snap-align: none;
+    }
+}
+
+
+/* =========================================================
+   13. ENCABEZADO FIJO + CONTENIDO CON SU PROPIO SCROLL
+   La página del Dashboard ocupa el 100 % de la pantalla: el
+   encabezado queda fijo arriba (nada pasa por debajo) y solo
+   el contenido de abajo hace scroll con snap.
+========================================================= */
+
+/* Sin scroll ni snap en la ventana (ahora lo hace el contenedor) */
+html:has(#dashboardView.active) {
+    scroll-snap-type: none !important;
+    overflow: hidden;
+}
+
+body:has(#dashboardView.active) .main-content {
+    height: 100vh;
+    height: 100svh;
+    min-height: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+#dashboardView.active {
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+#dashboardView .dashboard-hero {
+    position: relative;
+    top: auto;
+    flex: 0 0 auto;
+    scroll-snap-align: none;
+}
+
+/* El resto del Dashboard: contenedor con scroll y snap */
+#dashboardView.active > .dashboard-summary-grid {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scroll-snap-type: y mandatory;
+    scroll-padding-top: 6px;
+    scrollbar-width: none;          /* barra oculta: el scroll sigue activo */
+    -ms-overflow-style: none;
+
+    /* aire para que no se corten las sombras */
+    padding: 6px 8px 24px;
+    margin: -6px -8px 0;
+}
+
+#dashboardView.active > .dashboard-summary-grid > .income-expense-flip-card,
+#dashboardView.active .ffc-cards-section {
+    scroll-snap-align: start;
+}
+
+#dashboardView .dashboard-hero.is-shrunk .dashboard-hero-top {
+    overflow: hidden;
+}
+
+#dashboardView .dashboard-hero-top {
+    overflow: visible;
+}
+
+@media (min-width: 1201px) {
+    #dashboardView .dashboard-summary-grid {
+        grid-template-rows:
+            auto auto
+            minmax(min(calc(100svh - 190px), 600px), auto);
+        padding-bottom: 24px;
+    }
+}
+
+@media (max-width: 1200px) {
+    #dashboardView.active > .dashboard-summary-grid {
+        scroll-snap-type: y proximity;
+    }
+}
+
+@media (max-width: 600px) {
+    #dashboardView.active > .dashboard-summary-grid {
+        padding-bottom: 96px;   /* barra inferior */
+    }
+}
+
+/* Carrusel de metas: sin flechas ni texto de ayuda
+   (siguen funcionando con rueda, teclado y deslizar) */
+#ffcPrevGoal,
+#ffcNextGoal,
+.ffc-scroll-hint {
+    display: none !important;
+}
+
+#dashboardView.active {
+    padding-bottom: 0;
+}
+
+
+/* =========================================================
+   14. TODO EL DASHBOARD EN UNA SOLA VISTA (escritorio)
+   Con el encabezado compacto, filas 1-2-3 caben en pantalla.
+   js/dashboard-scroll.js calcula --row3-h y --hero-compact-h.
+========================================================= */
+
+@media (min-width: 1201px) and (min-height: 640px) {
+
+    body:has(#dashboardView.active) .main-content {
+        padding-top: 18px;
+        padding-bottom: 14px;
+    }
+
+    #dashboardView {
+        --dr-gap: 14px;
+    }
+
+    /* ---- Encabezado: más abajo de alto y más arriba ---- */
+    #dashboardView .dashboard-hero {
+        margin-top: calc(var(--hp) * -8px);
+        margin-bottom: calc(14px - var(--hp) * 2px);
+        padding-top: calc(8px - var(--hp) * 3px);
+        padding-bottom: calc(22px - var(--hp) * 17px);
+    }
+
+    #dashboardView .dashboard-hero-content {
+        padding-top: calc(10px - var(--hp) * 10px);
+    }
+
+    #dashboardView .dashboard-hero.is-compact {
+        border-radius: 16px;
+    }
+
+    #dashboardView .dashboard-hero.is-compact .quick-actions-row {
+        gap: 10px;
+    }
+
+    #dashboardView .dashboard-hero.is-compact .quick-actions-grid button {
+        min-height: 44px;
+        padding: 4px 10px;
+        gap: 6px;
+        font-size: 0.8rem;
+        border-radius: 13px;
+    }
+
+    #dashboardView .dashboard-hero.is-compact .quick-actions-grid button span:first-child {
+        font-size: 1.08rem;
+    }
+
+    #dashboardView .dashboard-hero.is-compact .dashboard-hero-date {
+        min-height: 44px;
+        padding: 0 4px 0 14px;
+    }
+
+    #dashboardView .dashboard-hero.is-compact .dashboard-date-label {
+        font-size: 0.62rem;
+        line-height: 1.1;
+    }
+
+    #dashboardView .dashboard-hero.is-compact .dashboard-hero-date strong {
+        font-size: 0.84rem;
+        line-height: 1.15;
+    }
+
+    /* ---- Cuadrícula: gap menor y 3.ª fila a la medida ---- */
+    #dashboardView.active > .dashboard-summary-grid {
+        gap: 14px;
+        grid-template-rows: auto auto var(--row3-h, minmax(0, 1fr));
+        padding-bottom: 8px;
+    }
+
+    /* ---- Fila 1 · Ingresos/Gastos · Ahorro · Disponible ---- */
+    #dashboardView .dashboard-summary-card,
+    #dashboardView .income-expense-flip-card,
+    #dashboardView .income-expense-flip-card .flip-inner,
+    #dashboardView .income-expense-flip-card .flip-face {
+        min-height: 0;
+    }
+
+    #dashboardView .income-expense-flip-card {
+        height: 118px;
+    }
+
+    #dashboardView .dashboard-summary-card {
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+
+    /* ---- Fila 2 · Control de gastos + Patrimonio ---- */
+    #dashboardView .budget-card {
+        padding: 14px 22px;
+    }
+
+    #dashboardView .dashboard-side-stack > .net-worth-card {
+        min-height: 0;
+        height: 100%;
+    }
+
+    /* ---- Fila 3 · llena la altura calculada ---- */
+    #dashboardView .ffc-cards-section,
+    #dashboardView .ffc-goals-section,
+    #dashboardView .dashboard-info-stack {
+        min-height: 0;
+        overflow: hidden;
+    }
+
+    #dashboardView .dashboard-info-stack {
+        grid-row: 2 / span 2;
+    }
+
+    /* Mis metas: más alta, ocupa todo el alto de la fila */
+    #dashboardView .ffc-goals-section {
+        display: flex;
+        flex-direction: column;
+    }
+
+    #dashboardView .ffc-goals-section > .ffc-goals-viewport,
+    #dashboardView .ffc-goals-viewport {
+        --card-height: 340px;
+        flex: 1 1 auto;
+        height: auto;
+        min-height: 380px;
+    }
+
+    #dashboardView .ffc-goal-card {
+        min-height: 320px;
+        padding: 24px 24px 28px;
+    }
+
+    #dashboardView .ffc-goal-card[data-position="0"] {
+        transform: translate3d(0, -195px, -190px) scale(.78);
+    }
+
+    #dashboardView .ffc-goal-card[data-position="2"] {
+        transform: translate3d(0, 195px, -190px) scale(.78);
+    }
+
+    #dashboardView .ffc-goal-body {
+        margin-top: 28px;
+    }
+}
+
+
+/* =========================================================
+   15. VISTA ÚNICA · el contenido tiene tamaño fijo y el scroll
+   solo transforma el encabezado (sin recortes ni saltos).
+   La cuadrícula ocupa siempre el espacio bajo el encabezado
+   COMPACTO; arriba lleva un relleno igual a lo que "sobra" del
+   encabezado completo, así su borde superior coincide siempre
+   con el borde inferior del encabezado.
+========================================================= */
+
+@media (min-width: 1201px) and (min-height: 640px) {
+
+    #dashboardView.active {
+        position: relative;
+    }
+
+    #dashboardView.active > .dashboard-summary-grid {
+        position: absolute;
+        top: var(--grid-top, 70px);
+        bottom: 0;
+        left: -8px;
+        right: -8px;
+        margin: 0;
+        padding: var(--grid-pad-top, 110px) 8px 8px;
+        scroll-padding-top: var(--grid-pad-top, 110px);
+        z-index: 1;
+    }
+
+    #dashboardView .dashboard-hero {
+        z-index: 60;
+    }
+
+    /* Se deja un lugar libre para el encabezado (no empuja la cuadrícula) */
+    #dashboardView.active > .dashboard-hero {
+        position: relative;
+    }
+}
+
+
+/* =========================================================
+   16. AJUSTES FINOS DE LA VISTA ÚNICA
+========================================================= */
+
+/* Meta: el pie y las etiquetas ya no se encimaban */
+#dashboardView .ffc-goal-card {
+    padding-bottom: 58px;
+}
+
+#dashboardView .ffc-goal-footer {
+    margin-top: 14px;
+    padding-top: 14px;
+    gap: 10px;
+}
+
+#dashboardView .ffc-money-value {
+    margin-top: 4px;
+    font-size: clamp(14px, 1.15vw, 18px);
+    white-space: nowrap;
+}
+
+#dashboardView .ffc-goal-status {
+    right: 24px;
+    bottom: 22px;
+}
+
+#dashboardView .ffc-goal-number {
+    left: 24px;
+    bottom: 22px;
+}
+
+@media (min-width: 1201px) and (min-height: 640px) {
+
+    /* Mis tarjetas más compacta para que la fila 3 quepa */
+    #dashboardView .ffc-distribution-panel {
+        padding: 12px 12px;
+    }
+
+    #dashboardView .ffc-donut-wrap {
+        width: 124px;
+        height: 124px;
+        margin: 6px auto 4px;
+    }
+
+    #dashboardView .ffc-distribution-legend > * {
+        padding-top: 5px;
+        padding-bottom: 5px;
+    }
+
+    #dashboardView .ffc-active-card-info {
+        padding: 12px 18px;
+        gap: 10px 24px;
+    }
+
+    #dashboardView .ffc-financial-stage {
+        gap: 10px;
+    }
+
+    #dashboardView .dashboard-info-stack {
+        gap: 12px;
+    }
+
+    #dashboardView .dashboard-info-stack .empty-state {
+        padding: 6px 10px;
+    }
+
+    #dashboardView .dashboard-info-stack .empty-icon {
+        font-size: 1.6rem;
+        margin-bottom: 2px;
+    }
+
+    #dashboardView .dashboard-info-stack .card-header {
+        padding-bottom: 4px;
+    }
+}
+
+/* Pantallas bajas (portátiles 768 px o menos): todo un poco más denso */
+@media (min-width: 1201px) and (min-height: 640px) and (max-height: 860px) {
+
+    body:has(#dashboardView.active) .main-content {
+        padding-top: 12px;
+        padding-bottom: 10px;
+    }
+
+    #dashboardView .income-expense-flip-card {
+        height: 112px;
+    }
+
+    #dashboardView .dashboard-summary-card {
+        padding-top: 6px;
+        padding-bottom: 6px;
+    }
+
+    #dashboardView .budget-card {
+        padding: 10px 20px;
+    }
+
+    #dashboardView .budget-card > *,
+    #dashboardView .budget-card [class*="header"] {
+        margin-top: 0;
+        margin-bottom: 4px;
+    }
+
+    #dashboardView .ffc-donut-wrap {
+        width: 104px;
+        height: 104px;
+    }
+
+    #dashboardView .ffc-goals-viewport {
+        --card-height: 300px;
+        min-height: 320px;
+    }
+
+    #dashboardView .ffc-goal-card {
+        min-height: 290px;
+        padding: 18px 20px 54px;
+    }
+
+    #dashboardView .ffc-goal-card[data-position="0"] {
+        transform: translate3d(0, -165px, -190px) scale(.78);
+    }
+
+    #dashboardView .ffc-goal-card[data-position="2"] {
+        transform: translate3d(0, 165px, -190px) scale(.78);
+    }
+
+    #dashboardView .ffc-goal-body {
+        margin-top: 16px;
+    }
+}
+
+@media (min-width: 1201px) and (max-width: 1399px) {
+    #dashboardView .dashboard-hero.is-compact .quick-actions-grid button {
+        padding: 4px 4px;
+        gap: 4px;
+        font-size: 0.72rem;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+    #dashboardView .dashboard-hero.is-compact .quick-actions-grid {
+        gap: 6px;
+    }
+    #dashboardView .dashboard-hero.is-compact .quick-actions-row {
+        gap: 6px;
+    }
+    #dashboardView .dashboard-hero.is-compact .dashboard-hero-date {
+        padding-left: 8px;
+    }
+}
+
+
+/* =========================================================
+   15. SCROLL INVISIBLE EN EL DASHBOARD
+   El desplazamiento (rueda, trackpad, táctil y teclado) sigue
+   funcionando igual, pero la barra no se dibuja, así que ya no
+   le quita ancho a las tarjetas.
+========================================================= */
+
+html:has(#dashboardView.active),
+#dashboardView,
+#dashboardView * {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+html:has(#dashboardView.active)::-webkit-scrollbar,
+#dashboardView::-webkit-scrollbar,
+#dashboardView *::-webkit-scrollbar {
+    display: none;
+    width: 0;
+    height: 0;
+}
+
+
+/* =========================================================
+   17. DASHBOARD MÁS BAJO (escritorio)
+   Ahorra alto para poder agrandar los botones del encabezado.
+   - Ingresos / Gastos centrados verticalmente.
+   - La fila inferior ya no se estira: mide lo que ocupa su
+     contenido y todo lo demás se separa con el mismo gap (14px).
+   - Últimos movimientos, Próximos eventos y Mis metas más bajos.
+========================================================= */
+
+@media (min-width: 1201px) and (min-height: 640px) {
+
+    /* ---- 17.1 Ingresos y Gastos: centrados en la tarjeta ---- */
+
+    /* El botón de estadísticas pasa a la esquina y deja de
+       empujar el contenido hacia abajo */
+    #dashboardView .income-expense-flip-card .flip-front .flip-card-header {
+        position: absolute;
+        top: 10px;
+        right: 16px;
+        padding: 0;
+        width: auto;
+    }
+
+    #dashboardView .income-expense-flip-card .flip-front .income-expense-cards {
+        position: absolute;
+        inset: 0;
+        padding: 0 14px;
+        align-items: center;
+    }
+
+    /* ---- 17.2 La 3.ª fila mide su contenido (sin huecos de sobra) ---- */
+
+    #dashboardView.active > .dashboard-summary-grid {
+        grid-template-rows: auto auto max-content;
+        align-content: start;
+
+        /* --grid-extra-bottom lo calcula js/dashboard-scroll.js */
+        padding-bottom: calc(8px + var(--grid-extra-bottom, 0px));
+    }
+
+    /* Movimientos + eventos ocupan el alto de las filas 2 y 3,
+       pero ya no deciden por sí solos cuánto miden */
+    #dashboardView .dashboard-side-stack > .dashboard-info-stack {
+        contain: size;
+    }
+
+    /* Mis tarjetas: gráfico circular y carrusel pegados al contenedor
+       de arriba; el bloque ENTIDAD/TARJETA queda justo debajo. */
+    #dashboardView .ffc-cards-section {
+        justify-content: flex-start;
+    }
+
+    #dashboardView .ffc-cards-section > .ffc-financial-stage {
+        flex: 0 0 auto;
+    }
+
+    /* La caja del carrusel mide la tarjeta + un margen corto
+       (antes eran 390px fijos: sobraba aire arriba y abajo) */
+    #dashboardView .ffc-cards-carousel {
+        height: calc(var(--card-height, 245px) + 70px);
+    }
+
+    #dashboardView .ffc-cards-carousel::after {
+        bottom: 12px;
+    }
+
+    #dashboardView .ffc-carousel-dots {
+        bottom: 8px;
+    }
+
+    #dashboardView .ffc-active-card-info {
+        margin-top: var(--dr-gap, 14px);
+    }
+
+    #dashboardView .ffc-active-details {
+        min-width: 0;
+        flex: 1 1 auto;
+        justify-content: space-between;
+    }
+
+    #dashboardView .ffc-detail-item {
+        min-width: 0;
+    }
+
+    #dashboardView .ffc-detail-item strong {
+        display: block;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+    /* ---- 17.3 Últimos movimientos y Próximos eventos, más bajos ---- */
+
+    #dashboardView .dashboard-info-stack {
+        gap: var(--dr-gap, 14px);
+    }
+
+    #dashboardView .dashboard-info-stack > .card {
+        padding: 16px 20px 14px;
+    }
+
+    #dashboardView .dashboard-info-stack .card-header {
+        padding-bottom: 2px;
+        margin-bottom: 0;
+    }
+
+    #dashboardView .dashboard-info-stack .recent-movements-footer,
+    #dashboardView .dashboard-info-stack .events-footer {
+        margin-top: 4px;
+        padding-top: 6px;
+    }
+
+    /* Movimientos: filas compactas (se muestran las 4 más recientes) */
+    #dashboardView .dashboard-cell-movements .movement-item {
+        padding: 4px 0;
+    }
+
+    #dashboardView .dashboard-cell-movements {
+        container-type: size;
+        container-name: movcard;
+    }
+
+    #dashboardView .dashboard-cell-movements .movement-item:nth-child(n+5) {
+        display: none;
+    }
+
+    #dashboardView .dashboard-cell-movements .movement-item:nth-child(4) {
+        border-bottom: none;
+    }
+
+    /* Si la tarjeta es alta (pantallas grandes) también se ve la 5.ª */
+    @container movcard (min-height: 292px) {
+        #dashboardView .dashboard-cell-movements .movement-item:nth-child(5) {
+            display: flex;
+        }
+
+        #dashboardView .dashboard-cell-movements .movement-item:nth-child(4) {
+            border-bottom: 1px solid var(--dr-divider);
+        }
+    }
+
+    #dashboardView .dashboard-cell-movements .movement-icon {
+        width: 28px;
+        height: 28px;
+        font-size: 0.82rem;
+    }
+
+    #dashboardView .dashboard-cell-movements .movement-name,
+    #dashboardView .dashboard-cell-movements .movement-date {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        max-width: 100%;
+    }
+
+    #dashboardView .dashboard-cell-movements .movement-info > div:last-child {
+        min-width: 0;
+    }
+
+    /* Eventos: una fila corta por evento (fecha · título · monto) */
+    #dashboardView .dashboard-cell-events .timeline-item {
+        align-items: center;
+        gap: 10px;
+        padding: 4px 0;
+    }
+
+    #dashboardView .dashboard-cell-events .timeline-date {
+        flex: 0 0 54px;
+        padding: 4px 2px;
+        border-radius: 10px;
+        font-size: 0.78rem;
+    }
+
+    #dashboardView .dashboard-cell-events .timeline-date small {
+        margin-top: 1px;
+        font-size: 0.62rem;
+    }
+
+    #dashboardView .dashboard-cell-events .timeline-content strong {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        font-size: 0.84rem;
+    }
+
+    #dashboardView .dashboard-cell-events .timeline-content p {
+        display: none;
+    }
+
+    #dashboardView .dashboard-cell-events .calendar-amount {
+        margin-top: 1px;
+        font-size: 0.78rem;
+    }
+
+    #dashboardView .dashboard-cell-events .events-more {
+        margin: 2px 0 0;
+    }
+
+    /* ---- 17.4 Mis metas: menos de las tarjetas de arriba y abajo ----
+       La tarjeta del medio NO se toca (mismo tamaño, mismo contenido).
+       Solo se recorta lo que asoma de la anterior y la siguiente; los
+       degradados se acortan para que no tapen la tarjeta central y
+       las vecinas quedan más pegadas detrás de ella. */
+
+    #dashboardView .ffc-goals-viewport::before,
+    #dashboardView .ffc-goals-viewport::after {
+        height: 18px;
+    }
+
+    #dashboardView .ffc-goal-card[data-position="0"] {
+        transform: translate3d(0, -112px, -190px) scale(.78);
+    }
+
+    #dashboardView .ffc-goal-card[data-position="2"] {
+        transform: translate3d(0, 112px, -190px) scale(.78);
+    }
+}
+
+

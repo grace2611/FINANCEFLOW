@@ -1,0 +1,156 @@
+/*
+==========================================
+FinanceFlow
+Archivo: charts.css
+Versión: 0.1.0
+
+Descripción:
+Estilos para gráficos y elementos
+de análisis financiero.
+==========================================
+*/
+
+
+/* ==========================
+   CONTENEDOR DE GRÁFICOS
+=========================== */
+
+
+.chart-container {
+
+    position: relative;
+
+    width: 100%;
+
+    min-height: 260px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+}
+
+canvas {
+
+    display: block;
+
+    max-width: 100%;
+
+}
+
+
+/* ==========================
+   TARJETA DE GRÁFICO
+=========================== */
+
+
+.chart-card {
+
+    background: var(--surface-color);
+
+    border-radius: var(--radius-lg);
+
+    padding: var(--space-md);
+
+    box-shadow: var(--shadow-sm);
+
+}
+
+
+
+/* ==========================
+   TÍTULOS
+=========================== */
+
+
+.chart-title {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: var(--space-md);
+
+}
+
+
+
+.chart-title h3 {
+
+    font-size: 1.1rem;
+
+    font-weight: 700;
+
+}
+
+
+
+/* ==========================
+   INDICADORES
+=========================== */
+
+
+.statistics {
+
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: var(--space-md);
+
+}
+
+
+
+.stat-item {
+
+    padding: var(--space-sm);
+
+    background: var(--background-color);
+
+    border-radius: var(--radius-md);
+
+}
+
+
+
+.stat-label {
+
+    color: var(--text-secondary);
+
+    font-size: 0.85rem;
+
+}
+
+
+
+.stat-value {
+
+    font-size: 1.4rem;
+
+    font-weight: 700;
+
+    margin-top: 6px;
+
+}
+
+
+
+/* ==========================
+   RESPONSIVE
+=========================== */
+
+
+@media (max-width: 768px) {
+
+    .statistics {
+
+        grid-template-columns: 1fr;
+
+    }
+
+}

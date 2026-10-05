@@ -1,0 +1,392 @@
+/*
+==========================================
+FinanceFlow
+Archivo: dashboard-layout.css
+
+Descripción:
+Reorganización del Dashboard. Se carga al FINAL
+de todos los CSS para ajustar solo la ubicación
+y el ancho de los contenedores, sin alterar sus
+estilos internos.
+
+Estructura (cuadrícula de 12 columnas, ≥ 1201px):
+
+  Fila 1  Ingresos y gastos (6) | Ahorro (3) | Disponible (3)
+  Fila 2  CONTROL DE GASTOS (9)               | Patrimonio total (3)
+  Fila 3  MIS TARJETAS (6) | MIS METAS (3)     | Últimos movimientos (3)
+                                               | Próximos eventos (3)
+
+  → Mis tarjetas (6) + Mis metas (3) = 9 columnas
+    = ancho de Control de gastos.
+  → Patrimonio total, Últimos movimientos y Próximos eventos
+    forman una sola columna (3) apilada, sin huecos.
+
+Para cambiar la proporción tarjetas/metas basta con
+editar las dos variables de abajo (deben sumar 9).
+==========================================
+*/
+
+.dashboard-summary-grid {
+    --dash-cards-span: 6;   /* ancho de Mis tarjetas */
+    --dash-goals-span: 3;   /* ancho de Mis metas    */
+}
+
+
+/* =========================================================
+   1. ACCIONES RÁPIDAS · botones más anchos que largos
+========================================================= */
+
+.dashboard .quick-actions-grid button {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 52px;
+    padding: 8px 10px;
+}
+
+/* 3 columnas x 2 filas: cada botón queda más ancho que alto */
+.dashboard .quick-actions-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.dashboard .quick-actions-grid button span:last-child {
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   1b. FECHA · en la misma fila que los 6 botones
+   La fecha vive dentro del cuerpo de la tarjeta de acciones,
+   a la derecha de los botones.
+========================================================= */
+
+.dashboard-hero-content {
+    grid-template-columns: minmax(0, 1fr);
+}
+
+/* Título ("ACCIONES RÁPIDAS") arriba; debajo: [ 6 botones ............ ][ fecha ]
+   Todo vive directamente dentro del contenedor del encabezado. */
+.dashboard .quick-actions-row {
+    display: flex;
+    align-items: stretch;
+    gap: 16px;
+}
+
+.dashboard .quick-actions-row .quick-actions-grid {
+    flex: 1 1 auto;
+    min-width: 0;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 10px;
+}
+
+.dashboard .quick-actions-row .dashboard-hero-date {
+    flex: 0 0 auto;
+    margin: 0;
+    min-height: 52px;
+    padding: 8px 18px;
+    justify-content: center;
+    white-space: nowrap;
+}
+
+@media (max-width: 1399px) {
+    .dashboard .quick-actions-row .quick-actions-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 900px) {
+    .dashboard .quick-actions-row {
+        flex-direction: column;
+    }
+    .dashboard .quick-actions-row .dashboard-hero-date {
+        white-space: normal;
+    }
+}
+
+/* =========================================================
+   2. CELDAS NUEVAS DENTRO DE LA CUADRÍCULA DE RESUMEN
+========================================================= */
+
+.dashboard-summary-grid > .dashboard-cell-budget,
+.dashboard-summary-grid > .dashboard-cell-movements,
+.dashboard-summary-grid > .dashboard-cell-events,
+.dashboard-summary-grid > .ffc-carousels-root > .ffc-cards-section,
+.dashboard-summary-grid > .ffc-carousels-root > .ffc-goals-section {
+    min-width: 0;
+    align-self: start;
+}
+
+/* El contenedor de carruseles deja de ser una caja y sus dos
+   módulos pasan a ser celdas directas de la cuadrícula.        */
+.dashboard-summary-grid > .ffc-carousels-root {
+    display: contents;
+}
+
+/* Los módulos ya no llevan el relleno de página completa */
+.dashboard-summary-grid .ffc-cards-section,
+.dashboard-summary-grid .ffc-goals-section {
+    width: auto;
+    margin: 0;
+    padding: 0;
+}
+
+.dashboard-summary-grid .ffc-cards-header,
+.dashboard-summary-grid .ffc-goals-header {
+    gap: 14px;
+    margin-bottom: 18px;
+}
+
+.dashboard-summary-grid .ffc-cards-header h1,
+.dashboard-summary-grid .ffc-goals-section h1 {
+    font-size: clamp(24px, 2.2vw, 32px);
+}
+
+.dashboard-summary-grid .ffc-cards-header p,
+.dashboard-summary-grid .ffc-goals-header p {
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   3. UBICACIÓN (solo escritorio ≥ 1201px)
+========================================================= */
+
+@media (min-width: 1201px) {
+
+    /* Fila 1: se mantiene igual */
+    .dashboard-summary-grid > .income-expense-flip-card,
+    .dashboard-summary-grid > .savings-card,
+    .dashboard-summary-grid > .available-card {
+        grid-row: 1;
+    }
+
+    /* Columna derecha: Patrimonio total + Últimos movimientos +
+       Próximos eventos, apilados uno debajo del otro. Arranca en la
+       fila de Control de gastos y baja junto a Tarjetas/Metas.      */
+    .dashboard-summary-grid > .dashboard-side-stack {
+        grid-column: 10 / span 3;
+        grid-row: 2 / span 2;
+        align-self: start;
+    }
+
+    /* Control de gastos: ancho = Ingresos/Gastos + Ahorro */
+    .dashboard-summary-grid > .dashboard-cell-budget {
+        grid-column: 1 / span 9;
+        grid-row: 2;
+    }
+
+    /* Fila 3 */
+    .dashboard-summary-grid .ffc-cards-section {
+        grid-column: 1 / span var(--dash-cards-span);
+        grid-row: 3;
+    }
+
+    .dashboard-summary-grid .ffc-goals-section {
+        grid-column: calc(var(--dash-cards-span) + 1) / span var(--dash-goals-span);
+        grid-row: 3;
+    }
+
+}
+
+
+/* =========================================================
+   4. RESPONSIVE (≤ 1200px): todo a ancho completo, en orden
+========================================================= */
+
+@media (max-width: 480px) {
+
+    .dashboard .quick-actions-row .quick-actions-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 1200px) {
+
+    /* La pila se deshace: cada tarjeta vuelve a ser una celda */
+    .dashboard-summary-grid > .dashboard-side-stack {
+        display: contents;
+    }
+
+    .dashboard-summary-grid > .dashboard-cell-budget,
+    .dashboard-summary-grid .dashboard-cell-movements,
+    .dashboard-summary-grid .dashboard-cell-events,
+    .dashboard-summary-grid .ffc-cards-section,
+    .dashboard-summary-grid .ffc-goals-section {
+        grid-column: 1 / -1;
+    }
+
+    /* Movimientos y eventos van al final del resumen */
+    .dashboard-summary-grid .dashboard-cell-movements,
+    .dashboard-summary-grid .dashboard-cell-events {
+        order: 1;
+    }
+}
+
+
+/* =========================================================
+   5. MIS TARJETAS · gráfico circular a la izquierda,
+      tarjetas a la derecha (ENTIDAD/TARJETA... queda debajo)
+========================================================= */
+
+.dashboard-summary-grid .ffc-financial-stage {
+    grid-template-columns: 210px minmax(0, 1fr);
+    align-items: center;
+    gap: 14px;
+}
+
+.dashboard-summary-grid .ffc-distribution-panel {
+    min-height: auto;
+    display: block;             /* anula la versión apilada de cards.css */
+    padding: 18px 14px;
+}
+
+.dashboard-summary-grid .ffc-distribution-header {
+    display: flex;
+}
+
+.dashboard-summary-grid .ffc-distribution-header h2 {
+    font-size: 16px;
+}
+
+.dashboard-summary-grid .ffc-donut-wrap {
+    width: 150px;
+    height: 150px;
+    margin: 14px auto 8px;
+}
+
+.dashboard-summary-grid .ffc-distribution-legend {
+    padding-right: 0;
+}
+
+/* El carrusel 3D se escala según el ancho disponible
+   (--ffc-scale lo calcula js/dashboard-layout.js). Los laterales
+   se recortan dentro de su propio contenedor.                   */
+.dashboard-summary-grid .ffc-cards-carousel {
+    zoom: var(--ffc-scale, 1);
+    overflow: hidden;
+    min-width: 0;
+}
+
+.dashboard-summary-grid .ffc-active-card-info {
+    flex-wrap: wrap;
+    gap: 16px 24px;
+    padding: 18px 20px;
+}
+
+.dashboard-summary-grid .ffc-active-details {
+    flex-wrap: wrap;
+    gap: 16px 28px;
+}
+
+/* Pantallas medianas/pequeñas: el gráfico vuelve arriba */
+@media (max-width: 1200px) and (min-width: 721px) {
+    .dashboard-summary-grid .ffc-financial-stage {
+        grid-template-columns: 210px minmax(0, 1fr);
+    }
+}
+
+@media (max-width: 720px) {
+    .dashboard-summary-grid .ffc-financial-stage {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+
+/* =========================================================
+   6. MIS METAS · adaptación al nuevo ancho
+========================================================= */
+
+.dashboard-summary-grid .ffc-goals-viewport {
+    width: 100%;
+}
+
+.dashboard-summary-grid .ffc-goal-card {
+    width: calc(100% - 16px);
+    padding: 28px 24px 58px;
+}
+
+
+/* =========================================================
+   7. COLUMNA DERECHA (Patrimonio · Movimientos · Eventos)
+========================================================= */
+
+@media (min-width: 1201px) {
+
+    .dashboard-side-stack {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        min-width: 0;
+    }
+
+    /* Patrimonio total conserva su tamaño original */
+    .dashboard-side-stack > .net-worth-card {
+        flex: 0 0 auto;
+        align-self: stretch;
+        grid-column: auto !important;
+        height: auto;
+        min-height: 142px;
+    }
+
+    .dashboard-side-stack > .card {
+        min-width: 0;
+        overflow: hidden;
+        margin: 0;
+        border: 1px solid rgba(226, 232, 240, 0.9);
+        border-radius: 19px;
+        box-shadow: 0 5px 17px rgba(15, 23, 42, 0.05);
+    }
+
+}
+
+/* Cualquier ancho: aspecto de las tarjetas de la columna derecha */
+.dashboard-side-stack > .card {
+    min-width: 0;
+    overflow: hidden;
+    margin: 0;
+    border: 1px solid rgba(226, 232, 240, 0.9);
+    border-radius: 19px;
+    box-shadow: 0 5px 17px rgba(15, 23, 42, 0.05);
+}
+
+
+/* =========================================================
+   8. ÚLTIMOS MOVIMIENTOS · botón "Ver historial" abajo
+      y filas más compactas (solo dentro de esta tarjeta)
+========================================================= */
+
+.dashboard-cell-movements .recent-movements-footer {
+    display: flex;
+    justify-content: center;
+    margin-top: 8px;
+    padding-top: 10px;
+    border-top: 1px solid var(--border-color);
+}
+
+.dashboard-cell-movements .recent-movements-button {
+    padding: 6px 16px;
+    min-height: 0;
+    font-size: 0.8rem;
+}
+
+.dashboard-cell-movements #recentMovements {
+    min-height: 0;
+}
+
+.dashboard-cell-movements .movement-item {
+    padding: 8px 0;
+}
+
+.dashboard-cell-movements .movement-icon {
+    width: 32px;
+    height: 32px;
+    font-size: 0.9rem;
+}
+
+/* Encabezado: menos aire inferior ahora que las acciones no van en otra tarjeta */
+.dashboard .dashboard-hero {
+    padding-bottom: 18px;
+}

@@ -1,0 +1,163 @@
+/*
+==========================================
+FinanceFlow
+Archivo: variables.css
+Versión: 0.1.0
+
+Descripción:
+Sistema global de diseño.
+Aquí viven los colores, tamaños,
+sombras y estilos base.
+==========================================
+*/
+
+
+:root {
+
+
+    /* ==========================
+       COLORES PRINCIPALES
+    =========================== */
+
+
+    --primary-color: #2563EB;
+    --primary-dark: #1E40AF;
+    --primary-light: #DBEAFE;
+
+
+    /* ==========================
+       COLORES FINANCIEROS
+    =========================== */
+
+
+    --success-color: #16A34A;
+    --success-light: #DCFCE7;
+
+
+    --warning-color: #D97706;
+    --warning-light: #FEF3C7;
+
+
+    --danger-color: #DC2626;
+    --danger-light: #FEE2E2;
+
+
+
+    /* ==========================
+       COLORES NEUTROS
+    =========================== */
+
+
+    --background-color: #F8FAFC;
+
+    --surface-color: #FFFFFF;
+
+    --text-primary: #0F172A;
+
+    --text-secondary: #64748B;
+
+    --border-color: #E2E8F0;
+
+
+   /* ==========================
+      SIDEBAR
+   ========================== */
+
+   --sidebar-width: 270px;
+
+   --sidebar-compact-width: 80px;
+
+   --sidebar-bg: #0F172A;
+
+   --sidebar-text: #F8FAFC;
+
+   --sidebar-hover: #1E293B;
+
+
+    /* ==========================
+       METAS
+    =========================== */
+
+
+    --goal-color: #D4A017;
+
+    --goal-light: #FEF9C3;
+
+
+
+    /* ==========================
+       SOMBRAS
+    =========================== */
+
+
+    --shadow-sm:
+
+        0 1px 3px rgba(15, 23, 42, 0.08);
+
+
+    --shadow-md:
+
+        0 4px 12px rgba(15, 23, 42, 0.10);
+
+
+    --shadow-lg:
+
+        0 10px 25px rgba(15, 23, 42, 0.12);
+
+
+
+    /* ==========================
+       BORDES
+    =========================== */
+
+
+    --radius-sm: 8px;
+
+    --radius-md: 14px;
+
+    --radius-lg: 20px;
+
+
+
+    /* ==========================
+       ESPACIADOS
+    =========================== */
+
+
+    --space-xs: 8px;
+
+    --space-sm: 16px;
+
+    --space-md: 24px;
+
+    --space-lg: 32px;
+
+    --space-xl: 48px;
+
+
+
+    /* ==========================
+       TRANSICIONES
+    =========================== */
+
+
+    --transition-fast: 0.2s ease;
+
+    --transition-normal: 0.3s ease;
+
+
+
+    /* ==========================
+       TIPOGRAFÍA
+    =========================== */
+
+
+    --font-family:
+
+    "Inter",
+    "Segoe UI",
+    Arial,
+    sans-serif;
+
+
+}

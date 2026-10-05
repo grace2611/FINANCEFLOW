@@ -1,0 +1,474 @@
+/*
+==========================================
+FinanceFlow
+Archivo: dashboard-budget-tracker.css
+Versión: 1.0.0
+
+Descripción:
+Tarjeta "¿Cómo van tus gastos este mes?" del
+Dashboard: barra de presupuesto con marcador,
+estado (verde/amarillo/rojo) y mensaje dinámico
+que avisa cuando te excedes.
+
+Origen: financeflow_presupuesto_demo (budget-card)
+
+IMPORTANTE:
+- Las clases genéricas que ya usaba la app
+  (.card-header, .status-warning, .status-danger,
+  .progress-fill, etc.) se renombraron con el
+  prefijo "budget-" para no afectar otras tarjetas
+  del dashboard, calendario, préstamos, etc.
+- Los colores y radios ya NO se definen en :root:
+  se reutilizan las variables de diseño de
+  variables.css (--success-color, --warning-color,
+  --danger-color, --primary-color, --border-color,
+  --radius-lg, --shadow-sm, etc.) para que la
+  tarjeta quede visualmente consistente con el
+  resto de FinanceFlow.
+==========================================
+*/
+
+
+/* ============================================================
+   7. TARJETA PRINCIPAL
+   ============================================================ */
+
+.budget-card {
+  border: 1px solid var(--border-color);
+  background: var(--surface-color);
+  box-shadow: var(--shadow-sm);
+}
+
+.budget-card {
+  position: relative;
+  overflow: hidden;
+
+  padding: 28px;
+
+  border-radius: var(--radius-lg);
+}
+
+.budget-card::before {
+  content: "";
+
+  position: absolute;
+  inset: 0 0 auto 0;
+
+  height: 3px;
+
+  background: linear-gradient(
+    90deg,
+    var(--success-color),
+    var(--warning-color),
+    var(--danger-color)
+  );
+}
+
+
+/* ============================================================
+   8. CABECERAS DE TARJETAS
+   ============================================================ */
+
+.budget-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.budget-card-header.compact {
+  align-items: center;
+}
+
+.budget-card-kicker {
+  display: block;
+
+  margin-bottom: 5px;
+
+  color: var(--text-secondary);
+
+  font-size: 0.67rem;
+  font-weight: 850;
+  letter-spacing: 0.13em;
+}
+
+.budget-card-header h2 {
+  font-size: 1.22rem;
+  line-height: 1.25;
+  letter-spacing: -0.025em;
+}
+
+
+/* ============================================================
+   9. ESTADO
+   ============================================================ */
+
+.budget-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+
+  padding: 7px 10px;
+
+  border-radius: 999px;
+
+  font-size: 0.73rem;
+  font-weight: 800;
+
+  white-space: nowrap;
+
+  transition:
+    background var(--transition-fast),
+    color var(--transition-fast);
+}
+
+.budget-status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+}
+
+.budget-status-good {
+  color: var(--success-color);
+  background: var(--success-light);
+}
+
+.budget-status-good .budget-status-dot {
+  background: var(--success-color);
+}
+
+.budget-status-warning {
+  color: var(--warning-color);
+  background: var(--warning-light);
+}
+
+.budget-status-warning .budget-status-dot {
+  background: var(--warning-color);
+}
+
+.budget-status-danger {
+  color: var(--danger-color);
+  background: var(--danger-light);
+}
+
+.budget-status-danger .budget-status-dot {
+  background: var(--danger-color);
+}
+
+
+/* ============================================================
+   10. NÚMEROS
+   ============================================================ */
+
+.budget-numbers {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+
+  gap: 30px;
+
+  margin-top: 34px;
+}
+
+.budget-spent-block > span,
+.budget-limit-block > span {
+  display: block;
+
+  color: var(--text-secondary);
+
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.budget-amount-row {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+
+  margin-top: 3px;
+}
+
+.budget-amount-row strong {
+  font-size: clamp(2rem, 5vw, 2.8rem);
+  line-height: 1;
+  letter-spacing: -0.055em;
+}
+
+.budget-amount-row > span {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  font-weight: 800;
+}
+
+.budget-limit-block {
+  text-align: right;
+}
+
+.budget-limit-block strong {
+  display: block;
+  margin-top: 3px;
+
+  font-size: 1.2rem;
+}
+
+
+/* ============================================================
+   11. BARRA DE PRESUPUESTO
+   ============================================================ */
+
+.budget-progress-area {
+  margin-top: 30px;
+}
+
+.budget-progress-track {
+  position: relative;
+
+  width: 100%;
+  height: 17px;
+
+  border-radius: 999px;
+
+  /*
+    Fondo dividido en tres zonas.
+    El relleno real se coloca encima mediante JS.
+  */
+  background:
+    linear-gradient(
+      90deg,
+      #dff5e8 0%,
+      #dff5e8 70%,
+      #fff0c6 70%,
+      #fff0c6 90%,
+      #ffe0de 90%,
+      #ffe0de 100%
+    );
+
+  box-shadow:
+    inset 0 1px 2px rgba(23, 32, 51, 0.08);
+
+  overflow: visible;
+}
+
+.budget-progress-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+
+  height: 100%;
+  width: 0%;
+
+  border-radius: inherit;
+
+  transition:
+    width 700ms cubic-bezier(0.22, 1, 0.36, 1),
+    background 250ms ease;
+
+  box-shadow:
+    0 3px 9px rgba(23, 32, 51, 0.12);
+}
+
+.budget-progress-good {
+  background: linear-gradient(
+    90deg,
+    #16a34a,
+    #20b765
+  );
+}
+
+.budget-progress-warning {
+  background: linear-gradient(
+    90deg,
+    #e6a019,
+    #f0b938
+  );
+}
+
+.budget-progress-danger {
+  background: linear-gradient(
+    90deg,
+    #dc4545,
+    #ef6464
+  );
+}
+
+.budget-progress-marker {
+  position: absolute;
+  top: 50%;
+
+  width: 27px;
+  height: 27px;
+
+  display: grid;
+  place-items: center;
+
+  border: 3px solid white;
+  border-radius: 50%;
+
+  background: var(--text-primary);
+
+  color: white;
+
+  font-size: 0.55rem;
+  font-weight: 850;
+
+  box-shadow:
+    0 3px 12px rgba(23, 32, 51, 0.2);
+
+  transform:
+    translate(-50%, -50%);
+
+  transition:
+    left 700ms cubic-bezier(0.22, 1, 0.36, 1),
+    background 250ms ease;
+}
+
+.budget-progress-scale {
+  display: flex;
+  justify-content: space-between;
+
+  margin-top: 9px;
+
+  color: var(--text-secondary);
+
+  font-size: 0.64rem;
+  font-weight: 700;
+}
+
+.budget-scale-green {
+  color: var(--success-color);
+}
+
+.budget-scale-yellow {
+  color: var(--warning-color);
+}
+
+.budget-scale-red {
+  color: var(--danger-color);
+}
+
+
+/* ============================================================
+   12. MENSAJE DINÁMICO
+   ============================================================ */
+
+.budget-status-message {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+
+  margin-top: 28px;
+  padding: 15px;
+
+  border-radius: 14px;
+
+  transition:
+    background var(--transition-fast),
+    color var(--transition-fast);
+}
+
+.budget-message-icon {
+  display: grid;
+  place-items: center;
+
+  width: 31px;
+  height: 31px;
+  flex: 0 0 31px;
+
+  border-radius: 9px;
+
+  font-size: 0.82rem;
+  font-weight: 900;
+}
+
+.budget-status-message strong {
+  display: block;
+  font-size: 0.83rem;
+}
+
+.budget-status-message p {
+  margin-top: 2px;
+
+  font-size: 0.75rem;
+  line-height: 1.45;
+}
+
+.budget-message-good {
+  background: var(--success-light);
+  color: var(--success-color);
+}
+
+.budget-message-good .budget-message-icon {
+  background: rgba(24, 169, 87, 0.13);
+}
+
+.budget-message-warning {
+  background: var(--warning-light);
+  color: var(--warning-color);
+}
+
+.budget-message-warning .budget-message-icon {
+  background: rgba(228, 161, 27, 0.13);
+}
+
+.budget-message-danger {
+  background: var(--danger-light);
+  color: var(--danger-color);
+}
+
+.budget-message-danger .budget-message-icon {
+  background: rgba(226, 75, 75, 0.13);
+}
+
+
+/* ============================================================
+   13. DETALLES INFERIORES
+   ============================================================ */
+
+.budget-details {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr auto 1fr;
+
+  align-items: center;
+
+  margin-top: 25px;
+  padding-top: 21px;
+
+  border-top: 1px solid var(--border-color);
+}
+
+.budget-detail-item {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.budget-detail-icon {
+  font-size: 1rem;
+}
+
+.budget-detail-item small {
+  display: block;
+
+  color: var(--text-secondary);
+
+  font-size: 0.64rem;
+  font-weight: 700;
+}
+
+.budget-detail-item strong {
+  display: block;
+
+  margin-top: 1px;
+
+  font-size: 0.78rem;
+}
+
+.budget-detail-divider {
+  width: 1px;
+  height: 28px;
+
+  margin: 0 18px;
+
+  background: var(--border-color);
+}
+

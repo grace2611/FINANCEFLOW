@@ -1,0 +1,987 @@
+/*
+==========================================
+FinanceFlow
+Archivo: dashboard-summary-cards.css
+Versión: 1.0.0
+
+Descripción:
+Tarjetas de resumen del Dashboard (FILA 1).
+Diseño nuevo con tarjeta "Ingresos y gastos" con
+efecto flip + gráfico comparativo, y tarjetas de
+Ahorro, Disponible y Patrimonio total.
+
+IMPORTANTE:
+Todas las clases usadas aquí (.dashboard-summary-grid,
+.dashboard-summary-card, .dashboard-card-header,
+.dashboard-card-icon, .dashboard-card-title,
+.dashboard-card-body, .dashboard-card-description)
+están renombradas/con prefijo respecto al archivo de
+origen para NO chocar con las clases genéricas
+(.summary-card, .card-header, .card-icon, .card-title,
+.card-body, .card-description) que ya usan otras vistas
+de la aplicación (Calendario, Crédito, etc.). Así, este
+archivo solo afecta a las tarjetas del Dashboard.
+==========================================
+*/
+
+
+/* =========================================================
+   2. LAYOUT: CUADRÍCULA DE 12 COLUMNAS
+   Contenedor donde viven todas las tarjetas de esta fila.
+========================================================= */
+
+.dashboard-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    align-items: stretch;
+    gap: 16px;
+    width: 100%;
+    margin-bottom: var(--space-lg, 32px);
+}
+
+
+/* =========================================================
+   3. COMPONENTE BASE: TARJETA DE RESUMEN (.dashboard-summary-card)
+   IMPORTANTE: estilo compartido por Ahorro, Disponible,
+   Patrimonio total, Ingresos y Gastos. Todo lo que cambia
+   entre tarjetas es el color de acento (--dashboard-accent),
+   definido en el punto 4.
+========================================================= */
+ 
+.dashboard-summary-card {
+    --dashboard-accent: #2563EB;
+ 
+    position: relative;
+    min-width: 0;
+    min-height: 142px;
+    grid-column: span 3;
+ 
+    padding: 20px 21px;
+    overflow: hidden;
+ 
+    border: 1px solid rgba(226, 232, 240, 0.95);
+    border-top: 3px solid var(--dashboard-accent);
+    border-radius: 18px;
+ 
+    background:
+        linear-gradient(
+            145deg,
+            #ffffff 0%,
+            #f8fafc 100%
+        );
+ 
+    box-shadow:
+        0 5px 16px rgba(15, 23, 42, 0.055);
+ 
+    transition:
+        transform 0.28s cubic-bezier(.2,.8,.2,1),
+        box-shadow 0.28s ease,
+        border-color 0.28s ease;
+}
+ 
+/* Círculos decorativos translúcidos */
+.dashboard-summary-card::before {
+    content: "";
+ 
+    position: absolute;
+    width: 150px;
+    height: 150px;
+    top: -75px;
+    right: -75px;
+ 
+    border-radius: 50%;
+    background: var(--dashboard-accent);
+    opacity: 0.055;
+ 
+    pointer-events: none;
+ 
+    transition:
+        transform 0.45s ease,
+        opacity 0.35s ease;
+}
+ 
+.dashboard-summary-card::after {
+    content: "";
+ 
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    right: -35px;
+    bottom: -40px;
+ 
+    border-radius: 50%;
+    background: var(--dashboard-accent);
+    opacity: 0.035;
+ 
+    pointer-events: none;
+ 
+    transition: transform 0.35s ease;
+}
+ 
+/* Hover de la tarjeta */
+.dashboard-summary-card:hover {
+    transform: translateY(-6px);
+ 
+    border-color:
+        color-mix(
+            in srgb,
+            var(--dashboard-accent) 28%,
+            #E2E8F0
+        );
+ 
+    box-shadow:
+        0 16px 32px rgba(15, 23, 42, 0.10);
+}
+ 
+.dashboard-summary-card:hover::before {
+    transform: scale(1.35);
+    opacity: 0.08;
+}
+ 
+.dashboard-summary-card:hover::after {
+    transform: scale(1.4);
+}
+ 
+/* Icono */
+.dashboard-card-icon {
+    position: relative;
+    z-index: 2;
+ 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+ 
+    width: 45px;
+    height: 45px;
+ 
+    border-radius: 13px;
+ 
+    background:
+        color-mix(
+            in srgb,
+            var(--dashboard-accent) 11%,
+            #FFFFFF
+        );
+ 
+    color: var(--dashboard-accent);
+ 
+    box-shadow:
+        0 4px 12px
+        color-mix(
+            in srgb,
+            var(--dashboard-accent) 12%,
+            transparent
+        );
+ 
+    font-size: 1.2rem;
+ 
+    transition:
+        transform 0.3s cubic-bezier(.2,.8,.2,1),
+        box-shadow 0.3s ease;
+}
+ 
+.dashboard-summary-card:hover .dashboard-card-icon {
+    transform:
+        scale(1.10)
+        rotate(-4deg);
+ 
+    box-shadow:
+        0 7px 16px
+        color-mix(
+            in srgb,
+            var(--dashboard-accent) 20%,
+            transparent
+        );
+}
+ 
+/* Encabezado (icono + título + monto) */
+.dashboard-card-header {
+    position: relative;
+    z-index: 2;
+ 
+    display: flex;
+    align-items: center;
+    gap: 10px;
+ 
+    margin-bottom: 0;
+}
+ 
+/* Bloque título + monto, en columna */
+.card-title-amount {
+    display: flex;
+    flex-direction: column;
+ 
+    gap: 2px;
+ 
+    min-width: 0;
+}
+ 
+.dashboard-card-title {
+    display: block;
+ 
+    color: #64748B;
+ 
+    font-size: 0.78rem;
+    font-weight: 750;
+    letter-spacing: 0.01em;
+    line-height: 1.3;
+}
+ 
+/* Monto (tamaño por defecto: Ahorro, Disponible, Patrimonio total) */
+.card-title-amount h2 {
+    margin: 0;
+ 
+    color: #0F172A;
+ 
+    font-size: clamp(1.45rem, 2vw, 1.72rem);
+    font-weight: 850;
+    letter-spacing: -0.045em;
+    line-height: 1.15;
+ 
+    transition: transform 0.25s ease;
+}
+ 
+.dashboard-summary-card:hover .card-title-amount h2 {
+    transform: translateX(2px);
+}
+ 
+/* Cuerpo (solo aporta la línea decorativa inferior) */
+.dashboard-card-body {
+    position: relative;
+    z-index: 2;
+    padding-top: 15px;
+}
+ 
+/* Estilo genérico por si en el futuro se coloca contenido
+   (monto/descripción) directamente dentro de .dashboard-card-body */
+.dashboard-card-body h2 {
+    margin: 0 0 6px;
+ 
+    color: #0F172A;
+ 
+    font-size: clamp(1.45rem, 2vw, 1.72rem);
+    font-weight: 850;
+    letter-spacing: -0.045em;
+    line-height: 1.15;
+ 
+    transition: transform 0.25s ease;
+}
+ 
+.dashboard-summary-card:hover .dashboard-card-body h2 {
+    transform: translateX(2px);
+}
+ 
+.dashboard-card-description {
+    margin: 0;
+ 
+    color: #64748B;
+ 
+    font-size: 0.72rem;
+    line-height: 1.45;
+}
+ 
+/* Línea inferior decorativa */
+.dashboard-card-body::after {
+    content: "";
+ 
+    display: block;
+    width: 34px;
+    height: 3px;
+ 
+    margin-top: 0;
+ 
+    border-radius: 999px;
+    background: var(--dashboard-accent);
+    opacity: 0.55;
+ 
+    transition:
+        width 0.3s ease,
+        opacity 0.3s ease;
+}
+ 
+.dashboard-summary-card:hover .dashboard-card-body::after {
+    width: 58px;
+    opacity: 0.9;
+}
+ 
+ 
+/* =========================================================
+   4. COLORES Y TAMAÑO SEGÚN POSICIÓN (nth-child)
+   IMPORTANTE: el color de cada tarjeta NO lo decide la
+   clase de la tarjeta (.savings-card, .available-card, etc.)
+   sino su posición como hijo dentro de su contenedor, porque
+   estos selectores nth-child tienen más especificidad. Se deja
+   documentado así para no romper el resultado actual.
+========================================================= */
+ 
+.dashboard-summary-card:nth-child(1) { --dashboard-accent: #2563EB; }
+.dashboard-summary-card:nth-child(2) { --dashboard-accent: #16A34A; }
+.dashboard-summary-card:nth-child(3) { --dashboard-accent: #059669; }
+.dashboard-summary-card:nth-child(4) { --dashboard-accent: #DC2626; }
+.dashboard-summary-card:nth-child(5) { --dashboard-accent: #D97706; }
+.dashboard-summary-card:nth-child(6) { --dashboard-accent: #7C3AED; }
+.dashboard-summary-card:nth-child(7) { --dashboard-accent: #CA8A04; }
+ 
+/* Solo del 5° al 7° necesitan un ancho distinto (4 columnas);
+   del 1° al 4° ya heredan "span 3" de la regla base. */
+.dashboard-summary-card:nth-child(5),
+.dashboard-summary-card:nth-child(6),
+.dashboard-summary-card:nth-child(7) {
+    grid-column: span 4;
+}
+ 
+ 
+/* =========================================================
+   5. TARJETA "INGRESOS Y GASTOS" (efecto flip)
+========================================================= */
+ 
+/* Card contenedora: ocupa 6 columnas para equilibrar con Ahorro */
+.income-expense-flip-card {
+    grid-column: span 6;
+    min-width: 0;
+    min-height: 100px;
+ 
+    perspective: 1400px;
+ 
+    /* El giro depende únicamente de .is-flipped en .flip-inner,
+       no de la posición de esta card contenedora. */
+    transform: none !important;
+}
+ 
+/* Pieza que realmente gira */
+.flip-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    min-height: 100px;
+ 
+    transform-style: preserve-3d;
+    -webkit-transform-style: preserve-3d;
+ 
+    transition:
+        transform 0.72s cubic-bezier(.2,.75,.2,1);
+}
+ 
+.income-expense-flip-card.is-flipped .flip-inner {
+    transform: rotateY(180deg) !important;
+    -webkit-transform: rotateY(180deg) !important;
+}
+ 
+/* Ambas caras comparten el mismo espacio */
+.flip-face {
+    position: absolute;
+    inset: 0;
+ 
+    width: 100%;
+    min-height: 100px;
+ 
+    border: 1px solid rgba(226, 232, 240, 0.95);
+    border-top: 3px solid #2563EB;
+    border-radius: 18px;
+ 
+    background:
+        linear-gradient(
+            145deg,
+            #ffffff 0%,
+            #f8fafc 100%
+        );
+ 
+    box-shadow:
+        0 5px 16px rgba(15, 23, 42, 0.055);
+ 
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+ 
+    overflow: hidden;
+    pointer-events: auto;
+}
+ 
+/* Decoraciones de la card contenedora */
+.flip-face::before {
+    content: "";
+ 
+    position: absolute;
+    width: 150px;
+    height: 150px;
+    top: -75px;
+    right: -75px;
+ 
+    border-radius: 50%;
+    background: #2563EB;
+    opacity: 0.055;
+ 
+    pointer-events: none;
+}
+ 
+.flip-face::after {
+    content: "";
+ 
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    right: -35px;
+    bottom: -40px;
+ 
+    border-radius: 50%;
+    background: #2563EB;
+    opacity: 0.035;
+ 
+    pointer-events: none;
+}
+ 
+/* Cara trasera, girada 180° por defecto */
+.flip-back {
+    transform: rotateY(180deg);
+}
+ 
+/* Al girar, solo la cara visible recibe los clics */
+.income-expense-flip-card:not(.is-flipped) .flip-back {
+    pointer-events: none;
+}
+ 
+.income-expense-flip-card.is-flipped .flip-front {
+    pointer-events: none;
+}
+ 
+.income-expense-flip-card.is-flipped .flip-back {
+    pointer-events: auto;
+}
+ 
+/* Cabecera de la card contenedora */
+.flip-card-header {
+    position: relative;
+    z-index: 5;
+ 
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+ 
+    gap: 14px;
+ 
+    padding: 5px 25px 5px;
+}
+ 
+.flip-card-kicker {
+    display: block;
+ 
+    margin-bottom: 3px;
+ 
+    color: #64748B;
+ 
+    font-size: 0.64rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+}
+ 
+.flip-card-title {
+    margin: 0;
+ 
+    color: #0F172A;
+ 
+    font-size: 1rem;
+    font-weight: 850;
+    letter-spacing: -0.025em;
+}
+ 
+/* Botón de estadísticas (voltea la card) */
+.statistics-button {
+    position: relative;
+    z-index: 10;
+
+    margin-left: auto;
+ 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+ 
+    width: 15px;
+    height: 15px;
+ 
+    flex: 0 0 40px;
+ 
+    border: 1px solid rgba(37, 99, 235, 0.14);
+    border-radius: 10px;
+ 
+    background: rgba(37, 99, 235, 0.08);
+    color: #2563EB;
+ 
+    font-size: 1.05rem;
+ 
+    cursor: pointer;
+ 
+    box-shadow:
+        0 4px 12px rgba(37, 99, 235, 0.10);
+ 
+    transition:
+        transform 0.25s ease,
+        background 0.25s ease,
+        box-shadow 0.25s ease;
+}
+ 
+.statistics-button:hover {
+    transform: translateY(-2px) scale(1.05);
+ 
+    background: rgba(37, 99, 235, 0.14);
+ 
+    box-shadow:
+        0 7px 17px rgba(37, 99, 235, 0.16);
+}
+ 
+.statistics-button:active {
+    transform: scale(0.95);
+}
+ 
+/* El botón de regreso usa el mismo icono de estadísticas */
+#statisticsBackButton {
+    cursor: pointer;
+}
+ 
+/* Ingresos + Gastos, uno al lado del otro dentro de la card padre */
+.income-expense-cards {
+    position: relative;
+    z-index: 2;
+ 
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+    gap: 16px !important;
+    width: 100% !important;
+ 
+    padding: 0 14px 14px;
+}
+ 
+.income-expense-cards .dashboard-summary-card {
+    min-height: 0;
+ 
+    padding: 15px 16px;
+ 
+    border-top-width: 3px;
+ 
+    box-shadow:
+        0 4px 13px rgba(15, 23, 42, 0.045);
+ 
+    width: 100% !important;
+    min-width: 0 !important;
+    grid-column: auto !important;
+}
+ 
+/* Evitamos que el hover de las tarjetas internas
+   mueva la card contenedora */
+.income-expense-cards .dashboard-summary-card:hover {
+    transform: translateY(-3px);
+}
+ 
+.income-expense-cards .dashboard-card-icon {
+    width: 39px;
+    height: 39px;
+ 
+    border-radius: 11px;
+ 
+    font-size: 1rem;
+}
+ 
+.income-expense-cards .dashboard-card-body {
+    padding-top: 8px;
+}
+ 
+.income-expense-cards .dashboard-card-header {
+    align-items: center;
+}
+ 
+/* Monto más compacto dentro de la card de Ingresos/Gastos */
+.income-expense-cards .card-title-amount h2 {
+    margin: 0;
+ 
+    color: #0F172A;
+ 
+    font-size: clamp(1.25rem, 1.8vw, 1.55rem);
+    font-weight: 850;
+    letter-spacing: -0.045em;
+    line-height: 1.15;
+ 
+    transition: transform 0.25s ease;
+}
+ 
+/* Colores propios de Ingresos y Gastos */
+.income-card {
+    --dashboard-accent: #2563EB;
+}
+ 
+.expense-card {
+    --dashboard-accent: #DC2626;
+}
+ 
+ 
+/* =========================================================
+   6. GRÁFICO COMPARATIVO INGRESOS VS. GASTOS
+   (cara trasera de la card "Ingresos y gastos")
+   Se adapta al alto disponible de la card (flex, sin alturas
+   fijas): a la izquierda dos barras en una sola línea cada una
+   (etiqueta · barra · monto) y a la derecha un anillo con el
+   % del ingreso que ya se gastó + el balance del mes.
+   El ancho de las barras y el anillo los asigna
+   js/dashboard-summary-cards.js.
+========================================================= */
+
+.flip-back {
+    display: flex;
+    flex-direction: column;
+
+    /* El gráfico se adapta al ancho real de la tarjeta (ver @container) */
+    container-type: inline-size;
+    container-name: flipback;
+}
+
+.comparison-chart {
+    position: relative;
+    z-index: 2;
+
+    flex: 1 1 auto;
+    min-height: 0;
+
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    column-gap: 26px;
+
+    padding: 0 28px 14px;
+}
+
+/* ---- Barras ---- */
+
+.chart-bars {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+
+    min-width: 0;
+}
+
+.chart-row {
+    display: grid;
+    grid-template-columns: 66px minmax(0, 1fr) auto;
+    align-items: center;
+    column-gap: 10px;
+
+    min-width: 0;
+}
+
+.chart-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    color: #64748B;
+
+    font-size: 0.72rem;
+    font-weight: 750;
+}
+
+.chart-dot {
+    flex: 0 0 7px;
+    width: 7px;
+    height: 7px;
+
+    border-radius: 50%;
+}
+
+.income-dot  { background: #2563EB; }
+.expense-dot { background: #DC2626; }
+
+.chart-value {
+    color: #0F172A;
+
+    font-size: 0.78rem;
+    font-weight: 800;
+    text-align: right;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+}
+
+/* Pista de fondo */
+.chart-track {
+    position: relative;
+
+    width: 100%;
+    height: 10px;
+
+    border-radius: 999px;
+    background: rgba(226, 232, 240, 0.65);
+
+    overflow: hidden;
+}
+
+/* Barra: crece en ancho (0% -> valor%) */
+.chart-bar {
+    position: relative;
+
+    height: 100%;
+    width: 0%;
+    min-width: 6px;
+
+    border-radius: 999px;
+
+    overflow: hidden;
+
+    transition: width 0.9s cubic-bezier(.16,.84,.24,1);
+}
+
+.chart-bar::after {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    background: linear-gradient(
+        100deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.55) 45%,
+        transparent 65%
+    );
+
+    background-size: 200% 100%;
+
+    animation: chart-bar-shine 2.6s ease-in-out infinite;
+}
+
+@keyframes chart-bar-shine {
+    0%   { background-position: 150% 0; }
+    100% { background-position: -50% 0; }
+}
+
+.chart-bar-income  { background: linear-gradient(90deg, #2563EB, #60A5FA); }
+.chart-bar-expense { background: linear-gradient(90deg, #DC2626, #F87171); }
+
+.chart-row:hover .chart-track {
+    background: rgba(226, 232, 240, 0.95);
+}
+
+/* ---- Anillo + balance ---- */
+
+.chart-summary {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+
+    padding-left: 24px;
+    border-left: 1px solid rgba(148, 163, 184, 0.28);
+
+    max-width: 210px;
+}
+
+.chart-ring {
+    --ring-color: #16A34A;
+
+    position: relative;
+
+    flex: 0 0 auto;
+    width: 56px;
+    height: 56px;
+}
+
+.chart-ring[data-level="warn"]   { --ring-color: #D97706; }
+.chart-ring[data-level="danger"] { --ring-color: #DC2626; }
+
+.chart-ring svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+
+    transform: rotate(-90deg);
+}
+
+.chart-ring-bg,
+.chart-ring-fg {
+    fill: none;
+    stroke-width: 3.6;
+}
+
+.chart-ring-bg {
+    stroke: rgba(148, 163, 184, 0.25);
+}
+
+.chart-ring-fg {
+    stroke: var(--ring-color);
+    stroke-linecap: round;
+    stroke-dasharray: 0 100;
+
+    transition:
+        stroke-dasharray 0.9s cubic-bezier(.16,.84,.24,1),
+        stroke 0.3s ease;
+}
+
+.chart-ring-text {
+    position: absolute;
+    inset: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: #0F172A;
+
+    font-size: 0.78rem;
+    font-weight: 850;
+    letter-spacing: -0.02em;
+}
+
+.chart-balance {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+
+    min-width: 0;
+}
+
+.chart-balance-label {
+    color: #64748B;
+
+    font-size: 0.64rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.chart-balance strong {
+    color: #16A34A;
+
+    font-size: 1.05rem;
+    font-weight: 850;
+    letter-spacing: -0.03em;
+    line-height: 1.15;
+    white-space: nowrap;
+}
+
+.chart-balance strong.is-negative {
+    color: #DC2626;
+}
+
+.chart-balance small {
+    color: #64748B;
+
+    font-size: 0.68rem;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Tarjeta angosta: queda solo el anillo (el % va dentro de él) */
+@container flipback (max-width: 479px) {
+
+    .comparison-chart {
+        column-gap: 18px;
+        padding-left: 22px;
+        padding-right: 22px;
+    }
+
+    .chart-summary {
+        padding-left: 18px;
+    }
+
+    .chart-balance {
+        display: none;
+    }
+}
+
+/* Tarjeta muy angosta: solo barras */
+@container flipback (max-width: 340px) {
+
+    .comparison-chart {
+        grid-template-columns: minmax(0, 1fr);
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+    .chart-summary {
+        display: none;
+    }
+
+    .chart-row {
+        grid-template-columns: 58px minmax(0, 1fr) auto;
+        column-gap: 8px;
+    }
+}
+
+/* =========================================================
+   7. TARJETAS: AHORRO / DISPONIBLE / PATRIMONIO TOTAL
+   Ahorro va en la primera fila; Disponible y Patrimonio
+   total van alineados a la derecha, uno debajo del otro.
+   IMPORTANTE: el contenido de estas tres se centra
+   verticalmente (alto), conservando el ancho ya definido.
+========================================================= */
+ 
+.savings-card {
+    grid-column: span 3;
+}
+ 
+.available-card,
+.net-worth-card {
+    grid-column: 10 / span 3 !important;
+}
+ 
+/* Que conserven su propia altura en vez de estirarse
+   para igualar a la card de Ingresos/Gastos */
+.savings-card,
+.available-card,
+.net-worth-card {
+    align-self: start;
+}
+ 
+/* Centrado vertical del contenido (icono + título + monto),
+   sin afectar el ancho de la tarjeta. */
+.savings-card,
+.available-card,
+.net-worth-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+}
+ 
+ 
+/* =========================================================
+   8. RESPONSIVE
+========================================================= */
+ 
+@media (max-width: 1200px) {
+ 
+    .income-expense-flip-card,
+    .savings-card,
+    .available-card,
+    .net-worth-card {
+        grid-column: span 6 !important;
+    }
+ 
+    .available-card,
+    .net-worth-card {
+        grid-column: 7 / span 6 !important;
+    }
+}
+ 
+@media (max-width: 768px) {
+ 
+    .income-expense-flip-card,
+    .savings-card,
+    .available-card,
+    .net-worth-card {
+        grid-column: span 12 !important;
+    }
+ 
+}
+ 
+@media (max-width: 480px) {
+ 
+    .flip-card-header {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+ 
+    .income-expense-cards {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+ 
+}
+ 

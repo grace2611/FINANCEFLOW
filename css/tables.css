@@ -1,0 +1,334 @@
+/*
+==========================================
+FinanceFlow
+Archivo: tables.css
+Versión: 0.1.0
+
+Descripción:
+Estilos para tablas y movimientos.
+==========================================
+*/
+
+
+/* ==========================
+   TABLA PRINCIPAL
+=========================== */
+
+
+.transactions-table {
+
+    width: 100%;
+
+    border-collapse: collapse;
+
+}
+
+
+
+/* ==========================
+   ENCABEZADO
+=========================== */
+
+
+.transactions-table thead {
+
+    background: var(--background-color);
+
+}
+
+
+
+.transactions-table th {
+
+    text-align: left;
+
+    padding: 14px 16px;
+
+    color: var(--text-secondary);
+
+    font-size: 0.85rem;
+
+    font-weight: 700;
+
+    border-bottom: 1px solid var(--border-color);
+
+}
+
+
+
+/* ==========================
+   CUERPO
+=========================== */
+
+
+.transactions-table td {
+
+    padding: 16px;
+
+    border-bottom: 1px solid var(--border-color);
+
+    color: var(--text-primary);
+
+}
+
+
+
+.transactions-table tbody tr {
+
+    transition: var(--transition-fast);
+
+}
+
+
+
+.transactions-table tbody tr:hover {
+
+    background: var(--background-color);
+
+}
+
+
+
+/* ==========================
+   TIPOS DE MOVIMIENTO
+=========================== */
+
+
+.transaction-income {
+
+    color: var(--success-color);
+
+    font-weight: 700;
+
+}
+
+
+
+.transaction-expense {
+
+    color: var(--danger-color);
+
+    font-weight: 700;
+
+}
+
+
+
+/* ==========================
+   CATEGORÍAS
+=========================== */
+
+
+.category-tag {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    padding: 6px 12px;
+
+    border-radius: 20px;
+
+    font-size: 0.8rem;
+
+    font-weight: 600;
+
+    background: var(--primary-light);
+
+    color: var(--primary-color);
+
+}
+
+
+
+/* ==========================
+   ESTADO VACÍO
+=========================== */
+
+
+.empty-state {
+
+    text-align: center;
+
+    padding: var(--space-lg);
+
+}
+
+.empty-icon {
+
+    font-size: 2.5rem;
+
+    margin-bottom: 12px;
+
+}
+
+.empty-state h4 {
+
+    margin-bottom: 8px;
+
+}
+
+
+/* ==========================
+   MOVIMIENTOS RECIENTES
+=========================== */
+
+
+#recentMovements {
+
+    min-height: 180px;
+
+}
+
+
+
+.movement-item {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    padding: 14px 0;
+
+    border-bottom: 1px solid var(--border-color);
+
+}
+
+
+
+.movement-info {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+}
+
+
+
+.movement-icon {
+
+    width: 40px;
+
+    height: 40px;
+
+    border-radius: 50%;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background: var(--primary-light);
+
+}
+
+
+.movement-name {
+
+    font-weight: 600;
+
+}
+
+
+
+.movement-date {
+
+    font-size: 0.85rem;
+
+    color: var(--text-secondary);
+
+}
+
+
+.movement-amount {
+
+    font-weight: 700;
+
+}
+
+/* ==========================================
+   RESPONSIVE DE TABLAS
+========================================== */
+
+@media (max-width: 768px) {
+
+    .transactions-table th,
+    .transactions-table td {
+
+        padding: 12px;
+
+    }
+
+
+    .movement-item {
+
+        gap: 12px;
+
+    }
+
+
+    .movement-info {
+
+        min-width: 0;
+
+    }
+
+
+    .movement-name {
+
+        overflow: hidden;
+
+        text-overflow: ellipsis;
+
+        white-space: nowrap;
+
+    }
+
+
+    .movement-amount {
+
+        flex-shrink: 0;
+
+    }
+
+}
+
+
+@media (max-width: 500px) {
+
+    .movement-item {
+
+        align-items: flex-start;
+
+    }
+
+
+    .movement-icon {
+
+        width: 34px;
+
+        height: 34px;
+
+    }
+
+
+    .movement-date {
+
+        font-size: 0.75rem;
+
+    }
+
+
+    .movement-amount {
+
+        font-size: 0.85rem;
+
+    }
+
+}

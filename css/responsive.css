@@ -1,0 +1,569 @@
+/*
+==========================================
+FinanceFlow
+Archivo: responsive.css
+Versión: 0.1.0
+
+Descripción:
+Adaptación responsive del dashboard.
+==========================================
+*/
+
+/* ==========================================
+   FINANCEFLOW
+   RESPONSIVE FINAL
+========================================== */
+
+
+/* ==========================================
+   TABLET GRANDE
+========================================== */
+
+@media (max-width: 1200px) {
+
+    .main-content {
+
+        padding: 24px;
+
+    }
+
+
+    .summary-grid {
+
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+    }
+
+
+    .accounts-grid {
+
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+    }
+
+}
+
+
+/* ==========================================
+   TABLET
+========================================== */
+
+@media (max-width: 900px) {
+
+    .main-content {
+
+        margin-left: 90px;
+
+        width: calc(100% - 90px);
+
+        padding: 20px;
+    }
+
+
+    .topbar {
+
+        gap: 12px;
+
+    }
+
+
+    .header-context {
+
+        min-width: 0;
+
+    }
+
+
+    .header-context h2 {
+
+        white-space: nowrap;
+
+        overflow: hidden;
+
+        text-overflow: ellipsis;
+
+    }
+
+
+    .header-left > p {
+
+        display: none;
+
+    }
+
+
+    .dashboard-row {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    .analysis-grid,
+    .reports-grid,
+    .settings-grid {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    .credit-summary,
+    .loan-summary {
+
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+    }
+
+}
+
+
+/* ==========================================
+   TABLET PEQUEÑA
+========================================== */
+
+@media (max-width: 768px) {
+
+    .main-content {
+
+        padding: 18px;
+
+    }
+
+
+    .page-header {
+
+        gap: 12px;
+
+    }
+
+
+    .page-header h1 {
+
+        font-size: 1.45rem;
+
+    }
+
+
+    .summary-grid {
+
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+    }
+
+
+    .accounts-grid {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+
+    .movements-summary {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+
+    .dashboard-quick-actions {
+
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+    }
+
+
+    .filters-container {
+
+        align-items: stretch;
+
+    }
+
+
+    .filter-group {
+
+        min-width: 140px;
+
+    }
+
+
+    .search-wrapper {
+
+        min-width: 180px;
+
+    }
+
+
+    .table-container {
+
+        width: 100%;
+
+        overflow-x: auto;
+
+        -webkit-overflow-scrolling: touch;
+
+    }
+
+
+    table {
+
+        min-width: 650px;
+
+    }
+
+}
+
+
+/* ==========================================
+   CELULAR
+========================================== */
+
+@media (max-width: 600px) {
+
+    .main-content {
+
+        margin-left: 0;
+
+        width: 100%;
+
+        padding: 14px;
+
+        padding-bottom: 90px;
+
+    }
+
+
+    .topbar {
+
+        min-height: 58px;
+
+        padding: 10px 14px;
+
+    }
+
+
+    .header-left {
+
+        min-width: 0;
+
+        flex: 1;
+
+    }
+
+
+    .header-brand {
+
+        font-size: 0.9rem;
+
+    }
+
+
+    .header-separator {
+
+        display: none;
+
+    }
+
+
+    .header-context h2 {
+
+        font-size: 0.9rem;
+
+    }
+
+
+    .header-right {
+
+        gap: 6px;
+
+    }
+
+
+    .header-icon-button {
+
+        width: 36px;
+
+        height: 36px;
+
+    }
+
+
+    .profile-button {
+
+        padding: 4px;
+
+    }
+
+
+    .profile-summary {
+
+        display: none;
+
+    }
+
+
+    .profile-avatar {
+
+        width: 34px;
+
+        height: 34px;
+
+    }
+
+
+    .page-header {
+
+        flex-direction: column;
+
+        align-items: stretch;
+
+    }
+
+
+    .page-header h1 {
+
+        font-size: 1.35rem;
+
+    }
+
+
+    .page-header-actions {
+
+        width: 100%;
+
+    }
+
+
+    .page-header-actions .button,
+    .page-header-actions .btn-primary,
+    .page-header-actions .btn-secondary {
+
+        width: 100%;
+
+    }
+
+
+    .summary-grid {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+
+    .dashboard-quick-actions {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+
+    .credit-summary,
+    .loan-summary {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+
+    .card {
+
+        padding: 14px;
+
+        border-radius: var(--radius-md);
+
+    }
+
+
+    .card-header {
+
+        gap: 10px;
+
+    }
+
+
+    .card-header h3 {
+
+        font-size: 0.95rem;
+
+    }
+
+
+    .summary-card .card-body h2 {
+
+        font-size: 1.5rem;
+
+    }
+
+
+    .form-row {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+
+    .form-actions {
+
+        flex-direction: column;
+
+        align-items: stretch;
+
+    }
+
+
+    .form-actions .button,
+    .form-actions button {
+
+        width: 100%;
+
+    }
+
+
+    .filters-container {
+
+        flex-direction: column;
+
+        gap: 10px;
+
+    }
+
+
+    .filter-group,
+    .search-wrapper {
+
+        width: 100%;
+
+        min-width: 0;
+
+    }
+
+
+    .card-actions {
+
+        flex-direction: column;
+
+        align-items: stretch;
+
+    }
+
+
+    .card-actions .button,
+    .card-actions .btn-primary,
+    .card-actions .btn-secondary {
+
+        width: 100%;
+
+    }
+
+
+    .goal-actions {
+
+        flex-direction: column;
+
+        align-items: stretch;
+
+    }
+
+
+    .goal-actions button {
+
+        width: 100%;
+
+    }
+
+
+    .account-card-footer {
+
+        flex-direction: column;
+
+        align-items: stretch;
+
+    }
+
+
+    .notification-item {
+
+        gap: 9px;
+
+    }
+
+
+    .notification-icon {
+
+        width: 32px;
+
+        height: 32px;
+
+    }
+
+}
+
+
+/* ==========================================
+   CELULAR MUY PEQUEÑO
+========================================== */
+
+@media (max-width: 400px) {
+
+    .main-content {
+
+        padding: 10px;
+
+    }
+
+
+    .topbar {
+
+        padding: 8px 10px;
+
+    }
+
+
+    .header-brand {
+
+        display: none;
+
+    }
+
+
+    .header-context h2 {
+
+        font-size: 0.85rem;
+
+    }
+
+
+    .page-header h1 {
+
+        font-size: 1.2rem;
+
+    }
+
+
+    .card {
+
+        padding: 12px;
+
+    }
+
+
+    input,
+    select,
+    textarea {
+
+        font-size: 16px;
+
+    }
+
+}

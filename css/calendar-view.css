@@ -1,0 +1,642 @@
+/*
+==========================================
+FinanceFlow
+Archivo: calendar-view.css
+
+Descripción:
+Calendario mensual de la página "Calendario".
+Usa los mismos tokens "glass" de pages-refined.css
+(--pg-*), así que combina con el resto de páginas y
+cambia solo en modo oscuro.
+
+Se carga después de pages-refined.css y antes de
+theme-dark.css. Para quitarlo basta con quitar su <link>.
+==========================================
+*/
+
+
+/* =========================================================
+   0. TOKENS
+========================================================= */
+
+.ffcal {
+    --cal-cell: rgba(255, 255, 255, 0.55);
+    --cal-cell-hover: rgba(255, 255, 255, 0.95);
+    --cal-border: rgba(148, 163, 184, 0.24);
+    --cal-side: rgba(37, 99, 235, 0.035);
+
+    --cal-income: #16A34A;
+    --cal-expense: #DC2626;
+    --cal-reminder: #D97706;
+
+    --cal-income-bg: rgba(22, 163, 74, 0.12);
+    --cal-expense-bg: rgba(220, 38, 38, 0.11);
+    --cal-reminder-bg: rgba(217, 119, 6, 0.13);
+}
+
+:root[data-theme="dark"] .ffcal {
+    --cal-cell: rgba(255, 255, 255, 0.035);
+    --cal-cell-hover: rgba(255, 255, 255, 0.085);
+    --cal-border: rgba(148, 163, 184, 0.16);
+    --cal-side: rgba(79, 139, 255, 0.06);
+
+    --cal-income: #34D399;
+    --cal-expense: #F87171;
+    --cal-reminder: #FBBF24;
+
+    --cal-income-bg: rgba(52, 211, 153, 0.14);
+    --cal-expense-bg: rgba(248, 113, 113, 0.14);
+    --cal-reminder-bg: rgba(251, 191, 36, 0.14);
+}
+
+
+/* =========================================================
+   1. TARJETA + DISTRIBUCIÓN (mes | detalle del día)
+========================================================= */
+
+.card.ffcal {
+    padding: 0;
+    overflow: hidden;
+}
+
+.card.ffcal:hover {
+    transform: none;
+}
+
+.ffcal-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 310px;
+}
+
+.ffcal-main {
+    min-width: 0;
+    padding: 22px 24px 20px;
+}
+
+
+/* =========================================================
+   2. BARRA SUPERIOR (mes · navegación)
+========================================================= */
+
+.ffcal-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    flex-wrap: wrap;
+
+    margin-bottom: 18px;
+}
+
+.ffcal-heading h3 {
+    margin: 0;
+
+    font-size: clamp(1.25rem, 2vw, 1.6rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    text-transform: capitalize;
+}
+
+.ffcal-heading h3 b {
+    margin-left: 4px;
+
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.ffcal-heading span {
+    display: block;
+    margin-top: 4px;
+
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+}
+
+.ffcal-nav {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.ffcal-today,
+.ffcal-arrow {
+    border: 1px solid var(--cal-border);
+    background: var(--cal-cell);
+    color: var(--text-primary);
+
+    font: inherit;
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.ffcal-today {
+    height: 36px;
+    padding: 0 16px;
+
+    border-radius: 999px;
+
+    font-size: 0.8rem;
+    font-weight: 750;
+}
+
+.ffcal-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 36px;
+    height: 36px;
+
+    border-radius: 50%;
+
+    font-size: 1.35rem;
+    line-height: 1;
+    padding-bottom: 3px;
+}
+
+.ffcal-today:hover,
+.ffcal-arrow:hover {
+    background: var(--cal-cell-hover);
+    border-color: var(--pg-a);
+    color: var(--pg-a);
+
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(37, 99, 235, 0.14);
+}
+
+.ffcal-today:active,
+.ffcal-arrow:active {
+    transform: scale(0.95);
+}
+
+
+/* =========================================================
+   3. DÍAS DE LA SEMANA + CUADRÍCULA
+========================================================= */
+
+.ffcal-weekdays,
+.ffcal-grid {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 8px;
+}
+
+.ffcal-weekdays {
+    margin-bottom: 8px;
+}
+
+.ffcal-weekdays span {
+    color: var(--text-secondary);
+
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.ffcal-cell {
+    position: relative;
+
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 5px;
+
+    min-width: 0;
+    min-height: 96px;
+    padding: 8px 9px 9px;
+
+    border: 1px solid var(--cal-border);
+    border-radius: 14px;
+
+    background: var(--cal-cell);
+    color: var(--text-primary);
+
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.ffcal-cell:hover {
+    transform: translateY(-2px);
+
+    background: var(--cal-cell-hover);
+    box-shadow: 0 10px 24px rgba(15, 23, 42, 0.09);
+}
+
+.ffcal-cell:focus-visible {
+    outline: 2px solid var(--pg-a);
+    outline-offset: 2px;
+}
+
+.ffcal-cell.is-outside {
+    opacity: 0.42;
+}
+
+.ffcal-cell.is-outside:hover {
+    opacity: 0.8;
+}
+
+/* Número del día */
+.ffcal-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    align-self: flex-start;
+    min-width: 26px;
+    height: 26px;
+    padding: 0 6px;
+
+    border-radius: 999px;
+
+    font-size: 0.82rem;
+    font-weight: 750;
+    font-variant-numeric: tabular-nums;
+}
+
+/* Hoy */
+.ffcal-cell.is-today .ffcal-num {
+    background: var(--pg-grad);
+    color: #ffffff;
+
+    box-shadow: 0 5px 12px rgba(37, 99, 235, 0.32);
+}
+
+/* Día elegido */
+.ffcal-cell.is-selected {
+    border-color: var(--pg-a);
+    background: rgba(37, 99, 235, 0.09);
+
+    box-shadow:
+        0 0 0 3px rgba(37, 99, 235, 0.14),
+        0 8px 20px rgba(37, 99, 235, 0.10);
+}
+
+:root[data-theme="dark"] .ffcal-cell.is-selected {
+    background: rgba(79, 139, 255, 0.16);
+    border-color: #4F8BFF;
+}
+
+/* Eventos dentro de la celda */
+.ffcal-chips {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+
+    min-width: 0;
+}
+
+.ffcal-chip {
+    display: block;
+    padding: 2px 7px;
+
+    border-radius: 7px;
+
+    font-size: 0.68rem;
+    font-weight: 700;
+    line-height: 1.35;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.ffcal-chip.is-income   { background: var(--cal-income-bg);   color: var(--cal-income); }
+.ffcal-chip.is-expense  { background: var(--cal-expense-bg);  color: var(--cal-expense); }
+.ffcal-chip.is-reminder { background: var(--cal-reminder-bg); color: var(--cal-reminder); }
+
+.ffcal-more {
+    padding-left: 4px;
+
+    color: var(--text-secondary);
+
+    font-size: 0.66rem;
+    font-weight: 700;
+}
+
+/* Puntos (solo pantallas angostas) */
+.ffcal-dots {
+    display: none;
+    gap: 4px;
+    margin-top: auto;
+}
+
+.ffcal-dot {
+    display: inline-block;
+
+    width: 7px;
+    height: 7px;
+
+    border-radius: 50%;
+}
+
+.ffcal-dot.is-income   { background: var(--cal-income); }
+.ffcal-dot.is-expense  { background: var(--cal-expense); }
+.ffcal-dot.is-reminder { background: var(--cal-reminder); }
+
+
+/* =========================================================
+   4. LEYENDA
+========================================================= */
+
+.ffcal-legend {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    flex-wrap: wrap;
+
+    margin-top: 16px;
+    padding-top: 14px;
+
+    border-top: 1px solid var(--pg-line);
+
+    color: var(--text-secondary);
+
+    font-size: 0.76rem;
+    font-weight: 600;
+}
+
+.ffcal-legend span {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+}
+
+
+/* =========================================================
+   5. PANEL DEL DÍA
+========================================================= */
+
+.ffcal-day {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    min-width: 0;
+    padding: 22px 22px 20px;
+
+    border-left: 1px solid var(--pg-line);
+    background: var(--cal-side);
+}
+
+.ffcal-day-kicker {
+    display: inline-flex;
+    align-items: center;
+
+    margin-bottom: 8px;
+    padding: 4px 11px;
+
+    border-radius: 999px;
+    background: var(--pg-chip);
+    color: var(--pg-chip-text);
+
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.ffcal-day-head h4 {
+    margin: 0;
+
+    font-size: 1.2rem;
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    line-height: 1.2;
+}
+
+.ffcal-day-events {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    flex: 1 1 auto;
+    min-height: 0;
+}
+
+.ffcal-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+
+    padding: 26px 12px;
+
+    border: 1px dashed var(--cal-border);
+    border-radius: 16px;
+
+    color: var(--text-secondary);
+    text-align: center;
+}
+
+.ffcal-empty span {
+    font-size: 1.6rem;
+}
+
+.ffcal-empty p {
+    margin: 0;
+    font-size: 0.82rem;
+}
+
+/* Evento del día */
+.ffcal-item {
+    --c: var(--cal-reminder);
+    --c-bg: var(--cal-reminder-bg);
+
+    position: relative;
+
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+
+    padding: 12px 12px 12px 14px;
+
+    border: 1px solid var(--cal-border);
+    border-left: 4px solid var(--c);
+    border-radius: 14px;
+
+    background: var(--cal-cell);
+}
+
+.ffcal-item.is-income  { --c: var(--cal-income);  --c-bg: var(--cal-income-bg); }
+.ffcal-item.is-expense { --c: var(--cal-expense); --c-bg: var(--cal-expense-bg); }
+
+.ffcal-item-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex: 0 0 36px;
+    width: 36px;
+    height: 36px;
+
+    border-radius: 11px;
+    background: var(--c-bg);
+
+    font-size: 1.05rem;
+}
+
+.ffcal-item-body {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.ffcal-item-body strong {
+    display: block;
+
+    font-size: 0.88rem;
+    font-weight: 750;
+    overflow-wrap: anywhere;
+}
+
+.ffcal-item-body p {
+    margin: 2px 0 0;
+
+    color: var(--text-secondary);
+
+    font-size: 0.78rem;
+    overflow-wrap: anywhere;
+}
+
+.ffcal-item-body p:empty {
+    display: none;
+}
+
+.ffcal-item-type {
+    display: inline-block;
+    margin-top: 7px;
+    padding: 2px 9px;
+
+    border-radius: 999px;
+    background: var(--c-bg);
+    color: var(--c);
+
+    font-size: 0.66rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.ffcal-item-amount {
+    display: block;
+    margin-top: 6px;
+
+    color: var(--c);
+
+    font-size: 0.9rem;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+}
+
+/* Botón de eliminar: reutiliza .timeline-delete */
+.ffcal-item .timeline-delete {
+    align-self: flex-start;
+}
+
+/* Botón "Agregar evento" */
+.ffcal-add {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    width: 100%;
+    margin-top: auto;
+}
+
+.ffcal-add[hidden] {
+    display: none;
+}
+
+
+/* =========================================================
+   6. RESPONSIVE
+========================================================= */
+
+@media (max-width: 1100px) {
+
+    .ffcal-layout {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .ffcal-day {
+        border-left: none;
+        border-top: 1px solid var(--pg-line);
+    }
+
+    .ffcal-day-events {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    }
+
+    .ffcal-add {
+        width: auto;
+        align-self: flex-start;
+        margin-top: 0;
+    }
+}
+
+@media (max-width: 760px) {
+
+    .ffcal-main {
+        padding: 16px 12px 14px;
+    }
+
+    .ffcal-weekdays,
+    .ffcal-grid {
+        gap: 4px;
+    }
+
+    .ffcal-cell {
+        align-items: center;
+        gap: 4px;
+
+        min-height: 54px;
+        padding: 6px 2px;
+
+        border-radius: 11px;
+    }
+
+    .ffcal-num {
+        align-self: center;
+        min-width: 24px;
+        height: 24px;
+        font-size: 0.78rem;
+    }
+
+    /* Los textos de cada evento pasan a puntos de color */
+    .ffcal-chips {
+        display: none;
+    }
+
+    .ffcal-dots {
+        display: flex;
+        justify-content: center;
+        margin-top: 0;
+        min-height: 7px;
+    }
+
+    .ffcal-weekdays span {
+        font-size: 0.6rem;
+        letter-spacing: 0.04em;
+    }
+
+    .ffcal-day {
+        padding: 18px 16px;
+    }
+}

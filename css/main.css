@@ -1,0 +1,75 @@
+/*
+==========================================
+FinanceFlow
+Archivo: main.css
+Versión: 0.1.0
+
+Descripción:
+Estructura principal de la aplicación.
+==========================================
+*/
+
+
+/* ==========================
+   RESET GENERAL
+=========================== */
+
+
+* {
+
+    margin: 0;
+
+    padding: 0;
+
+    box-sizing: border-box;
+
+}
+
+
+body {
+
+    font-family: var(--font-family);
+
+    background: var(--background-color);
+
+    color: var(--text-primary);
+
+    min-height: 100vh;
+
+}
+
+
+
+/* ==========================
+   DASHBOARD GRID
+=========================== */
+
+
+.dashboard {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: var(--space-lg);
+
+}
+
+
+.dashboard-column {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: var(--space-md);
+
+}
+
+
+
+.full-width-section {
+
+    width: 100%;
+
+}

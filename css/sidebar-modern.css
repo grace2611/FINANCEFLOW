@@ -1,0 +1,565 @@
+/*
+==========================================
+FinanceFlow
+Archivo: sidebar-modern.css
+
+Sidebar moderno de "vidrio" (efecto blur), con iconos SVG,
+logo nuevo y el interruptor de modo claro / oscuro al final.
+
+- Se apoya en la estructura y el comportamiento de sidebar.css
+  (colapsado, tablet, móvil); aquí solo cambia la apariencia.
+- Colores de modo oscuro: ver theme-dark.css
+==========================================
+*/
+
+
+/* =========================================================
+   1. VARIABLES DEL SIDEBAR
+========================================================= */
+
+.sidebar {
+    --sidebar-text: #526074;
+    --sidebar-text-strong: #0F172A;
+    --sidebar-border: rgba(148, 163, 184, 0.22);
+    --sidebar-hover: rgba(37, 99, 235, 0.07);
+    --sidebar-hover-border: transparent;
+
+    --sm-accent-a: #2563EB;
+    --sm-accent-b: #7C3AED;
+    --sm-glass: rgba(255, 255, 255, 0.66);
+    --sm-glass-edge: rgba(255, 255, 255, 0.75);
+    --sm-chip: rgba(15, 23, 42, 0.045);
+    --sm-divider: rgba(148, 163, 184, 0.28);
+}
+
+
+/* =========================================================
+   2. CONTENEDOR · vidrio esmerilado
+========================================================= */
+
+.sidebar {
+    padding: 22px 14px 16px;
+
+    background: var(--sm-glass);
+    -webkit-backdrop-filter: blur(24px) saturate(170%);
+    backdrop-filter: blur(24px) saturate(170%);
+
+    border-right: 1px solid var(--sm-glass-edge);
+
+    box-shadow:
+        12px 0 44px rgba(15, 23, 42, 0.06),
+        inset -1px 0 0 rgba(148, 163, 184, 0.14);
+
+    color: var(--sidebar-text);
+}
+
+
+/* =========================================================
+   3. LOGO
+========================================================= */
+
+.sidebar .logo::before {
+    display: none;
+}
+
+.sidebar .logo h1 {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+
+    color: var(--sidebar-text-strong);
+    font-size: 1.16rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+}
+
+.sidebar .logo-mark {
+    position: relative;
+    display: grid;
+    place-items: center;
+    flex: 0 0 auto;
+
+    width: 38px;
+    height: 38px;
+
+    border-radius: 12px;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--sm-accent-a) 0%,
+            var(--sm-accent-b) 100%
+        );
+
+    box-shadow:
+        0 8px 20px rgba(79, 70, 229, 0.32),
+        inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+
+.sidebar .logo-mark svg {
+    width: 22px;
+    height: 22px;
+    fill: none;
+    stroke: #ffffff;
+    stroke-width: 2.4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+
+/* =========================================================
+   4. MENÚ
+========================================================= */
+
+.sidebar-menu ul {
+    gap: 4px;
+}
+
+.sidebar-menu li {
+    min-height: 46px;
+    padding: 5px 10px;
+
+    border-radius: 15px;
+
+    font-weight: 600;
+
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease,
+        color 0.2s ease,
+        box-shadow 0.25s ease;
+}
+
+/* Sin el brillo que cruzaba al pasar el mouse */
+.sidebar-menu li::after {
+    background: none;
+}
+
+/* Icono */
+.sidebar .sidebar-menu li .nav-icon {
+    width: 36px;
+    min-width: 36px;
+    height: 36px;
+
+    border-radius: 12px;
+
+    background: var(--sm-chip);
+    color: inherit;
+
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease,
+        color 0.2s ease;
+}
+
+.sidebar .sidebar-menu li .nav-icon svg {
+    width: 20px;
+    height: 20px;
+
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.sidebar-menu li span:last-child {
+    font-size: 0.875rem;
+    letter-spacing: -0.005em;
+}
+
+/* Hover */
+.sidebar-menu li:hover {
+    background: var(--sidebar-hover);
+    color: var(--sidebar-text-strong);
+    transform: translateX(3px);
+}
+
+.sidebar-menu li:hover .nav-icon {
+    background: rgba(37, 99, 235, 0.12);
+    color: var(--sm-accent-a);
+    transform: none;
+    box-shadow: none;
+}
+
+/* Activo: pastilla con degradado y brillo */
+.sidebar-menu li.active {
+    color: #ffffff;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--sm-accent-a) 0%,
+            var(--sm-accent-b) 100%
+        );
+
+    border-color: transparent;
+
+    box-shadow:
+        0 10px 24px rgba(79, 70, 229, 0.30),
+        inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+.sidebar-menu li.active .nav-icon {
+    background: rgba(255, 255, 255, 0.20);
+    color: #ffffff;
+    box-shadow: none;
+}
+
+/* Línea que separa las herramientas financieras */
+.sidebar-menu li[data-view="credit"] {
+    margin-top: 16px;
+}
+
+.sidebar-menu li[data-view="credit"]::after {
+    background: var(--sm-divider);
+}
+
+
+/* =========================================================
+   5. INTERRUPTOR CLARO / OSCURO (parte inferior)
+========================================================= */
+
+.sidebar-footer {
+    margin-top: auto;
+    padding-top: 14px;
+}
+
+.theme-toggle {
+    position: relative;
+    display: block;
+    width: 100%;
+    padding: 0;
+    border: none;
+    background: none;
+    cursor: pointer;
+    font: inherit;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.theme-toggle:focus-visible {
+    outline: 3px solid rgba(37, 99, 235, 0.35);
+    outline-offset: 3px;
+    border-radius: 16px;
+}
+
+/* --- Versión ancha: dos opciones con perilla deslizante --- */
+
+.theme-seg {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+
+    padding: 4px;
+
+    border: 1px solid var(--sm-divider);
+    border-radius: 16px;
+
+    background: var(--sm-chip);
+}
+
+.theme-seg-knob {
+    position: absolute;
+    top: 4px;
+    bottom: 4px;
+    left: 4px;
+    width: calc(50% - 4px);
+
+    border-radius: 12px;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 4px 12px rgba(15, 23, 42, 0.12),
+        0 1px 2px rgba(15, 23, 42, 0.08);
+
+    transition:
+        transform 0.32s cubic-bezier(0.34, 1.3, 0.5, 1),
+        background 0.3s ease;
+}
+
+.theme-seg-option {
+    position: relative;
+    z-index: 1;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+
+    height: 36px;
+
+    color: var(--sidebar-text);
+    font-size: 0.8rem;
+    font-weight: 650;
+
+    transition: color 0.25s ease;
+}
+
+.theme-seg-option svg,
+.theme-compact svg {
+    width: 17px;
+    height: 17px;
+
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+/* Modo claro activo */
+.theme-seg-light {
+    color: #B45309;
+}
+
+/* Modo oscuro activo */
+:root[data-theme="dark"] .theme-seg-knob {
+    transform: translateX(calc(100% + 0px));
+}
+
+:root[data-theme="dark"] .theme-seg-light {
+    color: var(--sidebar-text);
+}
+
+:root[data-theme="dark"] .theme-seg-dark {
+    color: #E0E7FF;
+}
+
+.theme-toggle:hover .theme-seg {
+    border-color: rgba(37, 99, 235, 0.35);
+}
+
+/* --- Versión compacta: un solo icono redondo --- */
+
+.theme-compact {
+    display: none;
+    position: relative;
+
+    width: 46px;
+    height: 46px;
+    margin: 0 auto;
+
+    border: 1px solid var(--sm-divider);
+    border-radius: 15px;
+
+    background: var(--sm-chip);
+    color: #B45309;
+
+    overflow: hidden;
+
+    transition:
+        background 0.25s ease,
+        border-color 0.25s ease,
+        color 0.25s ease;
+}
+
+.theme-compact > span {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+
+    transition:
+        transform 0.45s cubic-bezier(0.34, 1.4, 0.5, 1),
+        opacity 0.3s ease;
+}
+
+.theme-compact svg {
+    width: 21px;
+    height: 21px;
+}
+
+/* Claro: se ve el sol. Oscuro: se ve la luna */
+.theme-compact-moon {
+    opacity: 0;
+    transform: rotate(-90deg) scale(0.4);
+}
+
+:root[data-theme="dark"] .theme-compact {
+    color: #C7D2FE;
+}
+
+:root[data-theme="dark"] .theme-compact-sun {
+    opacity: 0;
+    transform: rotate(90deg) scale(0.4);
+}
+
+:root[data-theme="dark"] .theme-compact-moon {
+    opacity: 1;
+    transform: none;
+}
+
+.theme-toggle:hover .theme-compact {
+    border-color: rgba(37, 99, 235, 0.4);
+}
+
+/* Sidebar colapsado o tablet: solo el icono */
+body.sidebar-collapsed .theme-seg {
+    display: none;
+}
+
+body.sidebar-collapsed .theme-compact {
+    display: block;
+}
+
+@media (max-width: 900px) {
+
+    .theme-seg {
+        display: none;
+    }
+
+    .theme-compact {
+        display: block;
+    }
+
+}
+
+
+/* =========================================================
+   6. BOTÓN PARA COLAPSAR + TOOLTIPS
+========================================================= */
+
+@media (min-width: 901px) {
+
+    .sidebar-toggle {
+        border: 1px solid var(--sm-divider);
+
+        background: var(--surface-color, #ffffff);
+        color: var(--sidebar-text-strong);
+
+        box-shadow: 0 6px 18px rgba(15, 23, 42, 0.14);
+    }
+
+    body.sidebar-collapsed .sidebar .logo h1 {
+        width: auto;
+        height: auto;
+        border: none;
+        background: none;
+        box-shadow: none;
+        font-size: 0;
+        gap: 0;
+    }
+
+    body.sidebar-collapsed .sidebar .logo h1::before {
+        content: none;
+    }
+
+    body.sidebar-collapsed .sidebar .logo-text {
+        display: none;
+    }
+
+    body.sidebar-collapsed .sidebar-menu li {
+        padding: 5px;
+    }
+
+    body.sidebar-collapsed .sidebar-menu li .nav-icon {
+        width: 42px;
+        min-width: 42px;
+        height: 42px;
+    }
+
+    body.sidebar-collapsed .sidebar-menu li:hover {
+        background: var(--sidebar-hover);
+    }
+
+    body.sidebar-collapsed .sidebar-menu li:hover .nav-icon {
+        background: rgba(37, 99, 235, 0.12);
+        transform: none;
+    }
+
+    body.sidebar-collapsed .sidebar-menu li.active {
+        background:
+            linear-gradient(
+                135deg,
+                var(--sm-accent-a) 0%,
+                var(--sm-accent-b) 100%
+            );
+
+        box-shadow:
+            0 10px 24px rgba(79, 70, 229, 0.30),
+            inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    }
+
+    body.sidebar-collapsed .sidebar-menu li.active .nav-icon {
+        background: rgba(255, 255, 255, 0.20);
+    }
+
+}
+
+/* Tablet: el logo también queda solo como icono */
+@media (max-width: 900px) {
+
+    .sidebar .logo h1 {
+        display: flex;
+    }
+
+    .sidebar .logo-text {
+        display: none;
+    }
+
+}
+
+
+/* =========================================================
+   7. MÓVIL · barra inferior
+========================================================= */
+
+@media (max-width: 600px) {
+
+    .sidebar {
+        flex-direction: row;
+        align-items: center;
+        gap: 6px;
+
+        border-right: none;
+        border-top: 1px solid var(--sm-glass-edge);
+
+        box-shadow: 0 -10px 30px rgba(15, 23, 42, 0.10);
+    }
+
+    .sidebar-menu {
+        flex: 1 1 auto;
+        min-width: 0;
+        width: auto;
+    }
+
+    .sidebar-footer {
+        flex: 0 0 auto;
+        margin: 0;
+        padding: 0;
+        width: 46px;
+    }
+
+    .theme-compact {
+        width: 42px;
+        height: 42px;
+    }
+
+    .sidebar-menu li {
+        min-height: 50px;
+    }
+
+}
+
+
+/* Móvil: que los 6 accesos + el botón de tema quepan sin encimarse */
+@media (max-width: 600px) {
+
+    .sidebar-menu ul {
+        gap: 2px;
+    }
+
+    .sidebar-menu li {
+        flex: 1 1 0;
+        min-width: 0;
+        padding: 4px;
+    }
+
+    .sidebar .sidebar-menu li .nav-icon {
+        width: 34px;
+        min-width: 34px;
+        height: 34px;
+    }
+
+}

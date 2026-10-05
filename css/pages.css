@@ -1,0 +1,5866 @@
+/*
+==========================================
+FinanceFlow
+Página: Cuentas
+==========================================
+*/
+
+
+.page-view {
+
+    padding-bottom: var(--space-xl);
+
+}
+
+
+.page-heading {
+
+    display: flex;
+
+    align-items: flex-end;
+
+    justify-content: space-between;
+
+    gap: var(--space-md);
+
+    margin-bottom: var(--space-lg);
+
+}
+
+
+.page-kicker {
+
+    display: block;
+
+    margin-bottom: 6px;
+
+    color: var(--primary-color);
+
+    font-size: 0.75rem;
+
+    font-weight: 800;
+
+    letter-spacing: 0.08em;
+
+}
+
+
+.page-heading h2 {
+
+    margin-bottom: 6px;
+
+    font-size: 1.8rem;
+
+}
+
+
+.page-heading p {
+
+    color: var(--text-secondary);
+
+}
+
+
+/* ==========================================
+   RESUMEN DE CUENTAS
+========================================== */
+
+.accounts-summary {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: var(--space-sm);
+
+    margin-bottom: var(--space-md);
+
+}
+
+
+.accounts-summary-item {
+
+    background: var(--surface-color);
+
+    border: 1px solid var(--border-color);
+
+    border-radius: var(--radius-md);
+
+    padding: var(--space-sm);
+
+}
+
+
+.accounts-summary-label {
+
+    color: var(--text-secondary);
+
+    font-size: 0.85rem;
+
+}
+
+
+.accounts-summary-value {
+
+    margin-top: 5px;
+
+    font-size: 1.4rem;
+
+    font-weight: 800;
+
+}
+
+
+/* ==========================================
+   GRID DE CUENTAS
+========================================== */
+
+.accounts-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: var(--space-md);
+
+    margin-bottom: var(--space-md);
+
+}
+
+
+.account-card {
+
+    position: relative;
+
+    background: var(--surface-color);
+
+    border: 1px solid var(--border-color);
+
+    border-radius: var(--radius-lg);
+
+    padding: var(--space-md);
+
+    box-shadow: var(--shadow-sm);
+
+    transition:
+        transform var(--transition-normal),
+        box-shadow var(--transition-normal);
+
+}
+
+
+.account-card:hover {
+
+    transform: translateY(-3px);
+
+    box-shadow: var(--shadow-md);
+
+}
+
+
+.account-card-header {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+}
+
+
+.account-card-info {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+}
+
+
+.account-icon {
+
+    width: 48px;
+
+    height: 48px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: var(--radius-md);
+
+    background: var(--primary-light);
+
+    font-size: 1.4rem;
+
+}
+
+
+.account-name {
+
+    font-weight: 800;
+
+    color: var(--text-primary);
+
+}
+
+
+.account-type {
+
+    margin-top: 3px;
+
+    color: var(--text-secondary);
+
+    font-size: 0.82rem;
+
+}
+
+
+.account-balance {
+
+    margin-top: var(--space-md);
+
+    font-size: 1.8rem;
+
+    font-weight: 800;
+
+    color: var(--text-primary);
+
+}
+
+
+.account-description {
+
+    margin-top: 5px;
+
+    color: var(--text-secondary);
+
+    font-size: 0.85rem;
+
+}
+
+
+.account-card-actions {
+
+    display: flex;
+
+    gap: 8px;
+
+    margin-top: var(--space-md);
+
+}
+
+
+.account-action {
+
+    border: 1px solid var(--border-color);
+
+    background: var(--surface-color);
+
+    color: var(--text-secondary);
+
+    border-radius: var(--radius-sm);
+
+    padding: 8px 12px;
+
+    cursor: pointer;
+
+    font: inherit;
+
+    font-size: 0.82rem;
+
+}
+
+
+.account-action:hover {
+
+    background: var(--background-color);
+
+    color: var(--text-primary);
+
+}
+
+
+.account-status {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 5px;
+
+    padding: 5px 9px;
+
+    border-radius: 999px;
+
+    background: var(--success-light);
+
+    color: var(--success-color);
+
+    font-size: 0.72rem;
+
+    font-weight: 700;
+
+}
+
+
+.transfer-card {
+
+    margin-top: var(--space-md);
+
+}
+
+
+@media(max-width: 900px) {
+
+    .accounts-grid {
+
+        grid-template-columns: 1fr;
+
+    }
+
+}
+
+
+@media(max-width: 700px) {
+
+    .page-heading {
+
+        align-items: stretch;
+
+        flex-direction: column;
+
+    }
+
+
+    .page-heading .btn-primary {
+
+        width: 100%;
+
+    }
+
+
+    .accounts-summary {
+
+        grid-template-columns: 1fr;
+
+    }
+
+}
+ 
+/* ==========================================
+   FINANCEFLOW
+   ESTILOS DE PÁGINAS
+========================================== */
+
+
+/* ==========================================
+   TÍTULOS DE PÁGINA
+========================================== */
+
+.page-header {
+
+    display: flex;
+
+    align-items: flex-start;
+
+    justify-content: space-between;
+
+    gap: var(--space-md);
+
+    margin-bottom: var(--space-lg);
+
+}
+
+
+.page-header h1 {
+
+    margin: 0;
+
+    color: var(--text-primary);
+
+    font-size: 1.7rem;
+
+    font-weight: 800;
+
+    line-height: 1.2;
+
+}
+
+
+.page-header p {
+
+    margin: 6px 0 0;
+
+    color: var(--text-secondary);
+
+    font-size: 0.88rem;
+
+    line-height: 1.5;
+
+}
+
+
+.page-header-actions {
+
+    display: flex;
+
+    align-items: center;
+
+    flex-wrap: wrap;
+
+    gap: 8px;
+
+}
+
+
+/* ==========================================
+   DASHBOARD
+========================================== */
+
+.dashboard-section {
+
+    margin-bottom: var(--space-lg);
+
+}
+
+
+.dashboard-section:last-child {
+
+    margin-bottom: 0;
+
+}
+
+
+.dashboard-row {
+
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1.5fr)
+        minmax(280px, 1fr);
+
+    gap: var(--space-md);
+
+    margin-bottom: var(--space-lg);
+
+}
+
+
+.dashboard-row:last-child {
+
+    margin-bottom: 0;
+
+}
+
+
+/* ==========================================
+   ACCIONES RÁPIDAS
+========================================== */
+
+.dashboard-quick-actions {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+
+    gap: 12px;
+
+}
+
+
+.dashboard-quick-actions button {
+
+    min-height: 48px;
+
+}
+
+
+/* ==========================================
+   CUENTAS
+========================================== */
+
+.account-card {
+
+    position: relative;
+
+    overflow: hidden;
+
+}
+
+
+.account-card-header {
+
+    display: flex;
+
+    align-items: flex-start;
+
+    justify-content: space-between;
+
+    gap: 12px;
+
+    margin-bottom: 16px;
+
+}
+
+
+.account-card-name {
+
+    margin: 0;
+
+    color: var(--text-primary);
+
+    font-size: 1rem;
+
+    font-weight: 800;
+
+}
+
+
+.account-card-type {
+
+    margin-top: 4px;
+
+    color: var(--text-secondary);
+
+    font-size: 0.78rem;
+
+}
+
+
+.account-card-balance {
+
+    margin: 0;
+
+    color: var(--text-primary);
+
+    font-size: 1.5rem;
+
+    font-weight: 800;
+
+    line-height: 1.2;
+
+}
+
+
+.account-card-footer {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 10px;
+
+    margin-top: 16px;
+
+}
+
+
+/* ==========================================
+   MOVIMIENTOS
+========================================== */
+
+.movements-summary {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+
+    gap: var(--space-md);
+
+    margin-bottom: var(--space-lg);
+
+}
+
+
+.movement-summary-item {
+
+    padding: var(--space-md);
+
+    border: 1px solid var(--border-color);
+
+    border-radius: var(--radius-md);
+
+    background: var(--surface-color);
+
+}
+
+
+.movement-summary-item span {
+
+    display: block;
+
+    margin-bottom: 5px;
+
+    color: var(--text-secondary);
+
+    font-size: 0.78rem;
+
+    font-weight: 700;
+
+}
+
+
+.movement-summary-item strong {
+
+    color: var(--text-primary);
+
+    font-size: 1.25rem;
+
+}
+
+
+/* ==========================================
+   METAS
+========================================== */
+
+.goal-card {
+
+    overflow: hidden;
+
+}
+
+
+.goal-container {
+
+    width: 100%;
+
+}
+
+
+.goal-progress {
+
+    margin-top: 14px;
+
+}
+
+
+.goal-amounts {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 10px;
+
+    margin-top: 8px;
+
+    color: var(--text-secondary);
+
+    font-size: 0.78rem;
+
+}
+
+
+.goal-actions {
+
+    display: flex;
+
+    align-items: center;
+
+    flex-wrap: wrap;
+
+    gap: 8px;
+
+    margin-top: 14px;
+
+}
+
+
+/* ==========================================
+   CALENDARIO
+========================================== */
+
+.calendar-container {
+
+    width: 100%;
+
+    overflow-x: auto;
+
+}
+
+
+.calendar-header {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 12px;
+
+    margin-bottom: var(--space-md);
+
+}
+
+
+.calendar-header h3 {
+
+    margin: 0;
+
+    color: var(--text-primary);
+
+    font-size: 1rem;
+
+    font-weight: 800;
+
+}
+
+
+.calendar-navigation {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+}
+
+
+/* ==========================================
+   CRÉDITOS
+========================================== */
+
+.credit-summary {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+
+    gap: var(--space-md);
+
+    margin-bottom: var(--space-lg);
+
+}
+
+
+.credit-card {
+
+    min-width: 0;
+
+}
+
+
+.credit-progress {
+
+    margin-top: 14px;
+
+}
+
+
+.credit-progress-bar {
+
+    width: 100%;
+
+    height: 8px;
+
+    overflow: hidden;
+
+    border-radius: 999px;
+
+    background: var(--background-color);
+
+}
+
+
+.credit-progress-fill {
+
+    height: 100%;
+
+    border-radius: inherit;
+
+    background: var(--primary-color);
+
+    transition:
+        width var(--transition-normal);
+
+}
+
+
+/* ==========================================
+   PRÉSTAMOS
+========================================== */
+
+.loan-summary {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+
+    gap: var(--space-md);
+
+    margin-bottom: var(--space-lg);
+
+}
+
+
+.loan-card {
+
+    min-width: 0;
+
+}
+
+
+.loan-card-header {
+
+    display: flex;
+
+    align-items: flex-start;
+
+    justify-content: space-between;
+
+    gap: 12px;
+
+}
+
+
+.loan-card-amount {
+
+    margin-top: 12px;
+
+    color: var(--text-primary);
+
+    font-size: 1.35rem;
+
+    font-weight: 800;
+
+}
+
+
+/* ==========================================
+   ANÁLISIS Y REPORTES
+========================================== */
+
+.analysis-grid,
+.reports-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: var(--space-md);
+
+}
+
+
+.analysis-card,
+.report-card {
+
+    min-width: 0;
+
+}
+
+
+.chart-container {
+
+    position: relative;
+
+    width: 100%;
+
+    min-height: 260px;
+
+}
+
+
+.chart-container canvas {
+
+    display: block;
+
+    width: 100% !important;
+
+    max-width: 100%;
+
+}
+
+
+/* ==========================================
+   CONFIGURACIÓN
+========================================== */
+
+.settings-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: var(--space-md);
+
+}
+
+
+.settings-card {
+
+    min-width: 0;
+
+}
+
+
+.settings-card h3 {
+
+    margin: 0 0 6px;
+
+    color: var(--text-primary);
+
+    font-size: 1rem;
+
+    font-weight: 800;
+
+}
+
+
+.settings-card p {
+
+    margin: 0 0 16px;
+
+    color: var(--text-secondary);
+
+    font-size: 0.82rem;
+
+    line-height: 1.5;
+
+}
+
+
+/* ==========================================
+   ZONA DE PELIGRO
+========================================== */
+
+.danger-zone {
+
+    border-color: var(--danger-color);
+
+}
+
+
+.danger-zone h3 {
+
+    color: var(--danger-color);
+
+}
+
+
+/* ==========================================
+   PÁGINA VACÍA
+========================================== */
+
+.page-empty {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    min-height: 240px;
+
+    padding: 32px;
+
+    text-align: center;
+
+}
+
+
+.page-empty-content {
+
+    max-width: 480px;
+
+}
+
+
+.page-empty-content h3 {
+
+    margin: 0 0 8px;
+
+    color: var(--text-primary);
+
+    font-size: 1.1rem;
+
+    font-weight: 800;
+
+}
+
+
+.page-empty-content p {
+
+    margin: 0;
+
+    color: var(--text-secondary);
+
+    font-size: 0.85rem;
+
+    line-height: 1.5;
+
+}
+
+
+/* ==========================================
+   RESPONSIVE
+========================================== */
+
+@media (max-width: 1000px) {
+
+    .dashboard-row {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    .credit-summary,
+    .loan-summary {
+
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+    }
+
+}
+
+
+@media (max-width: 800px) {
+
+    .analysis-grid,
+    .reports-grid,
+    .settings-grid {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    .dashboard-quick-actions {
+
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+    }
+
+
+    .movements-summary {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .page-header {
+
+        flex-direction: column;
+
+        align-items: stretch;
+
+    }
+
+
+    .page-header-actions {
+
+        width: 100%;
+
+    }
+
+
+    .page-header-actions .button,
+    .page-header-actions .btn-primary,
+    .page-header-actions .btn-secondary {
+
+        flex: 1;
+
+    }
+
+
+    .dashboard-quick-actions {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    .credit-summary,
+    .loan-summary {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    .account-card-footer {
+
+        align-items: flex-start;
+
+        flex-direction: column;
+
+    }
+
+
+    .goal-actions {
+
+        flex-direction: column;
+
+        align-items: stretch;
+
+    }
+
+}
+/* =========================================================
+   FINANCEFLOW · DASHBOARD PREMIUM
+   SISTEMA VISUAL PRINCIPAL
+========================================================= */
+
+
+/* =========================================================
+   ESTRUCTURA GENERAL
+========================================================= */
+.dashboard {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 24px;
+
+    width: 100%;
+
+    min-width: 0;
+}
+
+
+/* =========================================================
+   CABECERA DEL DASHBOARD
+========================================================= */
+.dashboard-hero-top {
+
+    position: relative;
+
+    z-index: 3;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    min-height: 46px;
+
+    padding-bottom: 5px;
+
+    border-bottom:
+        1px solid rgba(226, 232, 240, 0.75);
+
+}
+
+.dashboard-hero-context {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    column-gap: 9px;
+    row-gap: 8px;
+}
+
+.dashboard-hero-brand {
+
+    color:
+        var(--primary-color);
+
+    font-size:
+        0.82rem;
+
+    font-weight:
+        850;
+
+    letter-spacing:
+        -0.01em;
+
+}
+
+
+.dashboard-hero-separator {
+
+    color:
+        #CBD5E1;
+
+    font-size:
+        0.9rem;
+
+}
+
+
+.dashboard-hero-context h2 {
+
+    margin: 0;
+
+    color:
+        var(--text-secondary);
+
+    font-size:
+        0.82rem;
+
+    font-weight:
+        700;
+
+}
+
+
+.dashboard-hero-actions {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+}
+.dashboard-hero {
+
+    position: relative;
+
+    overflow: hidden;
+
+    width: 100%;
+
+    margin: 0;
+
+    padding: 5px 32px 32px;
+
+    border:
+        1px solid rgba(226, 232, 240, 0.95);
+
+    border-radius: 24px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #ffffff 0%,
+            #f8fbff 58%,
+            #eef5ff 100%
+        );
+
+    box-shadow:
+        0 8px 28px rgba(15, 23, 42, 0.055);
+
+}
+/* Decoración */
+
+.dashboard-hero::before {
+
+    content: "";
+
+    position: absolute;
+
+    width: 220px;
+
+    height: 220px;
+
+    top: -130px;
+
+    right: 8%;
+
+    border-radius: 50%;
+
+    background:
+        rgba(37, 99, 235, 0.07);
+
+    pointer-events: none;
+
+}
+
+
+.dashboard-hero::after {
+
+    content: "";
+
+    position: absolute;
+
+    width: 130px;
+
+    height: 130px;
+
+    right: -45px;
+
+    bottom: -65px;
+
+    border-radius: 50%;
+
+    background:
+        rgba(37, 99, 235, 0.045);
+
+    pointer-events: none;
+
+}
+
+.dashboard-hero-greeting {
+    flex-basis: 100%;
+    width: 100%;
+}
+
+.dashboard-hero-greeting p {
+    margin: 0;
+    color:
+        var(--text-secondary);
+    font-size:
+        0.92rem;
+    font-weight:
+        650;
+    line-height:
+        1.4;
+}
+.dashboard-hero-content {
+
+    position: relative;
+
+    z-index: 2;
+
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1fr)
+        auto;
+
+    align-items: center;
+
+    gap: 40px;
+
+    padding-top: 2px;
+
+}
+
+.dashboard-hero-text {
+
+    min-width: 0;
+
+}
+
+
+.dashboard-eyebrow {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    margin-bottom: 4px;
+
+    color:
+        var(--primary-color);
+
+    font-size:
+        0.70rem;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        0.12em;
+
+}
+
+
+.dashboard-eyebrow::before {
+
+    content: "";
+
+    width: 7px;
+
+    height: 7px;
+
+    border-radius: 50%;
+
+    background:
+        var(--primary-color);
+
+    box-shadow:
+        0 0 0 5px var(--primary-light);
+
+}
+
+
+.dashboard-hero h1 {
+
+    margin: 0;
+
+    color:
+        var(--text-primary);
+
+    font-size:
+        clamp(1.55rem, 2.2vw, 2rem);
+
+    font-weight:
+        850;
+
+    letter-spacing:
+        -0.04em;
+
+    line-height:
+        1.1;
+
+}
+
+
+.dashboard-hero-text p {
+
+    max-width: 650px;
+
+    margin:
+        10px 0 0;
+
+    color:
+        var(--text-secondary);
+
+    font-size:
+        0.88rem;
+
+    line-height:
+        1.6;
+
+}
+
+
+/* =========================================================
+   FECHA
+========================================================= */
+.dashboard-hero-date {
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    min-width: 90px;
+
+    min-height: 70px;
+
+    padding: 17px 20px;
+
+    border:
+        1px solid rgba(226, 232, 240, 0.95);
+
+    border-radius: 17px;
+
+    background:
+        rgba(255, 255, 255, 0.82);
+
+    box-shadow:
+        0 6px 18px rgba(15, 23, 42, 0.045);
+
+    text-align: left;
+
+    backdrop-filter:
+        blur(10px);
+
+    margin-top: 10px;
+
+}
+
+.dashboard-date-label {
+
+    display: block;
+
+    color:
+        var(--primary-color);
+
+    font-size:
+        0.68rem;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        0.08em;
+
+    text-transform:
+        uppercase;
+
+}
+
+
+.dashboard-hero-date strong {
+
+    color:
+        var(--text-primary);
+
+    font-size:
+        0.92rem;
+
+    font-weight:
+        800;
+
+    line-height:
+        1.35;
+
+}
+
+
+/* =========================================================
+   TARJETAS FINANCIERAS
+========================================================= */
+.dashboard .summary-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(12, minmax(0, 1fr));
+
+    gap:
+        16px;
+
+    width: 100%;
+
+    margin-top: 18px;
+
+}
+
+.dashboard .summary-card:nth-child(1),
+.dashboard .summary-card:nth-child(2),
+.dashboard .summary-card:nth-child(3),
+.dashboard .summary-card:nth-child(4) {
+
+    grid-column:
+        span 3;
+
+}
+
+
+.dashboard .summary-card:nth-child(5),
+.dashboard .summary-card:nth-child(6),
+.dashboard .summary-card:nth-child(7) {
+
+    grid-column:
+        span 4;
+
+}
+
+
+/* Tarjeta */
+
+.dashboard .summary-card {
+
+    --dashboard-accent:
+        #2563EB;
+
+    position: relative;
+
+    min-height: 142px;
+
+    padding: 20px 21px;
+
+    overflow: hidden;
+
+    border:
+        1px solid rgba(226, 232, 240, 0.95);
+
+    border-top:
+        3px solid var(--dashboard-accent);
+
+    border-radius: 18px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #ffffff 0%,
+            #f8fafc 100%
+        );
+
+    box-shadow:
+        0 5px 16px rgba(15, 23, 42, 0.055);
+
+    transition:
+        transform 0.28s cubic-bezier(.2,.8,.2,1),
+        box-shadow 0.28s ease,
+        border-color 0.28s ease;
+
+}
+
+
+/* Decoración */
+
+.dashboard .summary-card::before {
+
+    content: "";
+
+    position: absolute;
+
+    width: 150px;
+
+    height: 150px;
+
+    top: -75px;
+
+    right: -75px;
+
+    border-radius: 50%;
+
+    background:
+        var(--dashboard-accent);
+
+    opacity:
+        0.055;
+
+    pointer-events:
+        none;
+
+    transition:
+        transform 0.45s ease,
+        opacity 0.35s ease;
+
+}
+
+
+.dashboard .summary-card::after {
+
+    content: "";
+
+    position: absolute;
+
+    width: 80px;
+
+    height: 80px;
+
+    right: -35px;
+
+    bottom: -40px;
+
+    border-radius: 50%;
+
+    background:
+        var(--dashboard-accent);
+
+    opacity:
+        0.035;
+
+    pointer-events:
+        none;
+
+    transition:
+        transform 0.35s ease;
+
+}
+
+
+/* Hover */
+
+.dashboard .summary-card:hover {
+
+    transform:
+        translateY(-6px);
+
+    border-color:
+        color-mix(
+            in srgb,
+            var(--dashboard-accent) 28%,
+            #E2E8F0
+        );
+
+    box-shadow:
+        0 16px 32px rgba(15, 23, 42, 0.10);
+
+}
+
+
+.dashboard .summary-card:hover::before {
+
+    transform:
+        scale(1.35);
+
+    opacity:
+        0.08;
+
+}
+
+
+.dashboard .summary-card:hover::after {
+
+    transform:
+        scale(1.4);
+
+}
+
+
+/* =========================================================
+   ICONOS
+========================================================= */
+
+.dashboard .summary-card .card-icon {
+
+    position: relative;
+
+    z-index: 2;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    width: 45px;
+
+    height: 45px;
+
+    border-radius: 13px;
+
+    background:
+        color-mix(
+            in srgb,
+            var(--dashboard-accent) 11%,
+            #FFFFFF
+        );
+
+    color:
+        var(--dashboard-accent);
+
+    box-shadow:
+        0 4px 12px
+        color-mix(
+            in srgb,
+            var(--dashboard-accent) 12%,
+            transparent
+        );
+
+    transition:
+        transform 0.3s cubic-bezier(.2,.8,.2,1),
+        box-shadow 0.3s ease;
+
+}
+
+
+.dashboard .summary-card:hover .card-icon {
+
+    transform:
+        scale(1.10)
+        rotate(-4deg);
+
+    box-shadow:
+        0 7px 16px
+        color-mix(
+            in srgb,
+            var(--dashboard-accent) 20%,
+            transparent
+        );
+
+}
+
+
+/* =========================================================
+   TÍTULO DE TARJETA
+========================================================= */
+
+.dashboard .summary-card .card-title {
+
+    position: relative;
+
+    z-index: 2;
+
+    color:
+        var(--text-secondary);
+
+    font-size:
+        0.78rem;
+
+    font-weight:
+        750;
+
+    letter-spacing:
+        0.01em;
+
+}
+
+
+/* =========================================================
+   CUERPO
+========================================================= */
+
+.dashboard .summary-card .card-body {
+
+    position: relative;
+
+    z-index: 2;
+
+    padding-top:
+        15px;
+
+}
+
+
+/* Valor */
+
+.dashboard .summary-card .card-body h2 {
+
+    margin:
+        0 0 6px;
+
+    color:
+        var(--text-primary);
+
+    font-size:
+        clamp(1.45rem, 2vw, 1.72rem);
+
+    font-weight:
+        850;
+
+    letter-spacing:
+        -0.045em;
+
+    line-height:
+        1.15;
+
+    transition:
+        transform 0.25s ease;
+
+}
+
+
+.dashboard .summary-card:hover
+.card-body h2 {
+
+    transform:
+        translateX(2px);
+
+}
+
+
+/* Descripción */
+
+.dashboard .summary-card .card-description {
+
+    margin:
+        0;
+
+    color:
+        var(--text-secondary);
+
+    font-size:
+        0.72rem;
+
+    line-height:
+        1.45;
+
+}
+
+
+/* Línea inferior */
+
+.dashboard .summary-card .card-body::after {
+
+    content: "";
+
+    display: block;
+
+    width: 34px;
+
+    height: 3px;
+
+    margin-top:
+        13px;
+
+    border-radius:
+        999px;
+
+    background:
+        var(--dashboard-accent);
+
+    opacity:
+        0.55;
+
+    transition:
+        width 0.3s ease,
+        opacity 0.3s ease;
+
+}
+
+
+.dashboard .summary-card:hover
+.card-body::after {
+
+    width:
+        58px;
+
+    opacity:
+        0.9;
+
+}
+
+
+/* =========================================================
+   COLOR DE CADA INDICADOR
+========================================================= */
+
+.dashboard .summary-card:nth-child(1) {
+    --dashboard-accent: #2563EB;
+}
+
+.dashboard .summary-card:nth-child(2) {
+    --dashboard-accent: #16A34A;
+}
+
+.dashboard .summary-card:nth-child(3) {
+    --dashboard-accent: #059669;
+}
+
+.dashboard .summary-card:nth-child(4) {
+    --dashboard-accent: #DC2626;
+}
+
+.dashboard .summary-card:nth-child(5) {
+    --dashboard-accent: #D97706;
+}
+
+.dashboard .summary-card:nth-child(6) {
+    --dashboard-accent: #7C3AED;
+}
+
+.dashboard .summary-card:nth-child(7) {
+    --dashboard-accent: #CA8A04;
+}
+
+
+/* =========================================================
+   ACCIONES RÁPIDAS
+========================================================= */
+
+.dashboard .dashboard-quick-actions {
+
+    padding:
+        22px;
+        
+    width: 100%;
+
+    margin: 0;
+
+    border-radius:
+        20px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #ffffff 0%,
+            #f8fafc 100%
+        );
+
+    box-shadow:
+        0 5px 18px rgba(15, 23, 42, 0.055);
+
+}
+
+
+.dashboard .quick-actions-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(6, minmax(0, 1fr));
+
+    gap:
+        12px;
+
+}
+
+
+.dashboard .quick-actions-grid button {
+
+    position: relative;
+
+    overflow: hidden;
+
+    min-height:
+        78px;
+
+    flex-direction:
+        column;
+
+    gap:
+        7px;
+
+    padding:
+        12px 10px;
+
+    border:
+        1px solid var(--border-color);
+
+    border-radius:
+        15px;
+
+    background:
+        var(--surface-color);
+
+    color:
+        var(--text-primary);
+
+    box-shadow:
+        0 2px 8px rgba(15, 23, 42, 0.035);
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease,
+        border-color 0.25s ease;
+
+}
+
+
+.dashboard .quick-actions-grid button::after {
+
+    content: "";
+
+    position: absolute;
+
+    width:
+        70px;
+
+    height:
+        70px;
+
+    right:
+        -30px;
+
+    bottom:
+        -35px;
+
+    border-radius:
+        50%;
+
+    background:
+        rgba(37, 99, 235, 0.045);
+
+    transition:
+        transform 0.3s ease;
+
+}
+
+
+.dashboard .quick-actions-grid button:hover {
+
+    transform:
+        translateY(-4px);
+
+    border-color:
+        rgba(37, 99, 235, 0.25);
+
+    box-shadow:
+        0 10px 22px rgba(15, 23, 42, 0.08);
+
+}
+
+
+.dashboard .quick-actions-grid button:hover::after {
+
+    transform:
+        scale(1.5);
+
+}
+
+
+.dashboard .quick-actions-grid button span:first-child {
+
+    position:
+        relative;
+
+    z-index:
+        1;
+
+    font-size:
+        1.4rem;
+
+    transition:
+        transform 0.25s ease;
+
+}
+
+
+.dashboard .quick-actions-grid button:hover
+span:first-child {
+
+    transform:
+        scale(1.12);
+
+}
+
+
+.dashboard .quick-actions-grid button span:last-child {
+
+    position:
+        relative;
+
+    z-index:
+        1;
+
+    font-size:
+        0.77rem;
+
+    font-weight:
+        750;
+
+}
+
+
+/* =========================================================
+   FILAS DEL DASHBOARD
+========================================================= */
+
+.dashboard .dashboard-row {
+
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1.55fr)
+        minmax(300px, 1fr);
+
+    gap:
+        20px;
+
+    width: 100%;
+
+    margin: 0;
+
+}
+.dashboard .dashboard-column {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap:
+        20px;
+
+    width: 100%;
+
+    min-width: 0;
+
+}
+
+/* =========================================================
+   TARJETAS INTERNAS
+========================================================= */
+
+.dashboard .dashboard-row > .dashboard-column > .card,
+.dashboard .dashboard-row > aside > .card,
+.dashboard .dashboard-analysis-row > .card {
+
+    border:
+        1px solid rgba(226, 232, 240, 0.9);
+
+    border-radius:
+        19px;
+
+    box-shadow:
+        0 5px 17px rgba(15, 23, 42, 0.05);
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
+
+}
+
+
+.dashboard .dashboard-row > .dashboard-column > .card:hover,
+.dashboard .dashboard-row > aside > .card:hover,
+.dashboard .dashboard-analysis-row > .card:hover {
+
+    transform:
+        translateY(-3px);
+
+    box-shadow:
+        0 12px 26px rgba(15, 23, 42, 0.08);
+
+}
+
+
+/* =========================================================
+   TÍTULOS DE TARJETAS INTERNAS
+========================================================= */
+
+.dashboard .card-header h3 {
+
+    color:
+        var(--text-primary);
+
+    font-size:
+        0.98rem;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        -0.015em;
+
+}
+
+
+/* =========================================================
+   META
+========================================================= */
+
+.dashboard .goal-header h4 {
+
+    font-size:
+        1rem;
+
+    font-weight:
+        800;
+
+}
+
+
+.dashboard .goal-header span {
+
+    padding:
+        6px 11px;
+
+    border-radius:
+        999px;
+
+    background:
+        var(--goal-light);
+
+    color:
+        var(--goal-color);
+
+    font-size:
+        0.76rem;
+
+    font-weight:
+        800;
+
+}
+
+
+.dashboard .progress-bar {
+
+    height:
+        10px;
+
+    margin:
+        18px 0 12px;
+
+    overflow:
+        hidden;
+
+    border-radius:
+        999px;
+
+    background:
+        #E2E8F0;
+
+}
+
+
+.dashboard .progress-fill {
+
+    position:
+        relative;
+
+    height:
+        100%;
+
+    border-radius:
+        inherit;
+
+    background:
+        linear-gradient(
+            90deg,
+            #D97706,
+            #F59E0B
+        );
+
+    box-shadow:
+        0 2px 8px rgba(217, 119, 6, 0.20);
+
+}
+
+
+/* =========================================================
+   MOVIMIENTOS
+========================================================= */
+
+.dashboard .movement-item {
+
+    padding:
+        13px 4px;
+
+    border-bottom:
+        1px solid var(--border-color);
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease;
+
+}
+
+
+.dashboard .movement-item:last-child {
+
+    border-bottom:
+        none;
+
+}
+
+
+.dashboard .movement-item:hover {
+
+    transform:
+        translateX(3px);
+
+}
+
+
+.dashboard .movement-icon {
+
+    width:
+        38px;
+
+    height:
+        38px;
+
+    border-radius:
+        11px;
+
+    background:
+        var(--background-color);
+
+}
+
+
+/* =========================================================
+   ESTADOS VACÍOS
+========================================================= */
+
+.dashboard .empty-state {
+
+    padding:
+        28px 18px;
+
+    border-color:
+        rgba(226, 232, 240, 0.9);
+
+    background:
+        linear-gradient(
+            145deg,
+            #F8FAFC,
+            #FFFFFF
+        );
+
+}
+
+
+.dashboard .empty-icon {
+
+    opacity:
+        0.8;
+
+}
+
+
+/* =========================================================
+   ANIMACIONES
+========================================================= */
+
+@keyframes dashboardReveal {
+
+    from {
+
+        opacity:
+            0;
+
+        transform:
+            translateY(14px);
+
+    }
+
+    to {
+
+        opacity:
+            1;
+
+        transform:
+            translateY(0);
+
+    }
+
+}
+
+
+.dashboard-hero {
+
+    animation:
+        dashboardReveal
+        0.55s
+        ease
+        both;
+
+}
+
+
+.dashboard .summary-card {
+
+    opacity:
+        0;
+
+    animation:
+        dashboardReveal
+        0.5s
+        cubic-bezier(.2,.8,.2,1)
+        forwards;
+
+}
+
+
+.dashboard .summary-card:nth-child(1) {
+    animation-delay: 0.05s;
+}
+
+.dashboard .summary-card:nth-child(2) {
+    animation-delay: 0.10s;
+}
+
+.dashboard .summary-card:nth-child(3) {
+    animation-delay: 0.15s;
+}
+
+.dashboard .summary-card:nth-child(4) {
+    animation-delay: 0.20s;
+}
+
+.dashboard .summary-card:nth-child(5) {
+    animation-delay: 0.25s;
+}
+
+.dashboard .summary-card:nth-child(6) {
+    animation-delay: 0.30s;
+}
+
+.dashboard .summary-card:nth-child(7) {
+    animation-delay: 0.35s;
+}
+
+
+.dashboard .dashboard-quick-actions {
+
+    animation:
+        dashboardReveal
+        0.55s
+        ease
+        0.25s
+        both;
+
+}
+
+
+.dashboard .dashboard-row {
+
+    animation:
+        dashboardReveal
+        0.55s
+        ease
+        0.35s
+        both;
+
+}
+
+
+.dashboard .dashboard-analysis-row {
+
+    animation:
+        dashboardReveal
+        0.55s
+        ease
+        0.45s
+        both;
+
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1200px) {
+
+    .dashboard .summary-grid {
+
+        grid-template-columns:
+            repeat(3, minmax(0, 1fr));
+
+    }
+
+
+    .dashboard .quick-actions-grid {
+
+        grid-template-columns:
+            repeat(3, minmax(0, 1fr));
+
+    }
+
+}
+
+
+@media (max-width: 900px) {
+
+    .dashboard-hero-content {
+
+        align-items:
+            flex-start;
+
+        flex-direction:
+            column;
+
+    }
+
+
+    .dashboard-hero-date {
+
+        width:
+            100%;
+
+        text-align:
+            left;
+
+    }
+
+
+    .dashboard .summary-grid {
+
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+    }
+
+    .dashboard .dashboard-row {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+    .dashboard .dashboard-analysis-row {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+    .dashboard .dashboard-row {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+    .dashboard .dashboard-analysis-row {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+    .dashboard .quick-actions-grid {
+
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .dashboard-hero {
+
+        padding:
+            22px 20px;
+
+        border-radius:
+            18px;
+
+    }
+
+
+    .dashboard-hero h1 {
+
+        font-size:
+            1.65rem;
+
+    }
+
+
+    .dashboard-hero-text p {
+
+        font-size:
+            0.82rem;
+
+    }
+
+
+    .dashboard .summary-grid {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+
+    .dashboard .summary-card {
+
+        min-height:
+            140px;
+
+        padding:
+            18px;
+
+    }
+
+
+    .dashboard .summary-card .card-body h2 {
+
+        font-size:
+            1.55rem;
+
+    }
+
+
+    .dashboard .dashboard-quick-actions {
+
+        padding:
+            18px;
+
+    }
+
+
+    .dashboard .quick-actions-grid {
+
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+    }
+
+}
+
+/* =========================================================
+   DISTRIBUCIÓN DEL ANÁLISIS
+========================================================= */
+
+.dashboard .dashboard-analysis-row {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap:
+        20px;
+
+    width: 100%;
+
+    margin: 0;
+
+}
+
+/* =========================================================
+   SECCIONES DE ANCHO COMPLETO
+========================================================= */
+
+.dashboard .full-width-section {
+
+    width: 100%;
+
+    min-width: 0;
+
+    margin: 0;
+
+}
+/* =========================================================
+   ACCESIBILIDAD
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .dashboard-hero,
+    .dashboard .summary-card,
+    .dashboard .dashboard-quick-actions,
+    .dashboard .dashboard-row,
+    .dashboard .dashboard-analysis-row {
+
+        animation:
+            none;
+
+        opacity:
+            1;
+
+    }
+
+
+    .dashboard .summary-card,
+    .dashboard .summary-card:hover,
+    .dashboard .summary-card:hover .card-icon {
+
+        transform:
+            none;
+
+        transition:
+            none;
+
+    }
+
+}
+
+/* =========================================================
+   FINANCEFLOW · PREMIUM PAGES SYSTEM
+   Diseño general de todas las vistas
+========================================================= */
+
+
+/* =========================================================
+   CONTENEDOR GENERAL
+========================================================= */
+.page-view {
+
+    position: relative;
+
+    display: block;
+
+    width: 100%;
+
+    min-width: 0;
+
+    padding-bottom: 45px;
+
+}
+@keyframes financePageIn {
+
+    from {
+
+        opacity: 0;
+
+        transform:
+            translateY(10px);
+
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform:
+            translateY(0);
+
+    }
+
+}
+
+
+/* =========================================================
+   ENCABEZADO DE PÁGINA
+========================================================= */
+
+.page-heading,
+.page-header {
+
+    position: relative;
+
+    display: flex;
+
+    align-items: flex-end;
+
+    justify-content: space-between;
+
+    gap: 24px;
+
+    margin-bottom: 26px;
+
+    padding-bottom: 4px;
+
+}
+
+
+.page-heading > div,
+.page-header > div {
+
+    min-width: 0;
+
+}
+
+
+/* etiqueta superior */
+
+.page-kicker,
+.eyebrow {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    margin-bottom: 7px;
+
+    color:
+        var(--primary-color);
+
+    font-size: 0.68rem;
+
+    font-weight: 850;
+
+    letter-spacing: 0.13em;
+
+}
+
+
+.page-kicker::before,
+.eyebrow::before {
+
+    content: "";
+
+    width: 6px;
+
+    height: 6px;
+
+    border-radius: 50%;
+
+    background:
+        var(--primary-color);
+
+    box-shadow:
+        0 0 0 4px var(--primary-light);
+
+}
+
+
+.page-heading h2,
+.page-header h1 {
+
+    margin: 0;
+
+    color:
+        var(--text-primary);
+
+    font-size:
+        clamp(1.55rem, 2.4vw, 2rem);
+
+    font-weight: 850;
+
+    letter-spacing: -0.045em;
+
+    line-height: 1.15;
+
+}
+
+
+.page-heading p,
+.page-header p {
+
+    margin: 8px 0 0;
+
+    color:
+        var(--text-secondary);
+
+    font-size: 0.86rem;
+
+    line-height: 1.55;
+
+}
+
+
+/* =========================================================
+   BOTONES PRINCIPALES
+========================================================= */
+
+.page-heading .btn-primary,
+.page-header .btn-primary {
+
+    flex-shrink: 0;
+
+    min-height: 44px;
+
+    padding:
+        10px 17px;
+
+    border: none;
+
+    border-radius: 12px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #2563EB,
+            #1D4ED8
+        );
+
+    color: #FFFFFF;
+
+    font-size: 0.84rem;
+
+    font-weight: 800;
+
+    box-shadow:
+        0 7px 16px rgba(37,99,235,0.20);
+
+    transition:
+        transform 0.22s ease,
+        box-shadow 0.22s ease;
+
+}
+
+
+.page-heading .btn-primary:hover,
+.page-header .btn-primary:hover {
+
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 11px 22px rgba(37,99,235,0.27);
+
+}
+
+
+/* =========================================================
+   TARJETAS GENERALES DE PÁGINAS
+========================================================= */
+
+.page-view:not(#dashboardView) .card,
+.settings-card {
+
+    border:
+        1px solid rgba(226,232,240,0.92);
+
+    border-radius: 18px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #FFFFFF 0%,
+            #FBFDFF 100%
+        );
+
+    box-shadow:
+        0 5px 18px rgba(15,23,42,0.045);
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease,
+        border-color 0.25s ease;
+
+}
+
+
+.page-view:not(#dashboardView) .card:hover,
+.settings-card:hover {
+
+    border-color:
+        rgba(37,99,235,0.15);
+
+    box-shadow:
+        0 12px 28px rgba(15,23,42,0.075);
+
+}
+
+
+/* =========================================================
+   HEADER DE TARJETAS
+========================================================= */
+
+.page-view:not(#dashboardView) .card-header,
+.settings-card .card-header {
+
+    padding-bottom: 16px;
+
+    margin-bottom: 2px;
+
+    border-bottom:
+        1px solid rgba(226,232,240,0.72);
+
+}
+
+
+.page-view:not(#dashboardView) .card-header h3,
+.settings-card .card-header h2 {
+
+    margin: 0;
+
+    color:
+        var(--text-primary);
+
+    font-size: 0.98rem;
+
+    font-weight: 800;
+
+    letter-spacing: -0.015em;
+
+}
+
+
+.page-view:not(#dashboardView) .card-description,
+.settings-card .card-description {
+
+    margin-top: 5px;
+
+    color:
+        var(--text-secondary);
+
+    font-size: 0.78rem;
+
+    line-height: 1.5;
+
+}
+
+
+/* =========================================================
+   RESÚMENES
+========================================================= */
+
+.page-view:not(#dashboardView) .accounts-summary {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, minmax(0,1fr));
+
+    gap: 14px;
+
+    margin-bottom: 20px;
+
+}
+
+
+/* elementos generados dinámicamente */
+
+.page-view:not(#dashboardView) .accounts-summary-item {
+
+    position: relative;
+
+    min-height: 112px;
+
+    padding: 18px;
+
+    overflow: hidden;
+
+    border:
+        1px solid rgba(226,232,240,0.9);
+
+    border-radius: 16px;
+
+    background:
+        #FFFFFF;
+
+    box-shadow:
+        0 4px 14px rgba(15,23,42,0.045);
+
+}
+
+
+.page-view:not(#dashboardView) .accounts-summary-item::after {
+
+    content: "";
+
+    position: absolute;
+
+    width: 85px;
+
+    height: 85px;
+
+    right: -38px;
+
+    bottom: -42px;
+
+    border-radius: 50%;
+
+    background:
+        var(--primary-light);
+
+    opacity: 0.55;
+
+}
+
+
+.page-view:not(#dashboardView) .accounts-summary-label {
+
+    position: relative;
+
+    z-index: 1;
+
+    display: block;
+
+    margin-bottom: 7px;
+
+    color:
+        var(--text-secondary);
+
+    font-size: 0.72rem;
+
+    font-weight: 700;
+
+}
+
+
+.page-view:not(#dashboardView) .accounts-summary-value {
+
+    position: relative;
+
+    z-index: 1;
+
+    display: block;
+
+    color:
+        var(--text-primary);
+
+    font-size: 1.35rem;
+
+    font-weight: 850;
+
+    letter-spacing: -0.035em;
+
+}
+
+
+/* =========================================================
+   FILTROS
+========================================================= */
+
+.accounts-filter-card,
+.movements-filters-card,
+.loans-filters-card {
+
+    margin-bottom: 20px;
+
+}
+
+
+.accounts-filters,
+.movements-filters,
+.loans-filters {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, minmax(0,1fr));
+
+    gap: 14px;
+
+}
+
+
+.accounts-filters .form-group,
+.movements-filters .form-group,
+.loans-filters .form-group {
+
+    margin: 0;
+
+}
+
+
+.accounts-filters label,
+.movements-filters label,
+.loans-filters label {
+
+    margin-bottom: 7px;
+
+    font-size: 0.76rem;
+
+    font-weight: 750;
+
+}
+
+
+/* =========================================================
+   INPUTS DENTRO DE PÁGINAS
+========================================================= */
+
+.page-view input,
+.page-view select {
+
+    min-height: 43px;
+
+    border-radius: 11px;
+
+    border:
+        1px solid #E2E8F0;
+
+    background:
+        #FFFFFF;
+
+    box-shadow:
+        0 2px 5px rgba(15,23,42,0.025);
+
+}
+
+
+.page-view input:focus,
+.page-view select:focus {
+
+    border-color:
+        var(--primary-color);
+
+    box-shadow:
+        0 0 0 3px rgba(37,99,235,0.09);
+
+}
+
+
+/* =========================================================
+   CUENTAS
+========================================================= */
+
+.accounts-grid {
+
+    gap: 16px;
+
+    margin-bottom: 20px;
+
+}
+
+
+.account-card {
+
+    position: relative;
+
+    overflow: hidden;
+
+    padding: 20px;
+
+    border-radius: 18px;
+
+    border:
+        1px solid rgba(226,232,240,0.92);
+
+    background:
+        linear-gradient(
+            145deg,
+            #FFFFFF,
+            #F8FAFC
+        );
+
+    box-shadow:
+        0 5px 17px rgba(15,23,42,0.05);
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
+
+}
+
+
+.account-card:hover {
+
+    transform:
+        translateY(-5px);
+
+    box-shadow:
+        0 14px 28px rgba(15,23,42,0.09);
+
+}
+
+
+.account-icon {
+
+    width: 46px;
+
+    height: 46px;
+
+    border-radius: 13px;
+
+    background:
+        var(--primary-light);
+
+    color:
+        var(--primary-color);
+
+}
+
+
+.account-name {
+
+    font-size: 0.96rem;
+
+    font-weight: 800;
+
+}
+
+
+.account-type {
+
+    margin-top: 3px;
+
+    color:
+        var(--text-secondary);
+
+    font-size: 0.73rem;
+
+}
+
+
+.account-balance {
+
+    margin-top: 20px;
+
+    color:
+        var(--text-primary);
+
+    font-size: 1.45rem;
+
+    font-weight: 850;
+
+    letter-spacing: -0.04em;
+
+}
+
+
+.transfer-card {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+}
+
+
+/* =========================================================
+   MOVIMIENTOS
+========================================================= */
+
+.movements-list {
+
+    display: flex;
+
+    flex-direction: column;
+
+}
+
+
+.movements-list .movement-item {
+
+    padding:
+        14px 4px;
+
+    border-bottom:
+        1px solid #EEF2F7;
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease;
+
+}
+
+
+.movements-list .movement-item:hover {
+
+    transform:
+        translateX(3px);
+
+    background:
+        rgba(37,99,235,0.025);
+
+}
+
+
+.movements-list .movement-item:last-child {
+
+    border-bottom: none;
+
+}
+
+
+/* =========================================================
+   METAS
+========================================================= */
+
+.goals-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, minmax(0,1fr));
+
+    gap: 16px;
+
+}
+
+
+.goal-card {
+
+    position: relative;
+
+    overflow: hidden;
+
+    padding: 20px;
+
+    border:
+        1px solid rgba(226,232,240,0.9);
+
+    border-radius: 18px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #FFFFFF,
+            #FFFDF5
+        );
+
+    box-shadow:
+        0 5px 16px rgba(15,23,42,0.045);
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
+
+}
+
+
+.goal-card:hover {
+
+    transform:
+        translateY(-5px);
+
+    box-shadow:
+        0 14px 28px rgba(15,23,42,0.085);
+
+}
+
+
+.goal-progress {
+
+    height: 9px;
+
+    margin: 17px 0 11px;
+
+    overflow: hidden;
+
+    border-radius: 999px;
+
+    background:
+        #E5E7EB;
+
+}
+
+
+.goal-progress > * {
+
+    height: 100%;
+
+    border-radius: inherit;
+
+}
+
+
+.goal-amounts {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    gap: 10px;
+
+    color:
+        var(--text-secondary);
+
+    font-size: 0.74rem;
+
+}
+
+
+/* =========================================================
+   CALENDARIO
+========================================================= */
+
+.calendar-events {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 10px;
+
+}
+
+
+.calendar-event {
+
+    position: relative;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 14px;
+
+    padding: 15px;
+
+    border:
+        1px solid #E8EDF4;
+
+    border-radius: 14px;
+
+    background:
+        #FFFFFF;
+
+    transition:
+        transform 0.22s ease,
+        box-shadow 0.22s ease;
+
+}
+
+
+.calendar-event:hover {
+
+    transform:
+        translateX(3px);
+
+    box-shadow:
+        0 7px 18px rgba(15,23,42,0.06);
+
+}
+
+
+/* =========================================================
+   CRÉDITO
+========================================================= */
+
+.credit-page {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 20px;
+
+}
+
+
+.credit-summary {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, minmax(0,1fr));
+
+    gap: 14px;
+
+}
+
+
+.credit-summary .card {
+
+    min-height: 125px;
+
+}
+
+
+.credit-summary .card-body h2 {
+
+    margin: 8px 0 0;
+
+    color:
+        var(--text-primary);
+
+    font-size: 1.5rem;
+
+    font-weight: 850;
+
+    letter-spacing: -0.04em;
+
+}
+
+
+.credit-cards-list {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0,1fr));
+
+    gap: 16px;
+
+}
+
+
+.credit-card {
+
+    position: relative;
+
+    overflow: hidden;
+
+    min-height: 190px;
+
+    padding: 23px;
+
+    border-radius: 20px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #0F172A,
+            #1E3A8A
+        );
+
+    color: #FFFFFF;
+
+    box-shadow:
+        0 12px 28px rgba(15,23,42,0.17);
+
+}
+
+
+.credit-card::after {
+
+    content: "";
+
+    position: absolute;
+
+    width: 170px;
+
+    height: 170px;
+
+    right: -65px;
+
+    top: -65px;
+
+    border-radius: 50%;
+
+    background:
+        rgba(255,255,255,0.08);
+
+}
+
+
+/* =========================================================
+   PRÉSTAMOS
+========================================================= */
+
+.loans-list {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 10px;
+
+}
+
+
+.loan-card {
+
+    padding: 18px;
+
+    border:
+        1px solid #E6EBF2;
+
+    border-radius: 15px;
+
+    background:
+        #FFFFFF;
+
+    transition:
+        transform 0.22s ease,
+        box-shadow 0.22s ease;
+
+}
+
+
+.loan-card:hover {
+
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 9px 20px rgba(15,23,42,0.07);
+
+}
+
+
+.loan-summary {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, minmax(0,1fr));
+
+    gap: 14px;
+
+}
+
+
+/* =========================================================
+   ANÁLISIS
+========================================================= */
+
+.analysis-sections {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0,1fr));
+
+    gap: 16px;
+
+}
+
+
+.analysis-sections > .card {
+
+    min-height: 220px;
+
+}
+
+
+.analysis-sections > .card:first-child {
+
+    border-top:
+        3px solid #16A34A;
+
+}
+
+
+.analysis-sections > .card:nth-child(2) {
+
+    border-top:
+        3px solid #DC2626;
+
+}
+
+
+.analysis-sections > .card:nth-child(3) {
+
+    border-top:
+        3px solid #D97706;
+
+}
+
+
+.analysis-sections > .card:nth-child(4) {
+
+    border-top:
+        3px solid #2563EB;
+
+}
+
+
+#analysisIncomeTotal,
+#analysisExpenseTotal,
+#analysisSavingTotal {
+
+    margin-bottom: 14px;
+
+    color:
+        var(--text-primary);
+
+    font-size: 1.55rem;
+
+    font-weight: 850;
+
+    letter-spacing: -0.04em;
+
+}
+
+
+/* =========================================================
+   REPORTES
+========================================================= */
+
+#financialReport {
+
+    max-width: 900px;
+
+}
+
+
+#financialReport .card-body {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0,1fr));
+
+    gap: 0;
+
+}
+
+
+.report-item {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+    min-height: 66px;
+
+    padding: 13px 5px;
+
+    border-bottom:
+        1px solid #EEF2F7;
+
+}
+
+
+.report-item span {
+
+    color:
+        var(--text-secondary);
+
+    font-size: 0.82rem;
+
+}
+
+
+.report-item strong {
+
+    color:
+        var(--text-primary);
+
+    font-size: 0.92rem;
+
+    font-weight: 800;
+
+}
+
+
+/* =========================================================
+   CONFIGURACIÓN
+========================================================= */
+
+.settings-sections {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 16px;
+
+    max-width: 950px;
+
+}
+
+
+.settings-card {
+
+    overflow: hidden;
+
+}
+
+
+.settings-card .card-header {
+
+    padding:
+        21px 22px 16px;
+
+}
+
+
+.settings-content {
+
+    padding:
+        0 22px 8px;
+
+}
+
+
+.settings-row {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 24px;
+
+    min-height: 72px;
+
+    padding:
+        13px 0;
+
+    border-bottom:
+        1px solid #EEF2F7;
+
+}
+
+
+.settings-row:last-child {
+
+    border-bottom: none;
+
+}
+
+
+.settings-row strong {
+
+    display: block;
+
+    color:
+        var(--text-primary);
+
+    font-size: 0.84rem;
+
+    font-weight: 800;
+
+}
+
+
+.settings-row p {
+
+    margin-top: 4px;
+
+    color:
+        var(--text-secondary);
+
+    font-size: 0.75rem;
+
+    line-height: 1.45;
+
+}
+
+
+.settings-row > span {
+
+    flex-shrink: 0;
+
+    padding:
+        6px 11px;
+
+    border-radius: 999px;
+
+    background:
+        #F1F5F9;
+
+    color:
+        var(--text-secondary);
+
+    font-size: 0.72rem;
+
+    font-weight: 750;
+
+}
+
+
+/* =========================================================
+   ZONA DE DATOS
+========================================================= */
+
+#dangerSettings {
+
+    border-color:
+        rgba(220,38,38,0.16);
+
+}
+
+
+#dangerSettings .page-kicker {
+
+    color:
+        var(--danger-color);
+
+}
+
+
+#dangerSettings .page-kicker::before {
+
+    background:
+        var(--danger-color);
+
+    box-shadow:
+        0 0 0 4px var(--danger-light);
+
+}
+
+
+#dangerSettings .button-danger {
+
+    min-height: 40px;
+
+    padding:
+        9px 14px;
+
+    border: none;
+
+    border-radius: 10px;
+
+    background:
+        var(--danger-light);
+
+    color:
+        var(--danger-color);
+
+    font-size: 0.78rem;
+
+    font-weight: 800;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease;
+
+}
+
+
+#dangerSettings .button-danger:hover {
+
+    background:
+        #FECACA;
+
+    transform:
+        translateY(-1px);
+
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1200px) {
+
+    .page-view:not(#dashboardView) .accounts-summary,
+    .credit-summary,
+    .loan-summary {
+
+        grid-template-columns:
+            repeat(2, minmax(0,1fr));
+
+    }
+
+
+    .accounts-filters,
+    .movements-filters,
+    .loans-filters {
+
+        grid-template-columns:
+            repeat(2, minmax(0,1fr));
+
+    }
+
+
+    .goals-grid {
+
+        grid-template-columns:
+            repeat(2, minmax(0,1fr));
+
+    }
+
+}
+
+
+@media (max-width: 800px) {
+
+    .analysis-sections {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    .credit-cards-list {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    #financialReport .card-body {
+
+        grid-template-columns: 1fr;
+
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .page-heading,
+    .page-header {
+
+        align-items: stretch;
+
+        flex-direction: column;
+
+        gap: 15px;
+
+        margin-bottom: 20px;
+
+    }
+
+
+    .page-heading h2,
+    .page-header h1 {
+
+        font-size: 1.45rem;
+
+    }
+
+
+    .page-heading .btn-primary,
+    .page-header .btn-primary {
+
+        width: 100%;
+
+    }
+
+
+    .page-view:not(#dashboardView) .accounts-summary,
+    .credit-summary,
+    .loan-summary,
+    .goals-grid {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    .accounts-filters,
+    .movements-filters,
+    .loans-filters {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    .transfer-card {
+
+        align-items: stretch;
+
+        flex-direction: column;
+
+    }
+
+
+    .transfer-card .btn-primary {
+
+        width: 100%;
+
+    }
+
+
+    .settings-row {
+
+        align-items: flex-start;
+
+        flex-direction: column;
+
+        gap: 9px;
+
+    }
+
+
+    .settings-row > span {
+
+        align-self: flex-start;
+
+    }
+
+
+    .settings-content {
+
+        padding:
+            0 17px 6px;
+
+    }
+
+
+    .settings-card .card-header {
+
+        padding:
+            18px 17px 14px;
+
+    }
+
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+
+    .page-view {
+
+        animation: none;
+
+    }
+
+}
+
+/* =========================================================
+   FINANCEFLOW · CUENTAS
+   Tarjetas de resumen premium
+========================================================= */
+
+#accountsView {
+
+    animation:
+        financePageIn
+        0.4s
+        ease
+        both;
+
+}
+
+
+/* ---------------------------------------------------------
+   RESUMEN
+--------------------------------------------------------- */
+
+#accountsSummary {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+
+    gap: 15px;
+
+    margin-bottom: 22px;
+
+}
+
+
+/* ---------------------------------------------------------
+   CADA RESUMEN
+--------------------------------------------------------- */
+
+#accountsSummary > * {
+
+    position: relative;
+
+    min-height: 118px;
+
+    padding: 19px;
+
+    overflow: hidden;
+
+    border:
+        1px solid #E5EAF1;
+
+    border-radius: 18px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #FFFFFF 0%,
+            #F8FAFC 100%
+        );
+
+    box-shadow:
+        0 5px 16px rgba(15,23,42,0.045);
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease,
+        border-color 0.25s ease;
+
+}
+
+
+/* decoración */
+
+#accountsSummary > *::after {
+
+    content: "";
+
+    position: absolute;
+
+    width: 95px;
+
+    height: 95px;
+
+    right: -42px;
+
+    bottom: -48px;
+
+    border-radius: 50%;
+
+    background:
+        var(--primary-light);
+
+    opacity: 0.55;
+
+}
+
+
+/* hover */
+
+#accountsSummary > *:hover {
+
+    transform:
+        translateY(-4px);
+
+    border-color:
+        rgba(37,99,235,0.16);
+
+    box-shadow:
+        0 13px 28px rgba(15,23,42,0.08);
+
+}
+
+
+/* =========================================================
+   ICONOS DEL RESUMEN
+========================================================= */
+
+#accountsSummary .summary-icon {
+
+    position: relative;
+
+    z-index: 2;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 38px;
+
+    height: 38px;
+
+    margin-bottom: 12px;
+
+    border-radius: 11px;
+
+    background:
+        var(--primary-light);
+
+    color:
+        var(--primary-color);
+
+    font-size: 1.05rem;
+
+}
+
+
+/* =========================================================
+   TEXTO DEL RESUMEN
+========================================================= */
+
+#accountsSummary .summary-label {
+
+    position: relative;
+
+    z-index: 2;
+
+    display: block;
+
+    margin-bottom: 6px;
+
+    color:
+        var(--text-secondary);
+
+    font-size: 0.71rem;
+
+    font-weight: 750;
+
+}
+
+
+#accountsSummary .summary-value {
+
+    position: relative;
+
+    z-index: 2;
+
+    display: block;
+
+    color:
+        var(--text-primary);
+
+    font-size: 1.35rem;
+
+    font-weight: 850;
+
+    letter-spacing: -0.035em;
+
+}
+
+/* =========================================================
+   TARJETAS DE CUENTAS
+========================================================= */
+
+#accountsGrid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+
+    gap: 17px;
+
+    margin-bottom: 22px;
+
+}
+
+
+/* =========================================================
+   ACCOUNT CARD
+========================================================= */
+
+#accountsGrid .account-card {
+
+    position: relative;
+
+    display: flex;
+
+    flex-direction: column;
+
+    min-height: 205px;
+
+    padding: 21px;
+
+    overflow: hidden;
+
+    border:
+        1px solid #E3E8EF;
+
+    border-radius: 19px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #FFFFFF 0%,
+            #F8FAFC 100%
+        );
+
+    box-shadow:
+        0 5px 17px rgba(15,23,42,0.045);
+
+    transition:
+        transform 0.28s ease,
+        box-shadow 0.28s ease,
+        border-color 0.28s ease;
+
+}
+
+
+/* decoración de fondo */
+
+#accountsGrid .account-card::after {
+
+    content: "";
+
+    position: absolute;
+
+    width: 150px;
+
+    height: 150px;
+
+    right: -75px;
+
+    top: -75px;
+
+    border-radius: 50%;
+
+    background:
+        var(--primary-light);
+
+    opacity: 0.6;
+
+    pointer-events: none;
+
+}
+
+
+/* hover */
+
+#accountsGrid .account-card:hover {
+
+    transform:
+        translateY(-5px);
+
+    border-color:
+        rgba(37,99,235,0.18);
+
+    box-shadow:
+        0 15px 30px rgba(15,23,42,0.09);
+
+}
+
+
+/* =========================================================
+   CABECERA DE CUENTA
+========================================================= */
+
+#accountsGrid .account-card-header {
+
+    position: relative;
+
+    z-index: 2;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 12px;
+
+}
+
+
+/* icono */
+
+#accountsGrid .account-icon {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 46px;
+
+    height: 46px;
+
+    flex-shrink: 0;
+
+    border-radius: 13px;
+
+    background:
+        var(--primary-light);
+
+    color:
+        var(--primary-color);
+
+    font-size: 1.25rem;
+
+}
+
+
+/* nombre */
+
+#accountsGrid .account-name {
+
+    margin: 0;
+
+    color:
+        var(--text-primary);
+
+    font-size: 0.94rem;
+
+    font-weight: 820;
+
+    letter-spacing: -0.015em;
+
+}
+
+
+/* tipo */
+
+#accountsGrid .account-type {
+
+    margin-top: 3px;
+
+    color:
+        var(--text-secondary);
+
+    font-size: 0.71rem;
+
+}
+
+
+/* =========================================================
+   SALDO
+========================================================= */
+
+#accountsGrid .account-balance {
+
+    position: relative;
+
+    z-index: 2;
+
+    margin-top: auto;
+
+    padding-top: 25px;
+
+}
+
+
+#accountsGrid .account-balance-label {
+
+    display: block;
+
+    margin-bottom: 5px;
+
+    color:
+        var(--text-secondary);
+
+    font-size: 0.68rem;
+
+    font-weight: 700;
+
+}
+
+
+#accountsGrid .account-balance-value {
+
+    color:
+        var(--text-primary);
+
+    font-size: 1.55rem;
+
+    font-weight: 880;
+
+    letter-spacing: -0.045em;
+
+}
+
+
+/* =========================================================
+   ACCIONES
+========================================================= */
+
+#accountsGrid .account-actions {
+
+    position: relative;
+
+    z-index: 3;
+
+    display: flex;
+
+    justify-content: flex-end;
+
+    gap: 6px;
+
+    margin-top: 13px;
+
+}
+
+
+#accountsGrid .account-actions button {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 33px;
+
+    height: 33px;
+
+    padding: 0;
+
+    border:
+        1px solid #E2E8F0;
+
+    border-radius: 9px;
+
+    background:
+        #FFFFFF;
+
+    color:
+        var(--text-secondary);
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        transform 0.2s ease;
+
+}
+
+
+#accountsGrid .account-actions button:hover {
+
+    transform:
+        translateY(-2px);
+
+    background:
+        var(--primary-light);
+
+    color:
+        var(--primary-color);
+
+}
+
+
+/* =========================================================
+   ESTADO DE CUENTA
+========================================================= */
+
+#accountsGrid .account-status {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 5px;
+
+    padding:
+        5px 9px;
+
+    border-radius: 999px;
+
+    background:
+        #ECFDF5;
+
+    color:
+        #15803D;
+
+    font-size: 0.65rem;
+
+    font-weight: 800;
+
+}
+
+
+#accountsGrid .account-status::before {
+
+    content: "";
+
+    width: 5px;
+
+    height: 5px;
+
+    border-radius: 50%;
+
+    background:
+        #22C55E;
+
+}
+
+/* =========================================================
+   FILTROS DE CUENTAS
+========================================================= */
+
+#accountsView .accounts-filter-card {
+
+    margin-bottom: 20px;
+
+    padding: 20px;
+
+    border:
+        1px solid #E5EAF1;
+
+    border-radius: 18px;
+
+    background:
+        #FFFFFF;
+
+    box-shadow:
+        0 5px 16px rgba(15,23,42,0.04);
+
+}
+
+
+/* cabecera */
+
+#accountsView .accounts-filter-card h3 {
+
+    margin: 0 0 15px;
+
+    color:
+        var(--text-primary);
+
+    font-size: 0.95rem;
+
+    font-weight: 820;
+
+}
+
+
+/* filtros */
+
+#accountsView .accounts-filters {
+
+    display: grid;
+
+    grid-template-columns:
+        1fr 1fr auto;
+
+    gap: 12px;
+
+    align-items: end;
+
+}
+
+
+/* campos */
+
+#accountsView .accounts-filters .form-group {
+
+    margin: 0;
+
+}
+
+
+#accountsView .accounts-filters label {
+
+    display: block;
+
+    margin-bottom: 7px;
+
+    color:
+        var(--text-secondary);
+
+    font-size: 0.72rem;
+
+    font-weight: 750;
+
+}
+
+
+/* select */
+
+#accountsView .accounts-filters select {
+
+    width: 100%;
+
+    min-height: 43px;
+
+    padding:
+        0 12px;
+
+    border:
+        1px solid #E2E8F0;
+
+    border-radius: 11px;
+
+    background:
+        #FFFFFF;
+
+    color:
+        var(--text-primary);
+
+    font-size: 0.79rem;
+
+    outline: none;
+
+    cursor: pointer;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+
+}
+
+
+#accountsView .accounts-filters select:focus {
+
+    border-color:
+        var(--primary-color);
+
+    box-shadow:
+        0 0 0 3px rgba(37,99,235,0.09);
+
+}
+
+/* =========================================================
+   TRANSFERENCIA
+========================================================= */
+
+#accountsView #openTransferModal {
+
+    position: relative;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+    width: 100%;
+
+    min-height: 95px;
+
+    margin-top: 4px;
+
+    padding:
+        18px 21px;
+
+    border:
+        1px solid rgba(37,99,235,0.14);
+
+    border-radius: 18px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #EFF6FF,
+            #F8FAFC
+        );
+
+    box-shadow:
+        0 6px 18px rgba(37,99,235,0.055);
+
+    cursor: pointer;
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
+
+}
+
+
+#accountsView #openTransferModal:hover {
+
+    transform:
+        translateY(-3px);
+
+    box-shadow:
+        0 12px 25px rgba(37,99,235,0.10);
+
+}
+
+
+#accountsView #openTransferModal::before {
+
+    content: "↔";
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 45px;
+
+    height: 45px;
+
+    flex-shrink: 0;
+
+    border-radius: 13px;
+
+    background:
+        #FFFFFF;
+
+    color:
+        var(--primary-color);
+
+    font-size: 1.2rem;
+
+    font-weight: 800;
+
+    box-shadow:
+        0 4px 10px rgba(15,23,42,0.06);
+
+}
+
+
+/* =========================================================
+   RESPONSIVE CUENTAS
+========================================================= */
+
+@media (max-width: 1150px) {
+
+    #accountsGrid {
+
+        grid-template-columns:
+            repeat(2, minmax(0,1fr));
+
+    }
+
+
+    #accountsSummary {
+
+        grid-template-columns:
+            repeat(2, minmax(0,1fr));
+
+    }
+
+}
+
+
+@media (max-width: 700px) {
+
+    #accountsGrid {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    #accountsSummary {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    #accountsView .accounts-filters {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    #accountsView #openTransferModal {
+
+        align-items: flex-start;
+
+        flex-direction: column;
+
+    }
+
+}
+/* =========================================================
+   FINANCEFLOW · MOVIMIENTOS
+   Sistema visual premium
+========================================================= */
+
+#movementsView {
+
+    animation:
+        financePageIn
+        0.4s
+        ease
+        both;
+
+}
+
+
+/* =========================================================
+   ENCABEZADO
+========================================================= */
+
+#movementsView .page-heading,
+#movementsView .page-header {
+
+    margin-bottom: 24px;
+
+}
+
+
+/* =========================================================
+   BOTÓN NUEVO MOVIMIENTO
+========================================================= */
+
+#movementsView #openMovementModal {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    min-height: 44px;
+
+    padding:
+        10px 17px;
+
+    border: none;
+
+    border-radius: 12px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #2563EB,
+            #1D4ED8
+        );
+
+    color: #FFFFFF;
+
+    font-size: 0.82rem;
+
+    font-weight: 800;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 7px 17px rgba(37,99,235,0.20);
+
+    transition:
+        transform 0.22s ease,
+        box-shadow 0.22s ease;
+
+}
+
+
+#movementsView #openMovementModal:hover {
+
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 11px 24px rgba(37,99,235,0.27);
+
+}
+
+/* =========================================================
+   RESUMEN DE MOVIMIENTOS
+========================================================= */
+
+#movementsView .movements-summary {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, minmax(0,1fr));
+
+    gap: 15px;
+
+    margin-bottom: 21px;
+
+}
+
+
+#movementsView .summary-card {
+
+    position: relative;
+
+    min-height: 118px;
+
+    padding: 19px;
+
+    overflow: hidden;
+
+    border:
+        1px solid #E5EAF1;
+
+    border-radius: 18px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #FFFFFF,
+            #F8FAFC
+        );
+
+    box-shadow:
+        0 5px 16px rgba(15,23,42,0.045);
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
+
+}
+
+
+#movementsView .summary-card:hover {
+
+    transform:
+        translateY(-4px);
+
+    box-shadow:
+        0 13px 27px rgba(15,23,42,0.08);
+
+}
+
+
+/* decoración */
+
+#movementsView .summary-card::after {
+
+    content: "";
+
+    position: absolute;
+
+    width: 90px;
+
+    height: 90px;
+
+    right: -42px;
+
+    bottom: -45px;
+
+    border-radius: 50%;
+
+    background:
+        var(--primary-light);
+
+    opacity: 0.55;
+
+}
+
+
+/* título */
+
+#movementsView .summary-card-label {
+
+    position: relative;
+
+    z-index: 2;
+
+    display: block;
+
+    margin-bottom: 7px;
+
+    color:
+        var(--text-secondary);
+
+    font-size: 0.71rem;
+
+    font-weight: 750;
+
+}
+
+
+/* número */
+
+#movementsView .summary-card-value {
+
+    position: relative;
+
+    z-index: 2;
+
+    color:
+        var(--text-primary);
+
+    font-size: 1.42rem;
+
+    font-weight: 880;
+
+    letter-spacing: -0.04em;
+
+}
+
+
+/* ingresos */
+
+#movementsView .income,
+#movementsView .positive {
+
+    color:
+        #16A34A;
+
+}
+
+
+/* gastos */
+
+#movementsView .expense,
+#movementsView .negative {
+
+    color:
+        #DC2626;
+
+}
+
+/* =========================================================
+   FILTROS DE MOVIMIENTOS
+========================================================= */
+
+#movementsView .movements-filters-card {
+
+    margin-bottom: 20px;
+
+    padding: 20px;
+
+    border:
+        1px solid #E5EAF1;
+
+    border-radius: 18px;
+
+    background:
+        #FFFFFF;
+
+    box-shadow:
+        0 5px 16px rgba(15,23,42,0.04);
+
+}
+
+
+/* título */
+
+#movementsView .movements-filters-card h3 {
+
+    margin:
+        0 0 15px;
+
+    color:
+        var(--text-primary);
+
+    font-size: 0.95rem;
+
+    font-weight: 820;
+
+}
+
+
+/* distribución */
+
+#movementsView .movements-filters {
+
+    display: grid;
+
+    grid-template-columns:
+        1.5fr 1fr 1fr 1fr;
+
+    gap: 12px;
+
+    align-items: end;
+
+}
+
+
+/* grupo */
+
+#movementsView .movements-filters .form-group {
+
+    margin: 0;
+
+}
+
+
+/* etiquetas */
+
+#movementsView .movements-filters label {
+
+    display: block;
+
+    margin-bottom: 7px;
+
+    color:
+        var(--text-secondary);
+
+    font-size: 0.72rem;
+
+    font-weight: 750;
+
+}
+
+
+/* inputs y selects */
+
+#movementsView .movements-filters input,
+#movementsView .movements-filters select {
+
+    width: 100%;
+
+    min-height: 43px;
+
+    padding:
+        0 12px;
+
+    border:
+        1px solid #E2E8F0;
+
+    border-radius: 11px;
+
+    background:
+        #FFFFFF;
+
+    color:
+        var(--text-primary);
+
+    font-size: 0.79rem;
+
+    outline: none;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+
+}
+
+
+#movementsView .movements-filters input::placeholder {
+
+    color:
+        #94A3B8;
+
+}
+
+
+#movementsView .movements-filters input:focus,
+#movementsView .movements-filters select:focus {
+
+    border-color:
+        var(--primary-color);
+
+    box-shadow:
+        0 0 0 3px rgba(37,99,235,0.09);
+
+}
+
+/* =========================================================
+   LISTA DE MOVIMIENTOS
+========================================================= */
+
+#movementsView .movements-list-card {
+
+    overflow: hidden;
+
+    border:
+        1px solid #E5EAF1;
+
+    border-radius: 19px;
+
+    background:
+        #FFFFFF;
+
+    box-shadow:
+        0 5px 17px rgba(15,23,42,0.045);
+
+}
+
+
+/* encabezado */
+
+#movementsView .movements-list-header {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    padding:
+        19px 21px;
+
+    border-bottom:
+        1px solid #EEF2F7;
+
+}
+
+
+#movementsView .movements-list-header h3 {
+
+    margin: 0;
+
+    color:
+        var(--text-primary);
+
+    font-size: 0.96rem;
+
+    font-weight: 820;
+
+}
+
+
+#movementsView .movements-list-header span {
+
+    color:
+        var(--text-secondary);
+
+    font-size: 0.73rem;
+
+}
+
+
+/* =========================================================
+   MOVIMIENTO INDIVIDUAL
+========================================================= */
+
+#movementsView .movement-item {
+
+    position: relative;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 14px;
+
+    min-height: 76px;
+
+    padding:
+        12px 20px;
+
+    border-bottom:
+        1px solid #F0F3F7;
+
+    background:
+        #FFFFFF;
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease;
+
+}
+
+
+#movementsView .movement-item:last-child {
+
+    border-bottom: none;
+
+}
+
+
+#movementsView .movement-item:hover {
+
+    background:
+        #F8FAFC;
+
+}
+
+
+/* =========================================================
+   ICONO DEL MOVIMIENTO
+========================================================= */
+
+#movementsView .movement-icon {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 42px;
+
+    height: 42px;
+
+    flex-shrink: 0;
+
+    border-radius: 12px;
+
+    background:
+        #F1F5F9;
+
+    color:
+        var(--text-secondary);
+
+    font-size: 1rem;
+
+}
+
+
+/* ingreso */
+
+#movementsView .movement-item.income .movement-icon,
+#movementsView .movement-item.positive .movement-icon {
+
+    background:
+        #ECFDF5;
+
+    color:
+        #16A34A;
+
+}
+
+
+/* gasto */
+
+#movementsView .movement-item.expense .movement-icon,
+#movementsView .movement-item.negative .movement-icon {
+
+    background:
+        #FEF2F2;
+
+    color:
+        #DC2626;
+
+}
+
+
+/* =========================================================
+   INFORMACIÓN
+========================================================= */
+
+#movementsView .movement-info {
+
+    min-width: 0;
+
+    flex: 1;
+
+}
+
+
+#movementsView .movement-title {
+
+    overflow: hidden;
+
+    color:
+        var(--text-primary);
+
+    font-size: 0.84rem;
+
+    font-weight: 800;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+
+}
+
+
+#movementsView .movement-meta {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    margin-top: 4px;
+
+    color:
+        var(--text-secondary);
+
+    font-size: 0.7rem;
+
+}
+
+
+#movementsView .movement-meta span {
+
+    display: inline-flex;
+
+    align-items: center;
+
+}
+
+
+#movementsView .movement-meta span + span::before {
+
+    content: "•";
+
+    margin-right: 7px;
+
+    color:
+        #CBD5E1;
+
+}
+
+
+/* =========================================================
+   MONTO
+========================================================= */
+
+#movementsView .movement-amount {
+
+    flex-shrink: 0;
+
+    text-align: right;
+
+    color:
+        var(--text-primary);
+
+    font-size: 0.88rem;
+
+    font-weight: 850;
+
+}
+
+
+#movementsView .movement-amount.income,
+#movementsView .movement-amount.positive {
+
+    color:
+        #16A34A;
+
+}
+
+
+#movementsView .movement-amount.expense,
+#movementsView .movement-amount.negative {
+
+    color:
+        #DC2626;
+
+}
+
+
+/* =========================================================
+   FECHA
+========================================================= */
+
+#movementsView .movement-date {
+
+    flex-shrink: 0;
+
+    min-width: 75px;
+
+    color:
+        #94A3B8;
+
+    font-size: 0.69rem;
+
+    text-align: right;
+
+}
+
+/* =========================================================
+   ESTADO VACÍO
+========================================================= */
+
+#movementsView .empty-state {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    flex-direction: column;
+
+    min-height: 250px;
+
+    padding: 35px 20px;
+
+    text-align: center;
+
+}
+
+
+#movementsView .empty-state-icon {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 58px;
+
+    height: 58px;
+
+    margin-bottom: 13px;
+
+    border-radius: 17px;
+
+    background:
+        #EFF6FF;
+
+    color:
+        var(--primary-color);
+
+    font-size: 1.4rem;
+
+}
+
+
+#movementsView .empty-state h3 {
+
+    margin: 0;
+
+    color:
+        var(--text-primary);
+
+    font-size: 0.92rem;
+
+    font-weight: 800;
+
+}
+
+
+#movementsView .empty-state p {
+
+    max-width: 370px;
+
+    margin:
+        6px auto 0;
+
+    color:
+        var(--text-secondary);
+
+    font-size: 0.75rem;
+
+    line-height: 1.55;
+
+}
+
+/* =========================================================
+   RESPONSIVE · MOVIMIENTOS
+========================================================= */
+
+@media (max-width: 1050px) {
+
+    #movementsView .movements-filters {
+
+        grid-template-columns:
+            repeat(2, minmax(0,1fr));
+
+    }
+
+}
+
+
+@media (max-width: 750px) {
+
+    #movementsView .movements-summary {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+
+    #movementsView .movements-filters {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+
+    #movementsView .movement-item {
+
+        align-items: flex-start;
+
+        padding:
+            13px 15px;
+
+    }
+
+
+    #movementsView .movement-date {
+
+        display: none;
+
+    }
+
+}
+
+
+@media (max-width: 500px) {
+
+    #movementsView .movement-icon {
+
+        width: 38px;
+
+        height: 38px;
+
+        border-radius: 10px;
+
+    }
+
+
+    #movementsView .movement-title {
+
+        font-size: 0.78rem;
+
+    }
+
+
+    #movementsView .movement-meta {
+
+        font-size: 0.66rem;
+
+    }
+
+
+    #movementsView .movement-amount {
+
+        font-size: 0.79rem;
+
+    }
+
+}

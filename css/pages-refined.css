@@ -1,0 +1,1390 @@
+/*
+==========================================
+FinanceFlow
+Archivo: pages-refined.css
+
+Estilo "glass" (efecto blur) y mejor organización para las
+páginas: Cuentas, Movimientos, Metas, Calendario, Configuración,
+Crédito, Préstamos, Análisis y Reportes.
+
+- Se carga después de pages.css y antes de theme-dark.css.
+- Los colores del modo oscuro se definen aquí con las mismas
+  variables; theme-dark.css conserva sus fondos de vidrio.
+- No toca el Dashboard (#dashboardView).
+==========================================
+*/
+
+/* =========================================================
+   0. TOKENS
+========================================================= */
+
+:root {
+    --pg-glass: rgba(255, 255, 255, 0.66);
+    --pg-glass-strong: rgba(255, 255, 255, 0.82);
+    --pg-edge: rgba(255, 255, 255, 0.85);
+    --pg-line: rgba(148, 163, 184, 0.24);
+    --pg-chip: rgba(37, 99, 235, 0.08);
+    --pg-chip-text: #2563EB;
+    --pg-shadow: 0 10px 34px rgba(15, 23, 42, 0.07), 0 1px 2px rgba(15, 23, 42, 0.04);
+    --pg-shadow-hover: 0 18px 44px rgba(37, 99, 235, 0.13), 0 2px 4px rgba(15, 23, 42, 0.05);
+    --pg-a: #2563EB;
+    --pg-b: #7C3AED;
+    --pg-grad: linear-gradient(135deg, #2563EB 0%, #7C3AED 100%);
+    --pg-good: #16A34A;
+    --pg-bad: #DC2626;
+    --pg-warn: #D97706;
+    --pg-radius: 22px;
+}
+
+:root[data-theme="dark"] {
+    --pg-glass: rgba(20, 30, 52, 0.62);
+    --pg-glass-strong: rgba(24, 36, 62, 0.85);
+    --pg-edge: rgba(148, 163, 255, 0.14);
+    --pg-line: rgba(148, 163, 184, 0.16);
+    --pg-chip: rgba(79, 139, 255, 0.14);
+    --pg-chip-text: #8FB4FF;
+    --pg-shadow: 0 14px 40px rgba(0, 0, 0, 0.32);
+    --pg-shadow-hover: 0 20px 48px rgba(0, 0, 0, 0.45);
+    --pg-good: #34D399;
+    --pg-bad: #F87171;
+    --pg-warn: #FBBF24;
+}
+
+
+/* =========================================================
+   1. CONTENEDOR DE PÁGINA · cuadrícula de 12 columnas
+========================================================= */
+
+.page-view:not(#dashboardView).active {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: 20px;
+    row-gap: 20px;
+    align-content: start;
+}
+
+.page-view:not(#dashboardView).active > * {
+    grid-column: 1 / -1;
+    min-width: 0;
+    margin: 0 !important;
+}
+
+
+/* =========================================================
+   2. ENCABEZADO DE PÁGINA
+========================================================= */
+
+.page-view:not(#dashboardView) .page-heading,
+.page-view:not(#dashboardView) .page-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+
+    padding: 4px 4px 2px;
+    border: none;
+    background: none;
+}
+
+.page-view:not(#dashboardView) .page-kicker,
+.page-view:not(#dashboardView) .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+
+    margin-bottom: 8px;
+    padding: 4px 11px;
+
+    border-radius: 999px;
+    background: var(--pg-chip);
+    color: var(--pg-chip-text);
+
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.page-view:not(#dashboardView) .page-heading h2,
+.page-view:not(#dashboardView) .page-header h1 {
+    margin: 0;
+    font-size: clamp(1.7rem, 2.4vw, 2.15rem);
+    font-weight: 800;
+    letter-spacing: -0.035em;
+    line-height: 1.1;
+}
+
+.page-view:not(#dashboardView) .page-heading p,
+.page-view:not(#dashboardView) .page-header p {
+    margin: 6px 0 0;
+    font-size: 0.92rem;
+    color: var(--text-secondary);
+}
+
+
+/* =========================================================
+   3. SUPERFICIES DE VIDRIO (tarjetas y paneles)
+========================================================= */
+
+.page-view:not(#dashboardView) .card,
+.page-view:not(#dashboardView) .settings-card,
+.page-view:not(#dashboardView) .accounts-summary-item,
+.page-view:not(#dashboardView) .account-card,
+.page-view:not(#dashboardView) .transfer-card {
+    background: var(--pg-glass);
+    -webkit-backdrop-filter: blur(18px) saturate(160%);
+    backdrop-filter: blur(18px) saturate(160%);
+
+    border: 1px solid var(--pg-edge);
+    border-radius: var(--pg-radius);
+    box-shadow: var(--pg-shadow);
+}
+
+.page-view:not(#dashboardView) .card-header {
+    padding: 18px 22px 14px;
+    border-bottom: 1px solid var(--pg-line);
+}
+
+.page-view:not(#dashboardView) .card-body {
+    padding: 18px 22px 22px;
+}
+
+.page-view:not(#dashboardView) .card-header h2,
+.page-view:not(#dashboardView) .card-header h3,
+.page-view:not(#dashboardView) .card-title {
+    font-size: 1rem;
+    font-weight: 750;
+    letter-spacing: -0.015em;
+}
+
+.page-view:not(#dashboardView) .card-description {
+    margin: 3px 0 0;
+    font-size: 0.82rem;
+}
+
+
+/* =========================================================
+   4. TARJETAS DE RESUMEN (KPI)
+========================================================= */
+
+.page-view:not(#dashboardView) .accounts-summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 16px;
+    margin: 0;
+}
+
+.page-view:not(#dashboardView) .accounts-summary-item,
+.page-view:not(#dashboardView) .summary-card {
+    position: relative;
+    overflow: hidden;
+    padding: 18px 20px 18px 22px;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+/* Franja de color a la izquierda */
+.page-view:not(#dashboardView) .accounts-summary-item::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 16px;
+    bottom: 16px;
+    width: 4px;
+    border-radius: 0 4px 4px 0;
+    background: var(--pg-grad);
+}
+
+.page-view:not(#dashboardView) .accounts-summary-item:nth-child(2)::before { background: linear-gradient(180deg, #10B981, #059669); }
+.page-view:not(#dashboardView) .accounts-summary-item:nth-child(3)::before { background: linear-gradient(180deg, #F59E0B, #EF4444); }
+.page-view:not(#dashboardView) .accounts-summary-item:nth-child(4)::before { background: linear-gradient(180deg, #06B6D4, #3B82F6); }
+
+/* Quita el círculo decorativo antiguo */
+.page-view:not(#dashboardView) .accounts-summary-item::after,
+.page-view:not(#dashboardView) .movement-summary-item::after {
+    display: none;
+}
+
+.page-view:not(#dashboardView) .accounts-summary-item:hover,
+.page-view:not(#dashboardView) .account-card:hover,
+.page-view:not(#dashboardView) .goal-page-card:hover,
+.page-view:not(#dashboardView) .summary-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--pg-shadow-hover);
+}
+
+.page-view:not(#dashboardView) .accounts-summary-label,
+.page-view:not(#dashboardView) .accounts-summary-item > span:first-child {
+    display: block;
+    font-size: 0.7rem;
+    font-weight: 750;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+}
+
+.page-view:not(#dashboardView) .accounts-summary-value,
+.page-view:not(#dashboardView) .accounts-summary-item > strong {
+    display: block;
+    margin-top: 6px;
+    font-size: clamp(1.25rem, 1.8vw, 1.6rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    font-variant-numeric: tabular-nums;
+}
+
+
+/* =========================================================
+   5. BARRAS DE FILTROS · una sola línea, compactas
+========================================================= */
+
+.page-view:not(#dashboardView) .accounts-filter-card,
+.page-view:not(#dashboardView) .movements-filters-card,
+.page-view:not(#dashboardView) .loans-filters-card {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    flex-wrap: wrap;
+    padding: 14px 20px;
+}
+
+.page-view:not(#dashboardView) .accounts-filter-card > .card-header,
+.page-view:not(#dashboardView) .movements-filters-card > .card-header,
+.page-view:not(#dashboardView) .loans-filters-card > .card-header {
+    flex: 0 0 auto;
+    padding: 0;
+    border: none;
+}
+
+.page-view:not(#dashboardView) .accounts-filter-card .card-description,
+.page-view:not(#dashboardView) .movements-filters-card .card-description,
+.page-view:not(#dashboardView) .loans-filters-card .card-description {
+    display: none;
+}
+
+.page-view:not(#dashboardView) .accounts-filter-card > .card-body,
+.page-view:not(#dashboardView) .movements-filters-card > .card-body,
+.page-view:not(#dashboardView) .loans-filters-card > .card-body {
+    flex: 1 1 420px;
+    padding: 0;
+}
+
+.page-view:not(#dashboardView) .accounts-filters,
+.page-view:not(#dashboardView) .movements-filters,
+.page-view:not(#dashboardView) .loans-filters {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 12px;
+    margin: 0;
+}
+
+.page-view:not(#dashboardView) .form-group {
+    margin: 0;
+}
+
+.page-view:not(#dashboardView) .form-group label {
+    margin-bottom: 4px;
+    font-size: 0.68rem;
+    font-weight: 750;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+}
+
+.page-view:not(#dashboardView) input,
+.page-view:not(#dashboardView) select {
+    height: 42px;
+    padding: 0 14px;
+
+    border: 1px solid var(--pg-line);
+    border-radius: 13px;
+    background: var(--pg-glass-strong);
+
+    font-size: 0.88rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.page-view:not(#dashboardView) input:focus,
+.page-view:not(#dashboardView) select:focus {
+    outline: none;
+    border-color: var(--pg-a);
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.14);
+}
+
+
+/* =========================================================
+   6. CUENTAS
+========================================================= */
+
+#accountsView .accounts-grid {
+    grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+    gap: 18px;
+    margin: 0;
+}
+
+#accountsView .account-card {
+    padding: 20px;
+    overflow: hidden;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+#accountsView .account-card::before,
+#accountsView .account-card::after {
+    display: none;
+}
+
+#accountsView .account-balance {
+    font-size: 1.55rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    font-variant-numeric: tabular-nums;
+}
+
+#accountsView .account-icon {
+    border-radius: 14px;
+}
+
+#accountsView .account-status {
+    border-radius: 999px;
+    font-size: 0.7rem;
+    font-weight: 700;
+}
+
+#accountsView .transfer-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+    padding: 20px 24px;
+}
+
+#accountsView #openTransferModal {
+    border-radius: 16px;
+    background: var(--pg-grad);
+    color: #fff;
+    border: none;
+    box-shadow: 0 10px 24px rgba(79, 70, 229, 0.28);
+}
+
+
+/* =========================================================
+   7. MOVIMIENTOS
+========================================================= */
+
+#movementsView .movements-list-card,
+#movementsView > .card:last-child {
+    overflow: hidden;
+}
+
+#movementsView .movements-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+#movementsView .movement-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+
+    padding: 12px 14px;
+    border: 1px solid transparent;
+    border-radius: 16px;
+    background: transparent;
+
+    transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+#movementsView .movement-item:hover {
+    background: var(--pg-chip);
+    transform: translateX(3px);
+}
+
+#movementsView .movement-item-main {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    min-width: 0;
+}
+
+#movementsView .movement-item-main strong {
+    display: block;
+    font-size: 0.95rem;
+    font-weight: 700;
+}
+
+#movementsView .movement-item-main p {
+    margin: 2px 0 0;
+    font-size: 0.78rem;
+    color: var(--text-secondary);
+}
+
+#movementsView .movement-icon {
+    display: grid;
+    place-items: center;
+    flex: 0 0 auto;
+
+    width: 44px;
+    height: 44px;
+    border-radius: 14px;
+    background: var(--pg-chip);
+    font-size: 1.15rem;
+}
+
+#movementsView .movement-item-amount {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 3px;
+    flex: 0 0 auto;
+}
+
+#movementsView .movement-item-amount strong {
+    font-size: 1rem;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+}
+
+#movementsView .movement-item-amount span {
+    padding: 2px 9px;
+    border-radius: 999px;
+    background: var(--pg-chip);
+    color: var(--text-secondary);
+    font-size: 0.68rem;
+    font-weight: 700;
+}
+
+#movementsView .movement-income  { color: var(--pg-good); }
+#movementsView .movement-expense { color: var(--pg-bad); }
+
+
+/* =========================================================
+   8. METAS
+========================================================= */
+
+#goalsView .goals-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 18px;
+    margin: 0;
+}
+
+#goalsView .goal-page-card {
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+#goalsView .goal-page-card .card-header > div {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+#goalsView .goal-page-card .card-icon {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 14px;
+    background: var(--pg-chip);
+    font-size: 1.2rem;
+}
+
+#goalsView .goal-page-card .card-header h3 {
+    margin: 0;
+    font-size: 1.05rem;
+}
+
+#goalsView .goal-percentage {
+    padding: 4px 11px;
+    border-radius: 999px;
+    background: var(--pg-chip);
+    color: var(--pg-chip-text);
+    font-size: 0.8rem;
+    font-weight: 800;
+}
+
+#goalsView .progress-bar {
+    height: 10px;
+    margin: 14px 0 12px;
+    border-radius: 999px;
+    background: var(--pg-line);
+    overflow: hidden;
+}
+
+#goalsView .progress-fill {
+    height: 100%;
+    border-radius: 999px;
+    background: var(--pg-grad);
+    box-shadow: 0 0 14px rgba(79, 70, 229, 0.35);
+}
+
+#goalsView .goal-footer {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+#goalsView .goal-footer strong {
+    color: var(--text-primary);
+}
+
+#goalsView .goal-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid var(--pg-line);
+}
+
+#goalsView .goal-remaining {
+    font-size: 0.84rem;
+    color: var(--text-secondary);
+}
+
+#goalsView .goal-remaining strong {
+    color: var(--text-primary);
+}
+
+#goalsView .goal-add-money {
+    align-self: flex-start;
+}
+
+
+/* =========================================================
+   9. CALENDARIO
+========================================================= */
+
+#calendarView .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+}
+
+#calendarView .summary-card .card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 18px 22px 0;
+    border: none;
+}
+
+#calendarView .summary-card .card-icon {
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 13px;
+    background: var(--pg-chip);
+    font-size: 1.15rem;
+}
+
+#calendarView .summary-card .card-body {
+    padding-top: 10px;
+}
+
+#calendarView .summary-card h2 {
+    margin: 0;
+    font-size: 1.6rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+}
+
+#calendarView .calendar-events {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 20px 22px;
+}
+
+#calendarView .timeline-item {
+    display: flex;
+    align-items: stretch;
+    gap: 16px;
+
+    padding: 14px 16px;
+    border: 1px solid var(--pg-line);
+    border-left: 4px solid var(--pg-a);
+    border-radius: 16px;
+    background: var(--pg-glass-strong);
+
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+#calendarView .timeline-item:hover {
+    transform: translateX(3px);
+    box-shadow: var(--pg-shadow);
+}
+
+#calendarView .timeline-item.is-income  { border-left-color: var(--pg-good); }
+#calendarView .timeline-item.is-expense { border-left-color: var(--pg-bad); }
+
+#calendarView .timeline-date {
+    flex: 0 0 82px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+}
+
+#calendarView .timeline-date small {
+    display: block;
+    margin-top: 2px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+#calendarView .timeline-content {
+    flex: 1;
+    min-width: 0;
+}
+
+#calendarView .calendar-amount {
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+}
+
+
+/* =========================================================
+   10. CONFIGURACIÓN · dos columnas
+========================================================= */
+
+#settingsView .settings-sections {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+    align-items: start;
+    max-width: none;
+    width: 100%;
+}
+
+#settingsView .settings-card {
+    margin: 0;
+    overflow: hidden;
+}
+
+#settingsView .settings-card .card-header {
+    padding: 20px 24px 16px;
+}
+
+#settingsView .settings-card .card-header h2 {
+    margin: 0;
+    font-size: 1.12rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+}
+
+#settingsView .settings-content {
+    padding: 4px 24px 8px;
+}
+
+#settingsView .settings-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 15px 0;
+    border-bottom: 1px solid var(--pg-line);
+}
+
+#settingsView .settings-row:last-child {
+    border-bottom: none;
+}
+
+#settingsView .settings-row strong {
+    font-size: 0.92rem;
+}
+
+#settingsView .settings-row p {
+    margin: 2px 0 0;
+    font-size: 0.78rem;
+}
+
+#settingsView .settings-row > span {
+    flex: 0 0 auto;
+    padding: 5px 14px;
+    border-radius: 999px;
+    background: var(--pg-chip);
+    color: var(--pg-chip-text);
+    font-size: 0.78rem;
+    font-weight: 750;
+}
+
+#settingsView #dangerSettings {
+    grid-column: 1 / -1;
+    border-color: rgba(220, 38, 38, 0.22);
+}
+
+#settingsView .button-danger {
+    border: none;
+    border-radius: 12px;
+    background: rgba(220, 38, 38, 0.1);
+    color: var(--pg-bad);
+    font-weight: 700;
+    padding: 10px 18px;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+#settingsView .button-danger:hover {
+    background: rgba(220, 38, 38, 0.18);
+    transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   11. CRÉDITO
+========================================================= */
+
+#creditView .credit-page,
+#creditView .credit-summary,
+#creditView .credit-cards-list {
+    min-width: 0;
+}
+
+#creditView .credit-summary {
+    display: block;
+}
+
+#creditView .credit-cards-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 18px;
+}
+
+#creditView .credit-detail-grid,
+#creditView .credit-dates {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+    gap: 10px;
+}
+
+#creditView .credit-detail-grid > div,
+#creditView .credit-dates > div {
+    padding: 11px 13px;
+    border-radius: 14px;
+    background: var(--pg-chip);
+}
+
+#creditView .credit-detail-grid span,
+#creditView .credit-dates span {
+    display: block;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+}
+
+#creditView .credit-detail-grid strong,
+#creditView .credit-dates strong {
+    display: block;
+    margin-top: 3px;
+    font-size: 0.98rem;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+}
+
+#creditView .credit-dates {
+    margin-top: 10px;
+}
+
+#creditView .credit-progress {
+    height: 10px;
+    margin: 16px 0 4px;
+    border-radius: 999px;
+    background: var(--pg-line);
+    overflow: hidden;
+}
+
+#creditView .credit-progress-bar,
+#creditView .credit-progress-fill {
+    height: 100%;
+    border-radius: 999px;
+    background: var(--pg-grad);
+}
+
+
+/* =========================================================
+   12. PRÉSTAMOS · lista (8) + próximos vencimientos (4)
+========================================================= */
+
+@media (min-width: 1201px) {
+
+    #loansView > .loans-list-card,
+    #loansView > .card:nth-last-child(2) {
+        grid-column: 1 / span 8;
+    }
+
+    #loansView > .card:last-child {
+        grid-column: 9 / span 4;
+        align-self: start;
+    }
+}
+
+#loansView .loans-list,
+#loansView .loans-upcoming {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#loansView .loan-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    flex-wrap: wrap;
+
+    padding: 14px 16px;
+    border: 1px solid var(--pg-line);
+    border-radius: 18px;
+    background: var(--pg-glass-strong);
+
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+#loansView .loan-item:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--pg-shadow);
+}
+
+#loansView .loan-main {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    flex: 1 1 180px;
+    min-width: 0;
+}
+
+#loansView .loan-icon {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 14px;
+    background: var(--pg-chip);
+    font-size: 1.15rem;
+}
+
+#loansView .loan-info h4 {
+    margin: 0;
+    font-size: 0.96rem;
+}
+
+#loansView .loan-info p {
+    margin: 2px 0 0;
+    font-size: 0.78rem;
+}
+
+#loansView .loan-amount {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+}
+
+#loansView .loan-amount > strong {
+    font-size: 1.05rem;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+}
+
+#loansView .loan-status {
+    padding: 2px 10px;
+    border-radius: 999px;
+    background: var(--pg-chip);
+    color: var(--pg-chip-text);
+    font-size: 0.68rem;
+    font-weight: 750;
+}
+
+#loansView .loan-status.soon    { background: rgba(217, 119, 6, 0.13); color: var(--pg-warn); }
+#loansView .loan-status.overdue { background: rgba(220, 38, 38, 0.12); color: var(--pg-bad); }
+#loansView .loan-status.paid    { background: rgba(22, 163, 74, 0.12); color: var(--pg-good); }
+
+#loansView .loan-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+#loansView .loan-actions .btn-secondary {
+    padding: 7px 13px;
+    border: 1px solid var(--pg-line);
+    border-radius: 11px;
+    background: transparent;
+    color: var(--text-primary);
+    font-size: 0.78rem;
+    font-weight: 650;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+#loansView .loan-actions .btn-secondary:hover {
+    background: var(--pg-chip);
+}
+
+#loansView .loan-upcoming-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 14px;
+    border-radius: 14px;
+    background: var(--pg-chip);
+}
+
+#loansView .loan-upcoming-item span {
+    display: block;
+    margin-top: 2px;
+    font-size: 0.76rem;
+    color: var(--text-secondary);
+}
+
+
+/* =========================================================
+   13. ANÁLISIS · cuadrícula 2 × 2
+========================================================= */
+
+#analysisView .analysis-sections {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+    align-items: start;
+}
+
+#analysisView .analysis-sections > .card {
+    margin: 0;
+}
+
+#analysisView .card-body > div[id$="Total"] {
+    font-size: 1.9rem;
+    font-weight: 800;
+    letter-spacing: -0.035em;
+    font-variant-numeric: tabular-nums;
+}
+
+#analysisView .card-body > div + div {
+    margin-top: 12px;
+}
+
+#analysisView #comparisonAnalysis {
+    grid-column: 1 / -1;
+}
+
+
+/* =========================================================
+   14. REPORTES · rejilla de indicadores
+========================================================= */
+
+#reportsView #financialReport .card-body {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 14px;
+}
+
+#reportsView .report-item {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 6px;
+
+    padding: 16px 18px;
+    border: 1px solid var(--pg-line);
+    border-radius: 18px;
+    background: var(--pg-glass-strong);
+}
+
+#reportsView .report-item span {
+    font-size: 0.7rem;
+    font-weight: 750;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+}
+
+#reportsView .report-item strong {
+    font-size: 1.35rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    font-variant-numeric: tabular-nums;
+}
+
+
+/* =========================================================
+   15. BOTONES Y ESTADOS VACÍOS
+========================================================= */
+
+.page-view:not(#dashboardView) .btn-primary {
+    border-radius: 14px;
+    padding: 11px 20px;
+    font-weight: 700;
+}
+
+.page-view:not(#dashboardView) .empty-state {
+    display: grid;
+    place-items: center;
+    gap: 6px;
+    padding: 34px 20px;
+    border: 1px dashed var(--pg-line);
+    border-radius: 18px;
+    background: var(--pg-chip);
+    text-align: center;
+    color: var(--text-secondary);
+}
+
+.page-view:not(#dashboardView) .empty-icon {
+    font-size: 1.8rem;
+    opacity: 0.85;
+}
+
+
+/* =========================================================
+   16. RESPONSIVE
+========================================================= */
+
+@media (max-width: 1100px) {
+
+    #settingsView .settings-sections,
+    #analysisView .analysis-sections {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+@media (max-width: 720px) {
+
+    .page-view:not(#dashboardView).active {
+        row-gap: 14px;
+    }
+
+    .page-view:not(#dashboardView) .accounts-summary {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+    }
+
+    .page-view:not(#dashboardView) .accounts-summary-item {
+        padding: 14px 14px 14px 18px;
+    }
+
+    #creditView .credit-cards-list,
+    #accountsView .accounts-grid,
+    #goalsView .goals-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    #movementsView .movement-item {
+        padding: 10px 6px;
+    }
+
+    #calendarView .timeline-item {
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    #calendarView .timeline-date {
+        flex: 0 0 auto;
+    }
+
+    #settingsView .settings-row {
+        flex-direction: row;
+        flex-wrap: nowrap;
+        align-items: center;
+        justify-content: space-between;
+        text-align: left;
+    }
+
+    #settingsView .settings-row > div {
+        flex: 1 1 auto;
+        min-width: 0;
+        margin: 0;
+        padding: 0;
+        text-align: left;
+    }
+
+    #settingsView .settings-card .settings-content {
+        padding: 4px 20px 8px;
+    }
+}
+
+
+/* =========================================================
+   17. AJUSTES FINOS (después de revisar cada página)
+========================================================= */
+
+/* Filtros de movimientos: en fila, igual que cuentas y préstamos */
+#movementsView .movements-filters-card > .card-body,
+#movementsView .movements-filters-card .movements-filters {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 12px;
+    align-items: end;
+}
+
+#movementsView .movements-filters-card > .card-body {
+    display: block;
+}
+
+/* Encabezados de tarjetas de resumen alineados a la izquierda */
+.page-view:not(#dashboardView) .summary-card .card-header {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 12px;
+    border: none;
+    padding-bottom: 0;
+}
+
+.page-view:not(#dashboardView) .summary-card .card-title {
+    font-size: 0.78rem;
+    font-weight: 750;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+}
+
+.page-view:not(#dashboardView) .summary-card .card-body {
+    padding-top: 12px;
+}
+
+.page-view:not(#dashboardView) .summary-card .card-icon {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 13px;
+    background: var(--pg-chip);
+}
+
+/* Crédito: 4 indicadores en una fila */
+#creditView .credit-summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 16px;
+}
+
+#creditView .credit-summary > .card {
+    margin: 0;
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+}
+
+#creditView .credit-summary > .card::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 16px;
+    bottom: 16px;
+    width: 4px;
+    border-radius: 0 4px 4px 0;
+    background: var(--pg-grad);
+}
+
+#creditView .credit-summary > .card:nth-child(2)::before { background: linear-gradient(180deg, #06B6D4, #3B82F6); }
+#creditView .credit-summary > .card:nth-child(3)::before { background: linear-gradient(180deg, #10B981, #059669); }
+#creditView .credit-summary > .card:nth-child(4)::before { background: linear-gradient(180deg, #F59E0B, #EF4444); }
+
+#creditView .credit-summary .card-header {
+    border: none;
+    padding: 16px 22px 0;
+}
+
+#creditView .credit-summary .card-title {
+    font-size: 0.7rem;
+    font-weight: 750;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+}
+
+#creditView .credit-summary .card-body {
+    padding: 6px 22px 18px;
+    font-size: 1.5rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+}
+
+#creditView .credit-summary .card-body > * {
+    font-size: inherit;
+    font-weight: inherit;
+    margin: 0;
+}
+
+/* Configuración: 2 × 2, sin huecos */
+#settingsView #dangerSettings {
+    grid-column: auto;
+}
+
+/* Análisis: 2 × 2, sin huecos */
+#analysisView #comparisonAnalysis {
+    grid-column: auto;
+}
+
+#movementsView .movements-filters-card > .movements-filters,
+#loansView .loans-filters-card > .loans-filters,
+#accountsView .accounts-filter-card > .accounts-filters {
+    flex: 1 1 420px;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    margin: 0;
+}
+
+#movementsView .movements-filters-card,
+#loansView .loans-filters-card,
+#accountsView .accounts-filter-card {
+    padding: 14px 20px;
+    border: 1px solid var(--pg-edge);
+    border-radius: var(--pg-radius);
+    background: var(--pg-glass);
+    box-shadow: var(--pg-shadow);
+}
+
+#movementsView .movements-filters-card h3 {
+    margin: 0;
+    white-space: nowrap;
+}
+
+#reportsView #financialReport,
+#reportsView .card {
+    max-width: none;
+    width: 100%;
+}
+
+.page-view:not(#dashboardView) .accounts-summary-item,
+.page-view:not(#dashboardView) .summary-card {
+    min-height: 0;
+    height: auto;
+}
+
+@media (max-width: 720px) {
+
+    .page-view:not(#dashboardView) .page-heading,
+    .page-view:not(#dashboardView) .page-header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .page-view:not(#dashboardView) .page-heading > .btn-primary {
+        width: 100%;
+    }
+
+    #loansView .loan-amount {
+        align-items: flex-start;
+    }
+
+    .page-view:not(#dashboardView) .accounts-filter-card,
+    .page-view:not(#dashboardView) .movements-filters-card,
+    .page-view:not(#dashboardView) .loans-filters-card {
+        padding: 14px;
+    }
+}
+
+
+/* =========================================================
+   18. CUENTAS · botones Editar / Desactivar / Activar
+========================================================= */
+
+#accountsGrid .account-card-actions {
+    display: flex;
+    justify-content: flex-start;
+    gap: 10px;
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px solid var(--pg-line);
+}
+
+#accountsGrid .account-card-actions button {
+    width: auto;
+    height: auto;
+    min-height: 38px;
+    padding: 0 16px;
+    gap: 7px;
+
+    border: 1px solid transparent;
+    border-radius: 12px;
+
+    font: inherit;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: -0.005em;
+    white-space: nowrap;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease,
+        color 0.2s ease,
+        border-color 0.2s ease;
+}
+
+#accountsGrid .account-card-actions button::before {
+    font-size: 0.95rem;
+    line-height: 1;
+}
+
+/* Editar · azul suave */
+#accountsGrid .account-card-actions button[data-action="edit-account"] {
+    background: var(--pg-chip);
+    border-color: rgba(37, 99, 235, 0.18);
+    color: var(--pg-chip-text);
+}
+
+#accountsGrid .account-card-actions button[data-action="edit-account"]::before {
+    content: "✎";
+}
+
+#accountsGrid .account-card-actions button[data-action="edit-account"]:hover {
+    background: var(--pg-grad);
+    border-color: transparent;
+    color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 22px rgba(79, 70, 229, 0.28);
+}
+
+/* Desactivar · rojo suave */
+#accountsGrid .account-card-actions button[data-action="deactivate-account"] {
+    background: rgba(220, 38, 38, 0.08);
+    border-color: rgba(220, 38, 38, 0.16);
+    color: var(--pg-bad);
+}
+
+#accountsGrid .account-card-actions button[data-action="deactivate-account"]::before {
+    content: "⏻";
+}
+
+#accountsGrid .account-card-actions button[data-action="deactivate-account"]:hover {
+    background: var(--pg-bad);
+    border-color: transparent;
+    color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 22px rgba(220, 38, 38, 0.28);
+}
+
+/* Activar · verde suave */
+#accountsGrid .account-card-actions button[data-action="reactivate-account"] {
+    background: rgba(22, 163, 74, 0.09);
+    border-color: rgba(22, 163, 74, 0.18);
+    color: var(--pg-good);
+}
+
+#accountsGrid .account-card-actions button[data-action="reactivate-account"]::before {
+    content: "⏻";
+}
+
+#accountsGrid .account-card-actions button[data-action="reactivate-account"]:hover {
+    background: var(--pg-good);
+    border-color: transparent;
+    color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 22px rgba(22, 163, 74, 0.28);
+}
+
+#accountsGrid .account-card-actions button:focus-visible {
+    outline: 3px solid rgba(37, 99, 235, 0.35);
+    outline-offset: 2px;
+}

@@ -1,0 +1,448 @@
+/*
+==========================================
+FinanceFlow
+Archivo: layout.css
+Versión: 0.1.0
+
+Descripción:
+Estructura y distribución general
+de la interfaz.
+==========================================
+*/
+
+
+/* ==========================================
+   CONTENIDO PRINCIPAL
+========================================== */
+.main-content {
+
+    min-height: 100vh;
+
+    margin-left: var(--sidebar-width);
+
+    width: calc(100% - var(--sidebar-width));
+
+    padding: var(--space-lg);
+
+}
+/* ==========================================
+   TOPBAR
+========================================== */
+
+.topbar {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: var(--space-lg);
+
+    margin-bottom: var(--space-lg);
+
+}
+
+
+/* ==========================================
+   CONTEXTO DEL HEADER
+========================================== */
+
+.header-left {
+
+    min-width: 0;
+
+}
+
+
+.header-context {
+
+    display: flex;
+
+    align-items: center;
+
+    flex-wrap: wrap;
+
+    gap: 8px;
+
+}
+
+
+.header-brand {
+
+    color: var(--primary-color);
+
+    font-size: 0.85rem;
+
+    font-weight: 800;
+
+}
+
+
+.header-separator {
+
+    color: var(--text-secondary);
+
+    font-weight: 600;
+
+}
+
+
+.header-context h2 {
+
+    margin: 0;
+
+    font-size: 1.8rem;
+
+    font-weight: 800;
+
+    line-height: 1.2;
+
+}
+
+
+.header-left > p {
+
+    margin-top: 6px;
+
+    color: var(--text-secondary);
+
+    font-size: 0.9rem;
+
+}
+
+
+.header-left > p:empty {
+
+    display: none;
+
+}
+
+
+/* ==========================================
+   HERRAMIENTAS DEL HEADER
+========================================== */
+
+.header-right {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: flex-end;
+
+    gap: 12px;
+
+    flex-shrink: 0;
+
+}
+
+
+/* ==========================================
+   BOTONES DEL HEADER
+========================================== */
+
+.header-icon-button {
+
+    position: relative;
+
+    width: 44px;
+
+    height: 44px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border: 1px solid var(--border-color);
+
+    border-radius: 50%;
+
+    background: var(--surface-color);
+
+    color: var(--text-primary);
+
+    font-size: 1.1rem;
+
+    cursor: pointer;
+
+    box-shadow: var(--shadow-sm);
+
+    transition:
+        background var(--transition-fast),
+        border-color var(--transition-fast),
+        transform var(--transition-fast);
+}
+
+
+.header-icon-button:hover {
+
+    background: var(--background-color);
+
+    border-color: var(--primary-light);
+
+    transform: translateY(-1px);
+
+}
+
+
+/* ==========================================
+   PERFIL DEL HEADER
+========================================== */
+
+.header-profile {
+
+    position: relative;
+
+}
+
+
+.profile-button {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    min-height: 46px;
+
+    padding: 6px 12px 6px 6px;
+
+    border: 1px solid var(--border-color);
+
+    border-radius: var(--radius-lg);
+
+    background: var(--surface-color);
+
+    color: var(--text-primary);
+
+    cursor: pointer;
+
+    box-shadow: var(--shadow-sm);
+
+    font: inherit;
+
+    transition:
+        background var(--transition-fast),
+        border-color var(--transition-fast),
+        box-shadow var(--transition-fast);
+
+}
+
+
+.profile-button:hover {
+
+    background: var(--background-color);
+
+    border-color: var(--primary-light);
+
+    box-shadow: var(--shadow-md);
+
+}
+
+
+/* ==========================================
+   AVATAR
+========================================== */
+
+.profile-avatar {
+
+    width: 34px;
+
+    height: 34px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    background: var(--primary-light);
+
+    color: var(--primary-color);
+
+    font-weight: 800;
+
+}
+
+
+.profile-avatar.large {
+
+    width: 46px;
+
+    height: 46px;
+
+}
+
+
+/* ==========================================
+   INFORMACIÓN DEL PERFIL
+========================================== */
+
+.profile-summary {
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    min-width: 0;
+
+}
+
+
+.profile-summary strong {
+
+    max-width: 150px;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+
+    font-size: 0.9rem;
+
+}
+
+
+.profile-summary small {
+
+    max-width: 180px;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+
+    color: var(--text-secondary);
+
+    font-size: 0.75rem;
+
+}
+
+
+/* ==========================================
+   PÁGINAS
+========================================== */
+
+.page-view {
+
+    width: 100%;
+
+    min-width: 0;
+
+    padding-bottom: var(--space-xl);
+
+}
+
+
+.page-view[hidden] {
+
+    display: none !important;
+
+}
+
+
+.page-view.active {
+
+    display: block;
+
+}
+/* ==========================================
+   GRIDS GENERALES
+========================================== */
+
+.summary-grid,
+.dashboard-row,
+.accounts-summary,
+.accounts-grid {
+
+    width: 100%;
+
+}
+
+
+.dashboard-row > *,
+.dashboard-column > *,
+.summary-grid > *,
+.accounts-grid > * {
+
+    min-width: 0;
+
+}
+
+
+/* ==========================================
+   CONTROL DE CONTENIDO
+========================================== */
+
+img,
+svg,
+canvas {
+
+    max-width: 100%;
+
+}
+
+
+button,
+input,
+select,
+textarea {
+
+    font-family: inherit;
+
+}
+
+
+button {
+
+    -webkit-tap-highlight-color: transparent;
+
+}
+
+
+/* ==========================================
+   SELECCIÓN DE TEXTO
+========================================== */
+
+::selection {
+
+    background: var(--primary-light);
+
+    color: var(--primary-dark);
+
+}
+
+
+/* ==========================================
+   REDUCCIÓN DE MOVIMIENTO
+========================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+
+        scroll-behavior: auto !important;
+
+        animation-duration: 0.01ms !important;
+
+        animation-iteration-count: 1 !important;
+
+        transition-duration: 0.01ms !important;
+
+    }
+
+}

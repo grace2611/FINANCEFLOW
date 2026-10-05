@@ -1,0 +1,4147 @@
+<!DOCTYPE html>
+<html lang="es" class="ff-auth-locked">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#F8FAFC">
+
+    <title>FinanceFlow</title>
+
+    <!-- FAVICON -->
+    <link
+        rel="icon"
+        type="image/svg+xml"
+        href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%232563eb'/%3E%3Ctext x='50' y='67' font-size='58' text-anchor='middle' fill='white'%3EF%3C/text%3E%3C/svg%3E">
+
+    <!-- TEMA (claro/oscuro): se aplica antes de pintar para evitar parpadeos -->
+    <script>
+        try {
+            var savedTheme = localStorage.getItem("financeflow_theme");
+            if (savedTheme === "dark" || savedTheme === "light") {
+                document.documentElement.setAttribute("data-theme", savedTheme);
+            }
+        } catch (error) {}
+    </script>
+
+    <!-- FUENTE -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- La fuente carga sin bloquear el primer pintado -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"></noscript>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/cards.css">
+    <link rel="stylesheet" href="css/dashboard-summary-cards.css">
+    <link rel="stylesheet" href="css/dashboard-budget-tracker.css">
+    <link rel="stylesheet" href="css/tables.css">
+    <link rel="stylesheet" href="css/charts.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/forms.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/modal.css">
+    <link rel="stylesheet" href="css/pages.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/sidebar.css">
+    <link rel="stylesheet" href="css/dashboard-layout.css">
+    <link rel="stylesheet" href="css/notifications-events.css">
+    <link rel="stylesheet" href="css/dashboard-refined.css">
+    <link rel="stylesheet" href="css/sidebar-modern.css">
+    <link rel="stylesheet" href="css/pages-refined.css">
+    <link rel="stylesheet" href="css/calendar-view.css">
+    <link rel="stylesheet" href="css/auth.css">
+    <link rel="stylesheet" href="css/theme-dark.css">
+    <link rel="stylesheet" href="css/responsive-final.css">
+
+
+
+</head>
+
+<body>
+
+    <!-- ========= PANTALLA DE ACCESO (correo y contraseña) ========= -->
+
+    <div class="auth-screen" id="authScreen" data-state="loading">
+
+        <div class="auth-card" role="dialog" aria-modal="true" aria-labelledby="authTitle">
+
+            <div class="auth-brand">
+
+                <span class="auth-logo" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" focusable="false"><path d="M3 15c3 0 3-6 6-6s3 6 6 6 3-6 6-6"/></svg>
+                </span>
+
+                <span class="auth-brand-name">FinanceFlow</span>
+
+            </div>
+
+
+            <!-- Cargando -->
+
+            <section class="auth-panel" data-panel="loading" aria-live="polite">
+
+                <span class="auth-spinner" aria-hidden="true"></span>
+
+                <p id="authLoadingText">Cargando…</p>
+
+            </section>
+
+
+            <!-- Sin conexión con Firebase -->
+
+            <section class="auth-panel" data-panel="error" role="alert">
+
+                <h1 class="auth-title">No pudimos conectar</h1>
+
+                <p id="authFatalText"></p>
+
+                <button type="button" class="auth-submit" id="authRetry">Reintentar</button>
+
+            </section>
+
+
+            <!-- Iniciar sesión / Crear cuenta -->
+
+            <section class="auth-panel" data-panel="form">
+
+                <h1 class="auth-title" id="authTitle">Bienvenido de nuevo</h1>
+
+                <p class="auth-subtitle" id="authSubtitle">Inicia sesión para ver tus finanzas.</p>
+
+                <div class="auth-tabs" role="tablist">
+
+                    <span class="auth-tab-indicator" aria-hidden="true"></span>
+
+                    <button type="button" class="auth-tab" role="tab" data-auth-tab="login" aria-selected="true">Iniciar sesión</button>
+
+                    <button type="button" class="auth-tab" role="tab" data-auth-tab="register" aria-selected="false">Crear cuenta</button>
+
+                </div>
+
+
+                <form class="auth-form" id="loginForm" novalidate>
+
+                    <div class="auth-alert" role="alert" hidden></div>
+
+                    <div class="auth-field">
+                        <label for="loginEmail">Correo electrónico</label>
+                        <div class="auth-input-wrap">
+                            <input type="email" id="loginEmail" name="email" placeholder="tucorreo@ejemplo.com" autocomplete="email" inputmode="email" autocapitalize="none" spellcheck="false">
+                        </div>
+                        <small class="auth-field-error" data-error-for="loginEmail" aria-live="polite"></small>
+                    </div>
+
+                    <div class="auth-field">
+                        <label for="loginPassword">Contraseña</label>
+                        <div class="auth-input-wrap has-toggle">
+                            <input type="password" id="loginPassword" name="password" placeholder="Tu contraseña" autocomplete="current-password">
+                            <button type="button" class="auth-toggle" data-toggle-password="loginPassword" aria-pressed="false">Mostrar</button>
+                        </div>
+                        <small class="auth-field-error" data-error-for="loginPassword" aria-live="polite"></small>
+                    </div>
+
+                    <button type="submit" class="auth-submit">Iniciar sesión</button>
+
+                    <p class="auth-switch">¿No tienes cuenta? <button type="button" data-auth-switch="register">Crear cuenta</button></p>
+
+                </form>
+
+
+                <form class="auth-form" id="registerForm" novalidate hidden>
+
+                    <div class="auth-alert" role="alert" hidden></div>
+
+                    <div class="auth-field">
+                        <label for="registerName">Nombre</label>
+                        <div class="auth-input-wrap">
+                            <input type="text" id="registerName" name="name" placeholder="Tu nombre" autocomplete="name" maxlength="40">
+                        </div>
+                        <small class="auth-field-error" data-error-for="registerName" aria-live="polite"></small>
+                    </div>
+
+                    <div class="auth-field">
+                        <label for="registerEmail">Correo electrónico</label>
+                        <div class="auth-input-wrap">
+                            <input type="email" id="registerEmail" name="email" placeholder="tucorreo@ejemplo.com" autocomplete="email" inputmode="email" autocapitalize="none" spellcheck="false">
+                        </div>
+                        <small class="auth-field-error" data-error-for="registerEmail" aria-live="polite"></small>
+                    </div>
+
+                    <div class="auth-field">
+                        <label for="registerPassword">Contraseña</label>
+                        <div class="auth-input-wrap has-toggle">
+                            <input type="password" id="registerPassword" name="password" placeholder="Mínimo 6 caracteres" autocomplete="new-password">
+                            <button type="button" class="auth-toggle" data-toggle-password="registerPassword" aria-pressed="false">Mostrar</button>
+                        </div>
+                        <small class="auth-field-error" data-error-for="registerPassword" aria-live="polite"></small>
+                    </div>
+
+                    <button type="submit" class="auth-submit">Crear cuenta</button>
+
+                    <p class="auth-switch">¿Ya tienes cuenta? <button type="button" data-auth-switch="login">Iniciar sesión</button></p>
+
+                </form>
+
+            </section>
+
+        </div>
+
+    </div>
+
+
+    <!-- ========= SIDEBAR ========= -->
+
+    <aside class="sidebar">
+
+        <button
+            type="button"
+            id="sidebarToggle"
+            class="sidebar-toggle"
+            aria-label="Cerrar barra lateral"
+            >
+
+            <span
+                id="sidebarToggleIcon"
+                aria-hidden="true">
+                ◀
+            </span>
+
+        </button>
+
+        <div class="logo">
+
+            <h1>
+                <span class="logo-mark" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" focusable="false"><path d="M3 15c3 0 3-6 6-6s3 6 6 6 3-6 6-6"/></svg>
+                </span>
+                <span class="logo-text">FinanceFlow</span>
+            </h1>
+
+        </div>
+
+        <nav class="sidebar-menu">
+
+            <ul>
+
+                <li class="active" data-view="dashboard">
+                    <span class="nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3" y="3" width="7" height="9" rx="2"/><rect x="14" y="3" width="7" height="5" rx="2"/><rect x="14" y="12" width="7" height="9" rx="2"/><rect x="3" y="16" width="7" height="5" rx="2"/></svg></span>
+                    <span>Dashboard</span>
+                </li>
+
+                <li data-view="accounts">
+                    <span class="nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"/><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"/></svg></span>
+                    <span>Cuentas</span>
+                </li>
+
+                <li data-view="movements">
+                    <span class="nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8 3 4 7l4 4"/><path d="M4 7h16"/><path d="m16 21 4-4-4-4"/><path d="M20 17H4"/></svg></span>
+                    <span>Movimientos</span>
+                </li>
+
+                <li data-view="goals">
+                    <span class="nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></span>
+                    <span>Metas</span>
+                </li>
+
+                <li data-view="calendar">
+                    <span class="nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3" y="4" width="18" height="18" rx="3"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></span>
+                    <span>Calendario</span>
+                </li>
+
+                <li data-view="settings">
+                    <span class="nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M21 4h-7M10 4H3M21 12h-9M8 12H3M21 20h-5M12 20H3"/><path d="M14 2v4M8 10v4M16 18v4"/></svg></span>
+                    <span>Configuración</span>
+                </li>
+                <li data-view="credit">
+                    <span class="nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="2" y="5" width="20" height="14" rx="3"/><path d="M2 10h20M6 15h4"/></svg></span>
+                    <span>Crédito</span>
+                </li>
+                <li data-view="loans">
+                    <span class="nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="2" y="6" width="20" height="12" rx="3"/><circle cx="12" cy="12" r="2.5"/><path d="M6 12h.01M18 12h.01"/></svg></span>
+                    <span>Préstamos</span>
+                </li>
+                <li data-view="analysis">
+                    <span class="nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="m7 15 4-4 3 3 6-7"/></svg></span>
+                    <span>Análisis</span>
+                </li>
+
+                <li data-view="reports">
+                    <span class="nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h5"/></svg></span>
+                    <span>Reportes</span>
+                </li>
+            </ul>
+
+        </nav>
+
+        <div class="sidebar-footer">
+
+            <button
+                type="button"
+                id="themeToggle"
+                class="theme-toggle"
+                role="switch"
+                aria-checked="false"
+                aria-label="Activar modo oscuro"
+                title="Cambiar tema">
+
+                <!-- Versión ancha: interruptor con las dos opciones -->
+                <span class="theme-seg" aria-hidden="true">
+                    <span class="theme-seg-knob"></span>
+                    <span class="theme-seg-option theme-seg-light">
+                        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+                        <span>Claro</span>
+                    </span>
+                    <span class="theme-seg-option theme-seg-dark">
+                        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                        <span>Oscuro</span>
+                    </span>
+                </span>
+
+                <!-- Versión compacta: un solo icono (sol o luna) -->
+                <span class="theme-compact" aria-hidden="true">
+                    <span class="theme-compact-sun"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg></span>
+                    <span class="theme-compact-moon"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></span>
+                </span>
+
+            </button>
+
+        </div>
+
+    </aside>
+
+    <!-- ========= CONTENIDO PRINCIPAL ========= -->
+
+    <main class="main-content">
+
+        <!-- ==========================================
+            VISTA · CUENTAS
+        ========================================== -->
+
+        <section
+            class="page-view"
+            id="accountsView"
+            hidden>
+
+            <div class="page-heading">
+
+                <div>
+
+                    <span class="page-kicker">
+                        MI DINERO
+                    </span>
+
+                    <h2>
+                        Mis cuentas
+                    </h2>
+
+                    <p>
+                        Consulta dónde está tu dinero y organiza tus cuentas.
+                    </p>
+
+                </div>
+
+                <button
+                    class="btn-primary"
+                    id="openAccountModal">
+
+                    + Nueva cuenta
+
+                </button>
+
+            </div>
+
+
+            <div
+                class="accounts-summary"
+                id="accountsSummary">
+            </div>
+
+<!-- ==========================================
+    FILTRO DE CUENTAS
+========================================== -->
+
+<div class="card accounts-filter-card">
+
+    <div class="card-header">
+
+        <div>
+
+            <h3>
+                🗂️ Mis cuentas
+            </h3>
+
+            <p class="card-description">
+                Filtra tus cuentas por tipo.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="card-body">
+
+        <div class="accounts-filters">
+
+            <div class="form-group">
+
+                <label for="accountTypeFilter">
+                    Tipo de cuenta
+                </label>
+
+                <select
+                    id="accountTypeFilter">
+
+                    <option value="all">
+                        Todas
+                    </option>
+
+                    <option value="bank">
+                        Banco
+                    </option>
+
+                    <option value="wallet">
+                        Billetera digital
+                    </option>
+
+                    <option value="cash">
+                        Efectivo
+                    </option>
+
+                    <option value="savings">
+                        Ahorro
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="accountAvailabilityFilter">
+                    Disponibilidad
+                </label>
+
+                <select
+                    id="accountAvailabilityFilter">
+
+                    <option value="all">
+                        Todas
+                    </option>
+
+                    <option value="available">
+                        Disponible
+                    </option>
+
+                    <option value="unavailable">
+                        No disponible
+                    </option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+            <div
+                class="accounts-grid"
+                id="accountsGrid">
+            </div>
+
+
+            <div class="card transfer-card">
+
+                <div class="card-header">
+
+                    <div>
+
+                        <h3>
+                            🔄 Transferir dinero
+                        </h3>
+
+                        <p class="card-description">
+                            Mueve dinero entre tus propias cuentas.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <button
+                    class="btn-primary"
+                    id="openTransferModal">
+
+                    Hacer transferencia
+
+                </button>
+
+            </div>
+
+        </section>
+
+        <!-- ==========================================
+            VISTA · MOVIMIENTOS
+        ========================================== -->
+
+        <section
+            class="page-view"
+            id="movementsView"
+            hidden>
+
+            <div class="page-heading">
+
+                <div>
+
+                    <span class="page-kicker">
+                        ACTIVIDAD
+                    </span>
+
+                    <h2>
+                        Movimientos
+                    </h2>
+
+                    <p>
+                        Revisa tus ingresos, gastos y transferencias.
+                    </p>
+
+                </div>
+
+
+                <button class="btn-primary js-open-movement-modal">
+
+                    + Nuevo movimiento
+
+                </button>
+
+            </div>
+
+
+            <!-- ==========================================
+                RESUMEN
+            ========================================== -->
+
+            <div
+                class="accounts-summary movements-summary"
+                id="movementsSummary">
+
+            </div>
+
+
+            <!-- ==========================================
+                FILTROS
+            ========================================== -->
+
+            <div class="card movements-filters-card">
+
+                <div class="card-header">
+
+                    <div>
+
+                        <h3>
+                            🔎 Filtrar movimientos
+                        </h3>
+
+                        <p class="card-description">
+                            Encuentra rápidamente un movimiento.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="movements-filters">
+
+                    <div class="form-group">
+
+                        <label for="movementFilterType">
+                            Tipo
+                        </label>
+
+                        <select id="movementFilterType">
+
+                            <option value="all">
+                                Todos
+                            </option>
+
+                            <option value="income">
+                                Ingresos
+                            </option>
+
+                            <option value="expense">
+                                Gastos
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="movementFilterAccount">
+                            Cuenta
+                        </label>
+
+                        <select id="movementFilterAccount">
+
+                            <option value="all">
+                                Todas las cuentas
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="movementFilterCategory">
+                            Categoría
+                        </label>
+
+                        <select id="movementFilterCategory">
+
+                            <option value="all">
+                                Todas
+                            </option>
+
+                            <option value="Alimentación">
+                                Alimentación
+                            </option>
+
+                            <option value="Transporte">
+                                Transporte
+                            </option>
+
+                            <option value="Hogar">
+                                Hogar
+                            </option>
+
+                            <option value="Salud">
+                                Salud
+                            </option>
+
+                            <option value="Educación">
+                                Educación
+                            </option>
+
+                            <option value="Entretenimiento">
+                                Entretenimiento
+                            </option>
+
+                            <option value="Ahorro">
+                                Ahorro
+                            </option>
+
+                            <option value="Sueldo">
+                                Sueldo
+                            </option>
+
+                            <option value="Otros">
+                                Otros
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="movementFilterSearch">
+                            Buscar
+                        </label>
+
+                        <input
+                            type="search"
+                            id="movementFilterSearch"
+                            placeholder="Ej. supermercado">
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ==========================================
+                HISTORIAL
+            ========================================== -->
+
+            <div class="card">
+
+                <div class="card-header">
+
+                    <div>
+
+                        <h3>
+                            📋 Historial de movimientos
+                        </h3>
+
+                        <p class="card-description">
+                            Todos tus movimientos registrados.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="card-body">
+
+                    <div
+                        class="movements-list"
+                        id="movementsList">
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- ==========================================
+            VISTA · METAS
+        ========================================== -->
+
+        <section
+            class="page-view"
+            id="goalsView"
+            hidden>
+
+            <div class="page-heading">
+
+                <div>
+
+                    <span class="page-kicker">
+                        MIS OBJETIVOS
+                    </span>
+
+                    <h2>
+                        Mis metas
+                    </h2>
+
+                    <p>
+                        Convierte tus objetivos en pequeños avances.
+                    </p>
+
+                </div>
+
+
+                <button
+                    class="btn-primary"
+                    id="openGoalModal">
+
+                    + Nueva meta
+
+                </button>
+
+            </div>
+
+
+            <!-- ==========================================
+                RESUMEN DE METAS
+            ========================================== -->
+
+            <div
+                class="accounts-summary"
+                id="goalsSummary">
+            </div>
+
+
+            <!-- ==========================================
+                LISTA DE METAS
+            ========================================== -->
+
+            <div
+                class="goals-grid"
+                id="goalsGrid">
+            </div>
+
+        </section>
+
+        <!-- ==========================================
+            VISTA · CALENDARIO
+        ========================================== -->
+
+        <section
+            class="page-view"
+            id="calendarView"
+            hidden>
+
+            <div class="page-heading">
+
+                <div>
+
+                    <span class="page-kicker">
+                        ORGANIZA TU DINERO
+                    </span>
+
+                    <h2>
+                        Calendario
+                    </h2>
+
+                    <p>
+                        Revisa tus próximos pagos, ingresos y compromisos financieros.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- RESUMEN -->
+
+            <div class="summary-grid">
+
+                <article class="card summary-card">
+
+                    <div class="card-header">
+
+                        <span class="card-icon">
+                            📅
+                        </span>
+
+                        <span class="card-title">
+                            Próximos eventos
+                        </span>
+
+                    </div>
+
+                    <div class="card-body">
+
+                        <h2 id="calendarUpcomingCount">
+                            0
+                        </h2>
+
+                        <p class="card-description">
+                            Compromisos próximos.
+                        </p>
+
+                    </div>
+
+                </article>
+
+
+                <article class="card summary-card">
+
+                    <div class="card-header">
+
+                        <span class="card-icon">
+                            💰
+                        </span>
+
+                        <span class="card-title">
+                            Por recibir
+                        </span>
+
+                    </div>
+
+                    <div class="card-body">
+
+                        <h2 id="calendarToReceive">
+                            S/ 0.00
+                        </h2>
+
+                        <p class="card-description">
+                            Dinero pendiente de recibir.
+                        </p>
+
+                    </div>
+
+                </article>
+
+            </div>
+
+
+            <!-- CALENDARIO MENSUAL -->
+
+            <article class="card ffcal" id="financeCalendar" aria-label="Calendario mensual">
+
+                <div class="ffcal-layout">
+
+                    <!-- Mes -->
+                    <div class="ffcal-main">
+
+                        <div class="ffcal-toolbar">
+
+                            <div class="ffcal-heading">
+                                <h3 id="ffCalMonth">Mes</h3>
+                                <span id="ffCalSummary">Sin eventos este mes</span>
+                            </div>
+
+                            <div class="ffcal-nav">
+
+                                <button type="button" class="ffcal-today" id="ffCalToday">
+                                    Hoy
+                                </button>
+
+                                <button type="button" class="ffcal-arrow" id="ffCalPrev" aria-label="Mes anterior">
+                                    ‹
+                                </button>
+
+                                <button type="button" class="ffcal-arrow" id="ffCalNext" aria-label="Mes siguiente">
+                                    ›
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                        <div class="ffcal-weekdays" aria-hidden="true">
+                            <span>Lun</span>
+                            <span>Mar</span>
+                            <span>Mié</span>
+                            <span>Jue</span>
+                            <span>Vie</span>
+                            <span>Sáb</span>
+                            <span>Dom</span>
+                        </div>
+
+                        <div class="ffcal-grid" id="ffCalGrid" role="grid" aria-label="Días del mes"></div>
+
+                        <div class="ffcal-legend">
+                            <span><i class="ffcal-dot is-income"></i>Ingreso</span>
+                            <span><i class="ffcal-dot is-expense"></i>Pago</span>
+                            <span><i class="ffcal-dot is-reminder"></i>Recordatorio</span>
+                        </div>
+
+                    </div>
+
+                    <!-- Detalle del día seleccionado -->
+                    <aside class="ffcal-day" aria-live="polite">
+
+                        <div class="ffcal-day-head">
+                            <span class="ffcal-day-kicker" id="ffCalDayKicker">Hoy</span>
+                            <h4 id="ffCalDayTitle">Día</h4>
+                        </div>
+
+                        <div class="ffcal-day-events" id="ffCalDayEvents"></div>
+
+                        <button type="button" class="btn-primary ffcal-add" id="ffCalAdd">
+                            <span>＋</span>
+                            <span>Agregar evento</span>
+                        </button>
+
+                    </aside>
+
+                </div>
+
+            </article>
+
+
+            <!-- LISTA DE EVENTOS -->
+
+            <article class="card">
+
+                <div class="card-header">
+
+                    <div>
+
+                        <h3>
+                            📅 Próximos compromisos
+                        </h3>
+
+                        <p class="card-description">
+                            Tus eventos financieros ordenados por fecha.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    class="calendar-events"
+                    id="calendarEvents">
+
+                </div>
+
+            </article>
+
+        </section>
+        <!-- ==========================================
+            VISTA · ANÁLISIS
+        ========================================== -->
+
+        <section
+            class="page-view"
+            id="analysisView"
+            hidden>
+
+            <div class="page-heading">
+
+                <div>
+
+                    <span class="page-kicker">
+                        ANÁLISIS
+                    </span>
+
+                    <h2>
+                        Análisis financiero
+                    </h2>
+
+                    <p>
+                        Comprende qué está pasando con tu dinero.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="analysis-sections">
+
+
+                <!-- INGRESOS -->
+
+                <section
+                    class="card"
+                    id="incomeAnalysis">
+
+                    <div class="card-header">
+
+                        <span class="card-title">
+                            Ingresos
+                        </span>
+
+                    </div>
+
+                    <div class="card-body">
+
+                        <div id="analysisIncomeTotal">
+                            S/ 0.00
+                        </div>
+
+                        <div id="analysisIncomeEvolution">
+                        </div>
+
+                        <div id="analysisIncomeSources">
+                        </div>
+
+                        <div id="analysisIncomeComparison">
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- GASTOS -->
+
+                <section
+                    class="card"
+                    id="expenseAnalysis">
+
+                    <div class="card-header">
+
+                        <span class="card-title">
+                            Gastos
+                        </span>
+
+                    </div>
+
+                    <div class="card-body">
+
+                        <div id="analysisExpenseTotal">
+                            S/ 0.00
+                        </div>
+
+                        <div id="analysisExpenseCategories">
+                        </div>
+
+                        <div id="analysisExpenseEvolution">
+                        </div>
+
+                        <div id="analysisTopExpenses">
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- AHORRO -->
+
+                <section
+                    class="card"
+                    id="savingAnalysis">
+
+                    <div class="card-header">
+
+                        <span class="card-title">
+                            Ahorro
+                        </span>
+
+                    </div>
+
+                    <div class="card-body">
+
+                        <div id="analysisSavingTotal">
+                            S/ 0.00
+                        </div>
+
+                        <div id="analysisSavingPercentage">
+                            0%
+                        </div>
+
+                        <div id="analysisSavingEvolution">
+                        </div>
+
+                        <div id="analysisSavingGoals">
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- COMPARACIÓN -->
+
+                <section
+                    class="card"
+                    id="comparisonAnalysis">
+
+                    <div class="card-header">
+
+                        <span class="card-title">
+                            Este mes vs. anterior
+                        </span>
+
+                    </div>
+
+                    <div class="card-body">
+
+                        <div id="analysisComparison">
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+            </div>
+
+        </section>
+
+        <!-- ==========================================
+            VISTA · REPORTES
+        ========================================== -->
+
+        <section
+            class="page-view"
+            id="reportsView"
+            hidden>
+
+            <div class="page-heading">
+
+                <div>
+
+                    <span class="page-kicker">
+                        REPORTES
+                    </span>
+
+                    <h2>
+                        Reportes financieros
+                    </h2>
+
+                    <p>
+                        Consulta un resumen de tu situación financiera.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <section
+                class="card"
+                id="financialReport">
+
+                <div class="card-header">
+
+                    <span class="card-title">
+                        Resumen financiero
+                    </span>
+
+                </div>
+
+
+                <div class="card-body">
+
+
+                    <div class="report-item">
+
+                        <span>
+                            Ingresos
+                        </span>
+
+                        <strong id="reportIncome">
+                            S/ 0.00
+                        </strong>
+
+                    </div>
+
+
+                    <div class="report-item">
+
+                        <span>
+                            Gastos
+                        </span>
+
+                        <strong id="reportExpenses">
+                            S/ 0.00
+                        </strong>
+
+                    </div>
+
+
+                    <div class="report-item">
+
+                        <span>
+                            Ahorro
+                        </span>
+
+                        <strong id="reportSavings">
+                            S/ 0.00
+                        </strong>
+
+                    </div>
+
+
+                    <div class="report-item">
+
+                        <span>
+                            Mayor categoría
+                        </span>
+
+                        <strong id="reportTopCategory">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="report-item">
+
+                        <span>
+                            Meta
+                        </span>
+
+                        <strong id="reportGoalProgress">
+                            0%
+                        </strong>
+
+                    </div>
+
+
+                    <div class="report-item">
+
+                        <span>
+                            Crédito utilizado
+                        </span>
+
+                        <strong id="reportCreditUsed">
+                            0%
+                        </strong>
+
+                    </div>
+
+
+                </div>
+
+            </section>
+
+        </section>
+
+        <!-- ==========================================
+            VISTA · PRÉSTAMOS
+        ========================================== -->
+
+        <section
+            class="page-view"
+            id="loansView"
+            hidden>
+
+            <div class="page-heading">
+
+                <div>
+
+                    <span class="page-kicker">
+                        PRÉSTAMOS
+                    </span>
+
+                    <h2>
+                        Mis préstamos
+                    </h2>
+
+                    <p>
+                        Controla el dinero que has prestado y que tienes pendiente de recibir.
+                    </p>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="btn-primary"
+                    id="openLoanModal">
+
+                    + Nuevo préstamo
+
+                </button>
+
+            </div>
+
+
+            <!-- ==========================================
+                RESUMEN DE PRÉSTAMOS
+            ========================================== -->
+
+            <div
+                class="accounts-summary loans-summary"
+                id="loansSummary">
+
+            </div>
+
+
+            <!-- ==========================================
+                FILTROS
+            ========================================== -->
+
+            <div class="card loans-filters-card">
+
+                <div class="card-header">
+
+                    <div>
+
+                        <h3>
+                            🔎 Filtrar préstamos
+                        </h3>
+
+                        <p class="card-description">
+                            Consulta rápidamente tus préstamos.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="card-body">
+
+                    <div class="loans-filters">
+
+
+                        <div class="form-group">
+
+                            <label for="loanFilterType">
+                                Tipo
+                            </label>
+
+                            <select id="loanFilterType">
+
+                                <option value="all">
+                                    Todos
+                                </option>
+
+                                <option value="to_receive">
+                                    Me deben dinero
+                                </option>
+
+                                <option value="to_pay">
+                                    Yo debo dinero
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="loanFilterStatus">
+                                Estado
+                            </label>
+
+                            <select id="loanFilterStatus">
+
+                                <option value="all">
+                                    Todos
+                                </option>
+
+                                <option value="active">
+                                    Pendientes
+                                </option>
+
+                                <option value="paid">
+                                    Pagados
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="loanFilterSearch">
+                                Buscar
+                            </label>
+
+                            <input
+                                type="search"
+                                id="loanFilterSearch"
+                                placeholder="Ej. Juan, banco...">
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ==========================================
+                LISTA DE PRÉSTAMOS
+            ========================================== -->
+
+            <div class="card">
+
+                <div class="card-header">
+
+                    <div>
+
+                        <h3>
+                            💰 Mis préstamos
+                        </h3>
+
+                        <p class="card-description">
+                            Consulta el estado de cada préstamo.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="card-body">
+
+                    <div
+                        class="loans-list"
+                        id="loansList">
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ==========================================
+                PRÓXIMOS COBROS / PAGOS
+            ========================================== -->
+
+            <div class="card">
+
+                <div class="card-header">
+
+                    <div>
+
+                        <h3>
+                            📅 Próximos vencimientos
+                        </h3>
+
+                        <p class="card-description">
+                            Revisa los préstamos que tienen pagos pendientes.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="card-body">
+
+                    <div
+                        class="loans-upcoming"
+                        id="loansUpcoming">
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- ==========================================
+            VISTA · CRÉDITO
+        ========================================== -->
+
+        <section
+            class="page-view"
+            id="creditView"
+            hidden>
+
+            <div class="page-heading">
+
+                <div>
+
+                    <span class="page-kicker">
+                        CRÉDITO
+                    </span>
+
+                    <h2>
+                        Mis tarjetas
+                    </h2>
+
+                    <p>
+                        Consulta el uso y disponibilidad de tu crédito.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="credit-page">
+
+                <div class="credit-summary">
+
+                    <article class="card">
+
+                        <div class="card-header">
+
+                            <span class="card-title">
+                                Crédito utilizado
+                            </span>
+
+                        </div>
+
+                        <div class="card-body">
+
+                            <h2 id="creditUsed">
+                                S/ 0.00
+                            </h2>
+
+                        </div>
+
+                    </article>
+
+
+                    <article class="card">
+
+                        <div class="card-header">
+
+                            <span class="card-title">
+                                Límite de crédito
+                            </span>
+
+                        </div>
+
+                        <div class="card-body">
+
+                            <h2 id="creditLimit">
+                                S/ 0.00
+                            </h2>
+
+                        </div>
+
+                    </article>
+
+
+                    <article class="card">
+
+                        <div class="card-header">
+
+                            <span class="card-title">
+                                Crédito disponible
+                            </span>
+
+                        </div>
+
+                        <div class="card-body">
+
+                            <h2 id="creditAvailable">
+                                S/ 0.00
+                            </h2>
+
+                        </div>
+
+                    </article>
+
+
+                    <article class="card">
+
+                        <div class="card-header">
+
+                            <span class="card-title">
+                                Utilización
+                            </span>
+
+                        </div>
+
+                        <div class="card-body">
+
+                            <h2 id="creditPercentage">
+                                0%
+                            </h2>
+
+                        </div>
+
+                    </article>
+
+                </div>
+
+
+                <div
+                    id="creditCardsList"
+                    class="credit-cards-list">
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <section
+            class="page-view"
+            id="settingsView"
+            hidden
+            >
+
+            <div class="page-header">
+
+                <div>
+
+                    <span class="eyebrow">
+                        FinanceFlow
+                    </span>
+
+                    <h1>
+                        Configuración
+                    </h1>
+
+                    <p>
+                        Configura tu experiencia financiera.
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="settings-sections">
+
+                <section
+                    class="settings-card"
+                    id="profileSettings">
+
+                    <div class="card-header">
+
+                        <div>
+
+                            <span class="page-kicker">
+                                PERFIL
+                            </span>
+
+                            <h2>
+                                Mi perfil
+                            </h2>
+
+                            <p class="card-description">
+                                Información básica de tu espacio financiero.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <div class="settings-content">
+
+                        <div
+                            class="settings-row"
+                            id="profileNameSetting">
+
+                            <div>
+
+                                <strong>
+                                    Nombre
+                                </strong>
+
+                                <p>
+                                    Nombre utilizado en FinanceFlow.
+                                </p>
+
+                            </div>
+
+                            <span id="settingsProfileName">
+                                Grace
+                            </span>
+
+                        </div>
+
+                        <div
+                            class="settings-row"
+                            id="profileCurrencySetting">
+
+                            <div>
+
+                                <strong>
+                                    Moneda
+                                </strong>
+
+                                <p>
+                                    Moneda principal de tu espacio.
+                                </p>
+
+                            </div>
+
+                            <span id="settingsCurrency">
+                                PEN
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <section
+                    class="settings-card"
+                    id="generalSettings">
+
+                    <div class="card-header">
+
+                        <div>
+
+                            <span class="page-kicker">
+                                PREFERENCIAS
+                            </span>
+
+                            <h2>
+                                Configuración general
+                            </h2>
+
+                            <p class="card-description">
+                                Personaliza el funcionamiento de FinanceFlow.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <div class="settings-content">
+
+                        <div class="settings-row">
+
+                            <div>
+
+                                <strong>
+                                    Idioma
+                                </strong>
+
+                                <p>
+                                    Idioma utilizado por la aplicación.
+                                </p>
+
+                            </div>
+
+                            <span id="settingsLanguage">
+                                Español
+                            </span>
+
+                        </div>
+
+                        <div class="settings-row">
+
+                            <div>
+
+                                <strong>
+                                    Tema
+                                </strong>
+
+                                <p>
+                                    Apariencia visual de FinanceFlow.
+                                </p>
+
+                            </div>
+
+                            <span id="settingsTheme">
+                                Claro
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <section
+                    class="settings-card"
+                    id="financialSettings">
+
+                    <div class="card-header">
+
+                        <div>
+
+                            <span class="page-kicker">
+                                FINANZAS
+                            </span>
+
+                            <h2>
+                                Preferencias financieras
+                            </h2>
+
+                            <p class="card-description">
+                                Configuración relacionada con tu organización financiera.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <div class="settings-content">
+
+                        <div class="settings-row">
+
+                            <div>
+
+                                <strong>
+                                    Moneda principal
+                                </strong>
+
+                                <p>
+                                    Moneda utilizada para mostrar tus valores.
+                                </p>
+
+                            </div>
+
+                            <span id="settingsFinancialCurrency">
+                                PEN
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+                <section
+                    class="settings-card"
+                    id="dangerSettings">
+
+                    <div class="card-header">
+
+                        <div>
+
+                            <span class="page-kicker">
+                                DATOS
+                            </span>
+
+                            <h2>
+                                Gestión de datos
+                            </h2>
+
+                            <p class="card-description">
+                                Administra los datos financieros almacenados en este dispositivo.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <div class="settings-content">
+
+                        <div class="settings-row">
+
+                            <div>
+
+                                <strong>
+                                    Eliminar datos financieros
+                                </strong>
+
+                                <p>
+                                    Elimina las cuentas, movimientos, metas, préstamos y demás datos guardados localmente.
+                                </p>
+
+                            </div>
+
+                            <button
+                                type="button"
+                                id="clearFinancialData"
+                                class="button button-danger">
+
+                                Eliminar datos
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+            </div>
+
+        </section>
+
+        <!-- ========= DASHBOARD ========= -->
+
+        <section
+            class="page-view dashboard"
+            id="dashboardView">   
+                    
+            <!-- ==========================================
+                CABECERA DEL DASHBOARD
+            ========================================== -->
+            <header class="dashboard-hero">
+
+                <!-- ==============================
+                    CABECERA SUPERIOR
+                =============================== -->
+
+                <div class="dashboard-hero-top">
+
+                    <div class="dashboard-hero-context">
+
+                        <span class="dashboard-hero-brand">
+                            FinanceFlow
+                        </span>
+
+                        <span
+                            class="dashboard-hero-separator"
+                            aria-hidden="true">
+                            /
+                        </span>
+
+                        <h2 id="pageTitle">
+                            Dashboard
+                        </h2>
+                        
+                        <!-- ==============================
+                            SALUDO
+                        =============================== -->
+
+                        <div class="dashboard-hero-greeting">
+
+                            <p id="greeting"></p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="dashboard-hero-actions">
+
+                        <!-- NOTIFICACIONES -->
+
+                        <div
+                            class="header-notifications"
+                            id="headerNotifications">
+
+                            <button
+                                type="button"
+                                id="notificationsButton"
+                                class="header-icon-button"
+                                aria-label="Notificaciones"
+                                aria-expanded="false"
+                                aria-controls="notificationsPanel">
+
+                                <span aria-hidden="true">
+                                    🔔
+                                </span>
+
+                                <span
+                                    id="notificationsBadge"
+                                    class="notification-badge"
+                                    hidden>
+                                    0
+                                </span>
+
+                            </button>
+
+
+                            <div
+                                id="notificationsPanel"
+                                class="notifications-panel"
+                                hidden>
+
+                                <div class="notifications-header">
+
+                                    <div>
+
+                                        <h3>
+                                            Notificaciones
+                                        </h3>
+
+                                        <p>
+                                            Revisa lo importante de tus finanzas.
+                                        </p>
+
+                                    </div>
+
+
+                                    <button
+                                        type="button"
+                                        id="markNotificationsRead"
+                                        class="btn-secondary">
+
+                                        Marcar como leídas
+
+                                    </button>
+
+                                </div>
+
+
+                                <div
+                                    id="notificationsList"
+                                    class="notifications-list">
+
+                                    <div class="empty-state">
+
+                                        <span class="empty-icon">
+                                            🔔
+                                        </span>
+
+                                        <h4>
+                                            No tienes notificaciones
+                                        </h4>
+
+                                        <p>
+                                            Aquí aparecerán tus avisos financieros.
+                                        </p>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- PERFIL -->
+
+                        <div
+                            class="header-profile"
+                            id="headerProfile">
+
+                            <button
+                                type="button"
+                                id="profileButton"
+                                class="profile-button"
+                                aria-expanded="false"
+                                aria-controls="profilePanel">
+
+                                <span
+                                    class="profile-avatar"
+                                    id="profileAvatar">
+                                    G
+                                </span>
+
+                                <span class="profile-summary">
+
+                                    <strong id="profileName">
+                                        Grace
+                                    </strong>
+
+                                    <small id="profileEmail">
+                                        usuario@financeflow.local
+                                    </small>
+
+                                </span>
+
+                                <span aria-hidden="true">
+                                    ▾
+                                </span>
+
+                            </button>
+
+
+                            <div
+                                id="profilePanel"
+                                class="profile-panel"
+                                hidden>
+
+                                <div class="profile-panel-header">
+
+                                    <span
+                                        class="profile-avatar large"
+                                        id="profilePanelAvatar">
+                                        G
+                                    </span>
+
+                                    <div>
+
+                                        <strong id="profilePanelName">
+                                            Grace
+                                        </strong>
+
+                                        <small id="profilePanelEmail">
+                                            usuario@financeflow.local
+                                        </small>
+
+                                    </div>
+
+                                </div>
+
+
+                                <!-- CUENTAS RECIENTES (se llena desde js/auth.js) -->
+                                <div
+                                    class="profile-recent"
+                                    id="profileRecent"
+                                    hidden>
+
+                                    <span class="profile-recent-title">
+                                        Cambiar de cuenta
+                                    </span>
+
+                                    <ul
+                                        class="profile-recent-list"
+                                        id="profileRecentList">
+                                    </ul>
+
+                                </div>
+
+
+                                <div class="profile-panel-actions">
+
+                                    <button
+                                        type="button"
+                                        class="profile-menu-item"
+                                        data-view="settings">
+
+                                        ⚙️ Configuración
+
+                                    </button>
+
+
+                                    <button
+                                        type="button"
+                                        class="profile-menu-item"
+                                        id="logoutButton">
+
+                                        🚪 Cerrar sesión
+
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- ==============================
+                    CONTENIDO PRINCIPAL
+                =============================== -->
+
+                <div class="dashboard-hero-content">
+
+                    <div class="dashboard-hero-text">
+
+                    <!-- ==========================================
+                                ACCIONES RÁPIDAS
+                        =========================================== -->
+                        <div class="quick-actions-row">
+
+                                <div class="quick-actions-grid">
+
+
+                                    <button
+                                        type="button"
+                                        class="btn-primary"
+                                        data-action="new-expense">
+
+                                        <span>
+                                            💸
+                                        </span>
+
+                                        <span>
+                                            Nuevo gasto
+                                        </span>
+
+                                    </button>
+
+
+                                    <button
+                                        type="button"
+                                        class="btn-primary"
+                                        data-action="new-income">
+
+                                        <span>
+                                            💰
+                                        </span>
+
+                                        <span>
+                                            Nuevo ingreso
+                                        </span>
+
+                                    </button>
+
+
+                                    <button
+                                        type="button"
+                                        class="btn-primary"
+                                        data-action="new-transfer">
+
+                                        <span>
+                                            🔄
+                                        </span>
+
+                                        <span>
+                                            Transferencia
+                                        </span>
+
+                                    </button>
+
+
+                                    <button
+                                        type="button"
+                                        class="btn-primary"
+                                        data-action="new-goal">
+
+                                        <span>
+                                            🎯
+                                        </span>
+
+                                        <span>
+                                            Nueva meta
+                                        </span>
+
+                                    </button>
+
+
+                                    <button
+                                        type="button"
+                                        class="btn-primary"
+                                        data-action="new-account">
+
+                                        <span>
+                                            🏦
+                                        </span>
+
+                                        <span>
+                                            Nueva cuenta
+                                        </span>
+
+                                    </button>
+
+
+                                    <button
+                                        type="button"
+                                        class="btn-primary"
+                                        data-action="new-event">
+
+                                        <span>
+                                            📅
+                                        </span>
+
+                                        <span>
+                                            Nuevo evento
+                                        </span>
+
+                                    </button>
+
+
+                                </div>
+
+                                <div class="dashboard-hero-date">
+
+                        <span class="dashboard-date-label">
+                            Hoy
+                        </span>
+
+                        <strong id="dashboardHeroDate">
+                            --
+                        </strong>
+
+                    </div>
+
+                        </div>
+
+                    </div>
+
+</div>
+
+            </header>
+
+            <!-- ==========================================
+                    FILA 1 · RESUMEN GENERAL
+                    (tarjetas nuevas: FinanceFlow_resumen_7_tarjetas)
+            =========================================== -->
+
+            <section class="dashboard-summary-grid" aria-label="Resumen financiero">
+
+                <!-- ==========================================
+                     INGRESOS + GASTOS
+                     Card contenedora con efecto FLIP
+                =========================================== -->
+                <article class="income-expense-flip-card" id="incomeExpenseFlipCard">
+
+                    <div class="flip-inner">
+
+                        <!-- CARA FRONTAL -->
+                        <div class="flip-face flip-front">
+
+                            <div class="flip-card-header">
+                                <button
+                                    type="button"
+                                    class="statistics-button"
+                                    id="statisticsFlipButton"
+                                    aria-label="Ver comparación de ingresos y gastos"
+                                    title="Ver estadísticas"
+                                >
+                                    📊
+                                </button>
+                            </div>
+
+                            <div class="income-expense-cards">
+
+                                <!-- INGRESOS -->
+                                <article class="dashboard-summary-card income-card">
+                                    <div class="dashboard-card-header">
+                                        <span class="dashboard-card-icon">📈</span>
+                                        <div class="card-title-amount">
+                                            <span class="dashboard-card-title">Ingresos</span>
+                                            <h2 id="dashboardIncome">S/ 0.00</h2>
+                                        </div>
+                                    </div>
+
+                                    <div class="dashboard-card-body"></div>
+                                </article>
+
+                                <!-- GASTOS -->
+                                <article class="dashboard-summary-card expense-card">
+                                    <div class="dashboard-card-header">
+                                        <span class="dashboard-card-icon">📉</span>
+                                        <div class="card-title-amount">
+                                            <span class="dashboard-card-title">Gastos</span>
+                                            <h2 id="dashboardExpenses">S/ 0.00</h2>
+                                        </div>
+                                    </div>
+
+                                    <div class="dashboard-card-body"></div>
+                                </article>
+
+                            </div>
+                        </div>
+
+                        <!-- CARA TRASERA -->
+                        <div class="flip-face flip-back">
+
+                            <div class="flip-card-header">
+                                <div>
+                                    <h2 class="flip-card-title">
+                                        Ingresos vs. gastos
+                                    </h2>
+                                </div>
+
+                                <button
+                                    type="button"
+                                    class="statistics-button"
+                                    id="statisticsBackButton"
+                                    aria-label="Volver al resumen de ingresos y gastos"
+                                    title="Volver"
+                                >
+                                    📊
+                                </button>
+                            </div>
+
+                            <!-- Gráfico comparativo compacto:
+                                 izquierda = barras (ingresos / gastos), derecha = anillo con % gastado + balance -->
+                            <div class="comparison-chart" aria-label="Gráfico comparativo de ingresos y gastos">
+
+                                <div class="chart-bars">
+
+                                    <div class="chart-row">
+                                        <span class="chart-label">
+                                            <span class="chart-dot income-dot"></span>
+                                            Ingresos
+                                        </span>
+
+                                        <div class="chart-track">
+                                            <div class="chart-bar chart-bar-income" id="chartIncomeBar"></div>
+                                        </div>
+
+                                        <span class="chart-value" id="chartIncomeValue">S/ 0.00</span>
+                                    </div>
+
+                                    <div class="chart-row">
+                                        <span class="chart-label">
+                                            <span class="chart-dot expense-dot"></span>
+                                            Gastos
+                                        </span>
+
+                                        <div class="chart-track">
+                                            <div class="chart-bar chart-bar-expense" id="chartExpenseBar"></div>
+                                        </div>
+
+                                        <span class="chart-value" id="chartExpenseValue">S/ 0.00</span>
+                                    </div>
+
+                                </div>
+
+                                <div class="chart-summary">
+
+                                    <div class="chart-ring" id="chartRing" data-level="good" aria-hidden="true">
+                                        <svg viewBox="0 0 36 36" focusable="false">
+                                            <circle class="chart-ring-bg" cx="18" cy="18" r="15.915"></circle>
+                                            <circle class="chart-ring-fg" id="chartSpentRing" cx="18" cy="18" r="15.915"></circle>
+                                        </svg>
+                                        <span class="chart-ring-text" id="chartSpentPercent">0%</span>
+                                    </div>
+
+                                    <div class="chart-balance">
+                                        <span class="chart-balance-label">Balance</span>
+                                        <strong id="chartBalanceValue">S/ 0.00</strong>
+                                        <small id="chartBalanceHint">% gastado</small>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                </article>
+
+
+                <!-- ==========================================
+                     AHORRO
+                =========================================== -->
+                <article class="dashboard-summary-card savings-card">
+                    <div class="dashboard-card-header">
+                        <span class="dashboard-card-icon">💎</span>
+                        <div class="card-title-amount">
+                            <span class="dashboard-card-title">Ahorro</span>
+                            <h2 id="dashboardSavings">S/ 0.00</h2>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-card-body"></div>
+                </article>
+
+
+                <!-- ==========================================
+                     DINERO DISPONIBLE
+                =========================================== -->
+                <article class="dashboard-summary-card available-card">
+                    <div class="dashboard-card-header">
+                        <span class="dashboard-card-icon">💰</span>
+                        <div class="card-title-amount">
+                            <span class="dashboard-card-title">Disponible</span>
+                            <h2 id="availableBalance">S/ 0.00</h2>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-card-body"></div>
+                </article>
+
+
+                
+
+            
+
+            <!-- ==========================================
+                    COLUMNA DERECHA (debajo de Disponible)
+                    Patrimonio total → Últimos movimientos → Próximos eventos
+            =========================================== -->
+            <div class="dashboard-side-stack">
+
+                <article class="dashboard-summary-card net-worth-card">
+                    <div class="dashboard-card-header">
+                        <span class="dashboard-card-icon">🏦</span>
+                        <div class="card-title-amount">
+                            <span class="dashboard-card-title">Patrimonio total</span>
+                            <h2 id="totalBalance">S/ 0.00</h2>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-card-body"></div>
+                </article>
+
+                <div class="dashboard-info-stack">
+<article class="card dashboard-cell-movements">
+
+                    <div class="card-header">
+
+                        <h3>
+                            💸 Últimos movimientos
+                        </h3>
+
+                    </div>
+
+                    <div class="card-body">
+
+                        <div id="recentMovements">
+
+                            <div class="empty-state">
+
+                                <span class="empty-icon">
+                                    📭
+                                </span>
+
+                                <h4>
+                                    Aún no hay movimientos
+                                </h4>
+
+                                <p>
+
+                                    Cuando registres ingresos o gastos aparecerán aquí.
+
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                        <div class="recent-movements-footer">
+
+                            <button
+                                type="button"
+                                class="btn-secondary recent-movements-button"
+                                data-view="movements">
+
+                                Ver historial
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </article>
+
+                <article class="card dashboard-cell-events">
+
+                    <div class="card-header">
+
+                        <h3>
+                            📅 Próximos eventos
+                        </h3>
+
+                    </div>
+
+                    <div class="card-body">
+
+                       <div
+                            class="timeline"
+                            id="upcomingEvents">
+
+                            <div class="empty-state">
+
+                                <span class="empty-icon">
+                                    📅
+                                </span>
+
+                                <h4>
+                                    No hay próximos eventos
+                                </h4>
+
+                                <p>
+                                    Tus próximos pagos, ingresos y compromisos aparecerán aquí.
+                                </p>
+
+                            </div>
+
+                        </div> 
+
+                        <div class="events-footer">
+
+                            <button
+                                type="button"
+                                class="btn-secondary"
+                                data-view="calendar">
+
+                                Ver calendario
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </article>
+</div>
+
+            </div>
+
+            <!-- ==========================================
+                    CONTROL DE GASTOS · debajo de Ingresos/Gastos + Ahorro
+                    (misma fila que Patrimonio total)
+            =========================================== -->
+            <section class="full-width-section dashboard-cell-budget">
+
+                <article class="budget-card">
+
+                    <!-- Cabecera -->
+                    <div class="budget-card-header">
+                        <div>
+                            <span class="budget-card-kicker">CONTROL DE GASTOS</span>
+                        </div>
+
+                        <!-- Estado dinámico: verde / amarillo / rojo -->
+                        <div id="budgetStatusPill" class="budget-status-pill budget-status-good">
+                            <span class="budget-status-dot"></span>
+                            <span id="budgetStatusPillText">Vas bien</span>
+                        </div>
+                    </div>
+
+
+                    <!-- Números principales -->
+                    <div class="budget-numbers">
+
+                        <div class="budget-spent-block">
+                            <span>Has gastado</span>
+
+                            <div class="budget-amount-row">
+                                <strong id="budgetSpentAmount">S/ 0.00</strong>
+                                <span id="budgetSpentPercentage">0%</span>
+                            </div>
+                        </div>
+
+                        <div class="budget-limit-block" title="Ingresos del mes">
+                            <span>Ingresos del mes</span>
+                            <strong id="budgetLimitAmount">S/ 0.00</strong>
+                        </div>
+
+                    </div>
+
+
+                    <!-- Barra de progreso -->
+                    <div class="budget-progress-area">
+
+                        <div
+                            class="budget-progress-track"
+                            id="budgetProgressTrack"
+                            role="progressbar"
+                            aria-valuemin="0"
+                            aria-valuemax="100"
+                            aria-valuenow="0"
+                            aria-label="Porcentaje de tus ingresos ya gastado">
+
+                            <div id="budgetProgressFill" class="budget-progress-fill budget-progress-good"></div>
+
+                            <!-- Marcador circular que sigue al porcentaje -->
+                            <div id="budgetProgressMarker" class="budget-progress-marker">
+                                <span id="budgetMarkerPercentage">0%</span>
+                            </div>
+                        </div>
+
+                        <!-- Escala visual -->
+                        <div class="budget-progress-scale">
+                            <span>0%</span>
+                            <span class="budget-scale-green">70%</span>
+                            <span class="budget-scale-yellow">90%</span>
+                            <span class="budget-scale-red">100%</span>
+                        </div>
+
+                    </div>
+
+
+                    <!-- Mensaje dinámico -->
+                    <div id="budgetStatusMessage" class="budget-status-message budget-message-good">
+
+                        <div class="budget-message-icon" id="budgetStatusMessageIcon">✓</div>
+
+                        <div>
+                            <strong id="budgetStatusMessageTitle">Gastos bajo control</strong>
+
+                            <p id="budgetStatusMessageText">
+                                Has utilizado una parte saludable de tus ingresos.
+                            </p>
+                        </div>
+
+                    </div>
+
+
+                    <!-- Información inferior -->
+                    <div class="budget-details">
+
+                        <div class="budget-detail-item">
+                            <span class="budget-detail-icon">💳</span>
+
+                            <div>
+                                <small>Gastado</small>
+                                <strong id="budgetDetailSpent">S/ 0.00</strong>
+                            </div>
+                        </div>
+
+                        <div class="budget-detail-divider"></div>
+
+                        <div class="budget-detail-item">
+                            <span class="budget-detail-icon">💰</span>
+
+                            <div>
+                                <small>Te queda</small>
+                                <strong id="budgetDetailRemaining">S/ 0.00</strong>
+                            </div>
+                        </div>
+
+                        <div class="budget-detail-divider"></div>
+
+                        <div class="budget-detail-item">
+                            <span class="budget-detail-icon">📊</span>
+
+                            <div>
+                                <small>Utilizado</small>
+                                <strong id="budgetDetailPercentage">0%</strong>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </article>
+
+            </section>
+
+            <!-- ==========================================
+                    MIS TARJETAS + MIS METAS · debajo de Control de gastos
+                    (la suma de sus anchos = ancho de Control de gastos)
+            =========================================== -->
+            <section class="ffc-carousels-root">
+
+                
+
+                <div class="ffc-cards-section">
+
+                    <header class="ffc-cards-header">
+
+                        <div class="ffc-card-counter">
+                            <span id="ffcCurrentCard">00</span>
+                            <span class="ffc-counter-divider">/</span>
+                            <span id="ffcTotalCards">00</span>
+                        </div>
+                    </header>
+
+                    <section class="ffc-financial-stage" id="ffcCardsCarousel" aria-label="Tarjetas y distribución financiera">
+
+                        <!-- =====================================================
+                             GRÁFICO CIRCULAR
+                             Está fuera del track visual para que acompañe
+                             al carrusel sin convertirse en una tarjeta 3D.
+                             ===================================================== -->
+                        <aside class="ffc-distribution-panel">
+
+                            <div class="ffc-distribution-header">
+                                <div>
+                                    <span class="ffc-mini-label">DISTRIBUCIÓN</span>
+                                    <h2>Mis fondos</h2>
+                                </div>
+
+                                <span class="ffc-distribution-status" id="ffcDistributionStatus">—</span>
+                            </div>
+
+                            <div class="ffc-donut-wrap">
+
+                                <svg class="ffc-donut-chart"
+                                     viewBox="0 0 220 220"
+                                     aria-label="Distribución de fondos">
+
+                                    <circle
+                                        class="ffc-donut-track"
+                                        cx="110"
+                                        cy="110"
+                                        r="78">
+                                    </circle>
+
+                                    <!-- Segmentos generados dinámicamente -->
+                                    <g id="ffcDonutSegments"></g>
+
+                                </svg>
+
+                                <div class="ffc-donut-center">
+                                    <span id="ffcDonutPercentage">0%</span>
+                                    <small id="ffcDonutCenterLabel">—</small>
+                                    <strong id="ffcDonutAmount">S/ 0.00</strong>
+                                </div>
+
+                            </div>
+
+                            <div class="ffc-distribution-legend" id="ffcDistributionLegend"></div>
+
+                        </aside>
+
+
+                        <!-- =====================================================
+                             CARRUSEL 3D
+                             ===================================================== -->
+                        <div class="ffc-cards-carousel">
+
+                            <div class="ffc-cards-track" id="ffcCardsTrack"></div>
+
+                            <button
+                                class="ffc-carousel-button ffc-carousel-prev"
+                                id="ffcPrevCard"
+                                type="button"
+                                aria-label="Tarjeta anterior">
+                                <span>‹</span>
+                            </button>
+
+                            <button
+                                class="ffc-carousel-button ffc-carousel-next"
+                                id="ffcNextCard"
+                                type="button"
+                                aria-label="Tarjeta siguiente">
+                                <span>›</span>
+                            </button>
+
+                            <div class="ffc-carousel-dots"
+                                 id="ffcCarouselDots"
+                                 aria-label="Seleccionar tarjeta">
+                            </div>
+
+                        </div>
+
+                    </section>
+
+
+                    <section class="ffc-active-card-info">
+
+                        <div class="ffc-active-bank">
+                            <div class="ffc-bank-icon" id="ffcActiveBankIcon">—</div>
+
+                            <div>
+                                <span class="ffc-info-label">ENTIDAD</span>
+                                <strong id="ffcActiveBank">—</strong>
+                            </div>
+                        </div>
+
+                        <div class="ffc-active-details">
+
+                            <div class="ffc-detail-item">
+                                <span class="ffc-info-label">TARJETA</span>
+                                <strong id="ffcActiveCardName">—</strong>
+                            </div>
+
+                            <div class="ffc-detail-item">
+                                <span class="ffc-info-label">DISPONIBLE</span>
+                                <strong id="ffcActiveAvailable">S/ 0.00</strong>
+                            </div>
+
+                            <div class="ffc-detail-item">
+                                <span class="ffc-info-label">ÚLTIMOS DÍGITOS</span>
+                                <strong id="ffcActiveLastDigits">•••• ----</strong>
+                            </div>
+
+                        </div>
+
+                    </section>
+
+                </div>
+
+                <div class="ffc-goals-section">
+                    <header class="ffc-goals-header">
+                        <div class="ffc-goal-counter" aria-live="polite">
+                            <span id="ffcCurrentGoal">00</span>
+                            <span class="ffc-counter-divider">/</span>
+                            <span id="ffcTotalGoals">00</span>
+                        </div>
+                    </header>
+
+                    <section class="ffc-goals-viewport" id="ffcGoalsViewport" aria-label="Carrusel vertical de metas de ahorro">
+                        <div class="ffc-goals-track" id="ffcGoalsTrack"></div>
+                    </section>
+
+                    <div class="ffc-goal-controls" id="ffcGoalControlsWrap" aria-label="Controles de metas">
+                        <button class="ffc-goal-control" id="ffcPrevGoal" type="button" aria-label="Meta anterior">↑</button>
+                        <div class="ffc-goal-dots" id="ffcGoalDots" aria-label="Seleccionar meta"></div>
+                        <button class="ffc-goal-control" id="ffcNextGoal" type="button" aria-label="Meta siguiente">↓</button>
+                    </div>
+                    <div class="ffc-scroll-hint" id="ffcScrollHint">usa las flechas, rueda o desliza</div>
+                </div>
+
+            </section>
+
+            
+
+            </section>
+
+
+            <!-- ==========================================
+                    CONTROL DE PRESUPUESTO
+                    (financeflow_presupuesto_demo)
+            =========================================== -->
+
+            
+
+
+            <!-- ==========================================
+                    CARRUSELES 3D — MIS METAS Y MIS TARJETAS
+                    (integrado sin modificar data.js, goals.js
+                    ni credit.js; ver js/dashboard-carousels.js)
+            ============================================== -->
+            
+        </section>
+    </main>
+
+    <!-- ==========================================
+            JAVASCRIPT
+
+            Orden importante:
+            1. Datos
+            2. Utilidades
+            3. Módulos
+            4. Interfaz
+            5. Inicio
+    =========================================== -->
+<!-- ==========================================
+     MODAL · NUEVO MOVIMIENTO
+========================================== -->
+
+    <div
+        class="modal-overlay"
+        id="movementModal"
+        aria-hidden="true">
+
+        <div
+            class="modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="movementModalTitle">
+
+            <div class="modal-header">
+
+                <div>
+
+                    <span class="modal-kicker">
+                        FinanceFlow
+                    </span>
+
+                    <h3 id="movementModalTitle">
+                        Nuevo movimiento
+                    </h3>
+
+                </div>
+
+                <button
+                    type="button"
+                    class="modal-close"
+                    id="closeMovementModal"
+                    aria-label="Cerrar">
+
+                    ×
+
+                </button>
+
+            </div>
+
+
+            <form id="movementForm">
+
+                <div class="form-group">
+
+                    <label for="movementType">
+                        Tipo
+                    </label>
+
+                    <select
+                        id="movementType"
+                        required>
+
+                        <option value="expense">
+                            Gasto
+                        </option>
+
+                        <option value="income">
+                            Ingreso
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="movementDescription">
+                        Descripción
+                    </label>
+
+                    <input
+                        type="text"
+                        id="movementDescription"
+                        placeholder="Ej. Compra de alimentos"
+                        maxlength="60"
+                        required>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="movementCategory">
+                        Categoría
+                    </label>
+
+                    <select
+                        id="movementCategory"
+                        required>
+
+                        <option value="Alimentación">
+                            Alimentación
+                        </option>
+
+                        <option value="Transporte">
+                            Transporte
+                        </option>
+
+                        <option value="Hogar">
+                            Hogar
+                        </option>
+
+                        <option value="Salud">
+                            Salud
+                        </option>
+
+                        <option value="Educación">
+                            Educación
+                        </option>
+
+                        <option value="Entretenimiento">
+                            Entretenimiento
+                        </option>
+
+                        <option value="Ahorro">
+                            Ahorro
+                        </option>
+
+                        <option value="Sueldo">
+                            Sueldo
+                        </option>
+
+                        <option value="Otros">
+                            Otros
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="movementAccount">
+                        Cuenta
+                    </label>
+
+                    <select
+                        id="movementAccount"
+                        required>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="movementAmount">
+                        Monto
+                    </label>
+
+                    <div class="money-input">
+
+                        <span>
+                            S/
+                        </span>
+
+                        <input
+                            type="number"
+                            id="movementAmount"
+                            min="0.01"
+                            step="0.01"
+                            placeholder="0.00"
+                            required>
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="movementDate">
+                        Fecha
+                    </label>
+
+                    <input
+                        type="date"
+                        id="movementDate"
+                        required>
+
+                </div>
+
+
+                <div
+                    class="form-error"
+                    id="movementFormError"
+                    role="alert">
+                </div>
+
+
+                <div class="modal-actions">
+
+                    <button
+                        type="button"
+                        class="btn-secondary"
+                        id="cancelMovement">
+
+                        Cancelar
+
+                    </button>
+
+
+                    <button
+                        type="submit"
+                        class="btn-primary">
+
+                        Guardar movimiento
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div> 
+    
+    <!-- ==========================================
+     MODAL · NUEVO EVENTO
+========================================== -->
+
+    <div
+        class="modal-overlay"
+        id="eventModal"
+        aria-hidden="true">
+
+        <div
+            class="modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="eventModalTitle">
+
+            <div class="modal-header">
+
+                <div>
+
+                    <span class="modal-kicker">
+                        FinanceFlow
+                    </span>
+
+                    <h3 id="eventModalTitle">
+                        Nuevo evento
+                    </h3>
+
+                </div>
+
+                <button
+                    type="button"
+                    class="modal-close"
+                    id="closeEventModal"
+                    aria-label="Cerrar">
+
+                    ×
+
+                </button>
+
+            </div>
+
+
+            <form id="eventForm">
+
+                <div
+                    class="form-error"
+                    id="eventFormError"
+                    role="alert"
+                    aria-live="polite">
+                </div>
+
+                <div class="form-group">
+
+                    <label for="eventTitle">
+                        Título
+                    </label>
+
+                    <input
+                        type="text"
+                        id="eventTitle"
+                        placeholder="Ej. Pagar el alquiler"
+                        maxlength="60"
+                        required>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="eventDate">
+                        Fecha
+                    </label>
+
+                    <input
+                        type="date"
+                        id="eventDate"
+                        required>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="eventType">
+                        Tipo
+                    </label>
+
+                    <select id="eventType">
+
+                        <option value="reminder">
+                            📌 Recordatorio
+                        </option>
+
+                        <option value="expense">
+                            💸 Pago pendiente
+                        </option>
+
+                        <option value="income">
+                            💰 Ingreso esperado
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="eventAmount">
+                        Monto
+                    </label>
+
+                    <div class="money-input">
+
+                        <span>S/</span>
+
+                        <input
+                            type="number"
+                            id="eventAmount"
+                            min="0"
+                            step="0.01"
+                            value="0">
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="eventDescription">
+                        Descripción
+                    </label>
+
+                    <input
+                        type="text"
+                        id="eventDescription"
+                        placeholder="Opcional"
+                        maxlength="80">
+
+                </div>
+
+
+                <div class="modal-actions">
+
+                    <button
+                        type="button"
+                        class="btn-secondary"
+                        id="cancelEvent">
+
+                        Cancelar
+
+                    </button>
+
+                    <button
+                        type="submit"
+                        class="btn-primary">
+
+                        Guardar evento
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    <!-- ==========================================
+     MODAL · NUEVA CUENTA
+========================================== -->
+
+    <div
+        class="modal-overlay"
+        id="accountModal"
+        aria-hidden="true">
+
+        <div
+            class="modal"
+            role="dialog"
+            aria-modal="true">
+
+            <div class="modal-header">
+
+                <div>
+
+                    <span class="modal-kicker">
+                        FinanceFlow
+                    </span>
+
+                    <h3 id="accountModalTitle">
+                        Nueva cuenta
+                    </h3>
+
+                </div>
+
+                <button
+                    type="button"
+                    class="modal-close"
+                    id="closeAccountModal">
+
+                    ×
+
+                </button>
+
+            </div>
+
+
+            <form id="accountForm">
+
+                <div
+                    class="form-error"
+                    id="accountFormError"
+                    role="alert"
+                    aria-live="polite">
+                </div>
+
+                <div class="form-group">
+
+                    <label for="accountName">
+                        Nombre
+                    </label>
+
+                    <input
+                        type="text"
+                        id="accountName"
+                        placeholder="Ej. Interbank"
+                        maxlength="40"
+                        required>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="accountType">
+                        Tipo
+                    </label>
+
+                    <select id="accountType">
+
+                        <option value="bank">
+                            🏦 Banco
+                        </option>
+
+                        <option value="wallet">
+                            📱 Billetera digital
+                        </option>
+
+                        <option value="cash">
+                            💵 Efectivo
+                        </option>
+
+                        <option value="savings">
+                            🎯 Ahorro
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="accountBalance">
+                        Saldo inicial
+                    </label>
+
+                    <div class="money-input">
+
+                        <span>S/</span>
+
+                        <input
+                            type="number"
+                            id="accountBalance"
+                            min="0"
+                            step="0.01"
+                            value="0">
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="accountDescription">
+                        Descripción
+                    </label>
+
+                    <input
+                        type="text"
+                        id="accountDescription"
+                        placeholder="Opcional"
+                        maxlength="80">
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="accountAvailable">
+
+                        <input
+                            type="checkbox"
+                            id="accountAvailable"
+                            checked>
+
+                        Disponible para gastos
+
+                    </label>
+
+                </div>
+
+                <div class="modal-actions">
+
+                    <button
+                        type="button"
+                        class="btn-secondary"
+                        id="cancelAccount">
+
+                        Cancelar
+
+                    </button>
+
+                    <button
+                        type="submit"
+                        class="btn-primary"
+                        id="accountSubmitButton">
+
+                        Crear cuenta
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    <!-- ==========================================
+     MODAL · TRANSFERENCIA
+========================================== -->
+
+    <div
+        class="modal-overlay"
+        id="transferModal"
+        aria-hidden="true">
+
+        <div
+            class="modal"
+            role="dialog"
+            aria-modal="true">
+
+            <div class="modal-header">
+
+                <div>
+
+                    <span class="modal-kicker">
+                        MOVIMIENTO INTERNO
+                    </span>
+
+                    <h3>
+                        Transferir dinero
+                    </h3>
+
+                </div>
+
+                <button
+                    type="button"
+                    class="modal-close"
+                    id="closeTransferModal">
+
+                    ×
+
+                </button>
+
+            </div>
+
+
+            <form id="transferForm">
+
+                <div class="form-group">
+
+                    <label for="transferFrom">
+                        Desde
+                    </label>
+
+                    <select
+                        id="transferFrom"
+                        required>
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="transferTo">
+                        Hacia
+                    </label>
+
+                    <select
+                        id="transferTo"
+                        required>
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="transferAmount">
+                        Monto
+                    </label>
+
+                    <div class="money-input">
+
+                        <span>S/</span>
+
+                        <input
+                            type="number"
+                            id="transferAmount"
+                            min="0.01"
+                            step="0.01"
+                            placeholder="0.00"
+                            required>
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="transferDate">
+                        Fecha
+                    </label>
+
+                    <input
+                        type="date"
+                        id="transferDate"
+                        required>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="transferDescription">
+                        Nota
+                    </label>
+
+                    <input
+                        type="text"
+                        id="transferDescription"
+                        placeholder="Ej. Pasar dinero al ahorro"
+                        maxlength="60">
+
+                </div>
+
+
+                <div
+                    class="form-error"
+                    id="transferFormError">
+                </div>
+
+
+                <div class="modal-actions">
+
+                    <button
+                        type="button"
+                        class="btn-secondary"
+                        id="cancelTransfer">
+
+                        Cancelar
+
+                    </button>
+
+
+                    <button
+                        type="submit"
+                        class="btn-primary">
+
+                        Transferir dinero
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+<!-- ==========================================
+     MODAL · NUEVA META
+========================================== -->
+
+<div
+    class="modal-overlay"
+    id="goalModal"
+    aria-hidden="true">
+
+    <div
+        class="modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="goalModalTitle">
+
+        <div class="modal-header">
+
+            <div>
+
+                <span class="modal-kicker">
+                    FINANCEFLOW
+                </span>
+
+                <h3 id="goalModalTitle">
+                    Nueva meta
+                </h3>
+
+            </div>
+
+            <button
+                type="button"
+                class="modal-close"
+                id="closeGoalModal"
+                aria-label="Cerrar">
+
+                ×
+
+            </button>
+
+        </div>
+
+
+        <form id="goalForm">
+
+            <div class="form-group">
+
+                <label for="goalName">
+                    Nombre de la meta
+                </label>
+
+                <input
+                    type="text"
+                    id="goalName"
+                    placeholder="Ej. Laptop"
+                    maxlength="40"
+                    required>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="goalTargetInput">
+                    ¿Cuánto necesitas?
+                </label>
+
+                <div class="money-input">
+
+                    <span>
+                        S/
+                    </span>
+
+                    <input
+                        type="number"
+                        id="goalTargetInput"
+                        min="0.01"
+                        step="0.01"
+                        placeholder="5000.00"
+                        required>
+                </div>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="goalInitialSaved">
+                    ¿Cuánto tienes ahorrado?
+                </label>
+
+                <div class="money-input">
+
+                    <span>
+                        S/
+                    </span>
+
+                    <input
+                        type="number"
+                        id="goalInitialSaved"
+                        min="0"
+                        step="0.01"
+                        value="0">
+
+                </div>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="goalDescription">
+                    Descripción
+                </label>
+
+                <input
+                    type="text"
+                    id="goalDescription"
+                    placeholder="Ej. Mi próxima laptop"
+                    maxlength="80">
+
+            </div>
+
+
+            <div
+                class="form-error"
+                id="goalFormError"
+                role="alert">
+            </div>
+
+
+            <div class="modal-actions">
+
+                <button
+                    type="button"
+                    class="btn-secondary"
+                    id="cancelGoal">
+
+                    Cancelar
+
+                </button>
+
+
+                <button
+                    type="submit"
+                    class="btn-primary">
+
+                    Crear meta
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+<!-- ==========================================
+     MODAL · AGREGAR AHORRO
+========================================== -->
+
+<div
+    class="modal-overlay"
+    id="goalSavingModal"
+    aria-hidden="true">
+
+    <div
+        class="modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="goalSavingModalTitle">
+
+        <div class="modal-header">
+
+            <div>
+
+                <span class="modal-kicker">
+                    FINANCEFLOW
+                </span>
+
+                <h3 id="goalSavingModalTitle">
+                    Agregar ahorro
+                </h3>
+
+            </div>
+
+
+            <button
+                type="button"
+                class="modal-close"
+                id="closeGoalSavingModal"
+                aria-label="Cerrar">
+
+                ×
+
+            </button>
+
+        </div>
+
+
+        <form id="goalSavingForm">
+
+            <div class="form-group">
+
+                <span class="form-label">
+                    Meta
+                </span>
+
+                <p id="goalSavingName">
+                    —
+                </p>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="goalSavingAmount">
+                    ¿Cuánto quieres agregar?
+                </label>
+
+                <div class="money-input">
+
+                    <span>
+                        S/
+                    </span>
+
+                    <input
+                        type="number"
+                        id="goalSavingAmount"
+                        min="0.01"
+                        step="0.01"
+                        placeholder="100.00"
+                        required>
+
+                </div>
+
+            </div>
+
+
+            <div
+                class="form-error"
+                id="goalSavingFormError"
+                role="alert">
+            </div>
+
+
+            <div class="modal-actions">
+
+                <button
+                    type="button"
+                    class="btn-secondary"
+                    id="cancelGoalSaving">
+
+                    Cancelar
+
+                </button>
+
+
+                <button
+                    type="submit"
+                    class="btn-primary">
+
+                    + Agregar ahorro
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+<!-- ==========================================
+     MODAL · NUEVO PRÉSTAMO
+========================================== -->
+
+<div
+    class="modal-overlay"
+    id="loanModal"
+    aria-hidden="true">
+
+    <div
+        class="modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="loanModalTitle">
+
+        <div class="modal-header">
+
+            <div>
+
+                <span class="modal-kicker">
+                    FINANCEFLOW
+                </span>
+
+                <h3 id="loanModalTitle">
+                    Nuevo préstamo
+                </h3>
+
+            </div>
+
+
+            <button
+                type="button"
+                class="modal-close"
+                id="closeLoanModal"
+                aria-label="Cerrar">
+
+                ×
+
+            </button>
+
+        </div>
+
+
+        <form id="loanForm">
+
+
+            <!-- TIPO -->
+
+            <div class="form-group">
+
+                <label for="loanType">
+                    Tipo
+                </label>
+
+                <select
+                    id="loanType"
+                    required>
+
+                    <option value="to_receive">
+                        Me deben dinero
+                    </option>
+
+                    <option value="to_pay">
+                        Yo debo dinero
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- PERSONA -->
+
+            <div class="form-group">
+
+                <label for="loanPerson">
+                    Persona
+                </label>
+
+                <input
+                    type="text"
+                    id="loanPerson"
+                    placeholder="Ej. Mamá"
+                    maxlength="60"
+                    required>
+
+            </div>
+
+
+            <!-- MONTO -->
+
+            <div class="form-group">
+
+                <label for="loanAmount">
+                    Monto
+                </label>
+
+                <div class="money-input">
+
+                    <span>
+                        S/
+                    </span>
+
+                    <input
+                        type="number"
+                        id="loanAmount"
+                        min="0.01"
+                        step="0.01"
+                        placeholder="100.00"
+                        required>
+
+                </div>
+
+            </div>
+
+
+            <!-- INTERÉS -->
+
+            <div class="form-group">
+
+                <label for="loanInterest">
+                    Interés
+                </label>
+
+                <div class="money-input">
+
+                    <span>
+                        S/
+                    </span>
+
+                    <input
+                        type="number"
+                        id="loanInterest"
+                        min="0"
+                        step="0.01"
+                        value="0"
+                        placeholder="0.00">
+
+                </div>
+
+            </div>
+
+
+            <!-- FECHA -->
+
+            <div class="form-group">
+
+                <label for="loanDueDate">
+                    Fecha de vencimiento
+                </label>
+
+                <input
+                    type="date"
+                    id="loanDueDate"
+                    required>
+
+            </div>
+
+
+            <!-- ERROR -->
+
+            <div
+                class="form-error"
+                id="loanFormError"
+                role="alert"
+                aria-live="polite">
+            </div>
+
+
+            <!-- ACCIONES -->
+
+            <div class="modal-actions">
+
+                <button
+                    type="button"
+                    class="btn-secondary"
+                    id="cancelLoan">
+
+                    Cancelar
+
+                </button>
+
+
+                <button
+                    type="submit"
+                    class="btn-primary">
+
+                    Guardar préstamo
+
+                </button>
+
+            </div>
+
+
+        </form>
+
+    </div>
+
+</div>
+    
+    <script src="js/data.js"></script>
+
+    <script src="js/utils.js"></script>
+
+    <script src="js/modules/accounts.js"></script>
+
+    <script src="js/modules/movements.js"></script>
+
+    <script src="js/modules/goals.js"></script>
+
+    <script src="js/modules/loans.js"></script>
+
+    <script src="js/modules/credit.js"></script>
+
+    <script src="js/modules/calendar.js"></script>
+
+    <script src="js/ui.js"></script>
+
+    <script src="js/dashboard-summary-cards.js"></script>
+
+    <script src="js/dashboard-budget-tracker.js"></script>
+
+    <script src="js/app.js"></script>
+    <script src="js/dashboard-carousels.js"></script>
+
+    <script src="js/dashboard-layout.js"></script>
+    <script src="js/dashboard-scroll.js"></script>
+    <script src="js/theme.js"></script>
+    <script src="js/mobile-nav.js"></script>
+
+    <!-- CUENTAS: Firebase Authentication (correo y contraseña) -->
+    <script type="module" src="js/services/firebase.js"></script>
+    <script src="js/auth.js"></script>
+    
+</body>
+
+</html>         

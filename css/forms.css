@@ -1,0 +1,532 @@
+/*
+==========================================
+FinanceFlow
+Archivo: forms.css
+
+Estilos generales para formularios.
+==========================================
+*/
+
+
+/* ==========================================
+   FORMULARIO
+========================================== */
+
+form {
+
+    width: 100%;
+
+}
+
+
+.form-group {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 7px;
+
+    margin-bottom: 16px;
+
+}
+
+
+.form-row {
+
+    display: grid;
+
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    gap: 16px;
+
+}
+
+
+.form-row .form-group {
+
+    min-width: 0;
+
+}
+
+
+/* ==========================================
+   LABELS
+========================================== */
+
+label {
+
+    display: block;
+
+    color: var(--text-primary);
+
+    font-size: 0.88rem;
+
+    font-weight: 700;
+
+    line-height: 1.4;
+
+}
+
+
+.form-label {
+
+    display: block;
+
+    margin-bottom: 7px;
+
+    color: var(--text-primary);
+
+    font-size: 0.88rem;
+
+    font-weight: 700;
+
+}
+
+
+/* ==========================================
+   INPUTS
+========================================== */
+
+input,
+select,
+textarea {
+
+    width: 100%;
+
+    min-height: 44px;
+
+    padding: 10px 13px;
+
+    border: 1px solid var(--border-color);
+
+    border-radius: var(--radius-md);
+
+    background: var(--surface-color);
+
+    color: var(--text-primary);
+
+    font-size: 0.92rem;
+
+    line-height: 1.4;
+
+    outline: none;
+
+    transition:
+        border-color var(--transition-fast),
+        box-shadow var(--transition-fast),
+        background var(--transition-fast);
+
+}
+
+
+textarea {
+
+    min-height: 100px;
+
+    resize: vertical;
+
+}
+
+
+/* ==========================================
+   PLACEHOLDER
+========================================== */
+
+input::placeholder,
+textarea::placeholder {
+
+    color: var(--text-secondary);
+
+    opacity: 0.7;
+
+}
+
+
+/* ==========================================
+   FOCUS
+========================================== */
+
+input:focus,
+select:focus,
+textarea:focus {
+
+    border-color: var(--primary-color);
+
+    box-shadow:
+        0 0 0 3px var(--primary-light);
+
+}
+
+
+input:hover,
+select:hover,
+textarea:hover {
+
+    border-color: var(--primary-light);
+
+}
+
+
+/* ==========================================
+   SELECT
+========================================== */
+
+select {
+
+    cursor: pointer;
+
+}
+
+
+/* ==========================================
+   CAMPOS DESHABILITADOS
+========================================== */
+
+input:disabled,
+select:disabled,
+textarea:disabled {
+
+    background: var(--background-color);
+
+    color: var(--text-secondary);
+
+    cursor: not-allowed;
+
+    opacity: 0.75;
+
+}
+
+
+/* ==========================================
+   CAMPOS DE SOLO LECTURA
+========================================== */
+
+input[readonly],
+textarea[readonly] {
+
+    background: var(--background-color);
+
+    cursor: default;
+
+}
+
+
+/* ==========================================
+   INPUT DE FECHA
+========================================== */
+
+input[type="date"] {
+
+    cursor: pointer;
+
+}
+
+
+/* ==========================================
+   INPUT NUMÉRICO
+========================================== */
+
+input[type="number"] {
+
+    font-variant-numeric: tabular-nums;
+
+}
+
+
+/* ==========================================
+   CHECKBOX
+========================================== */
+
+input[type="checkbox"] {
+
+    width: 18px;
+
+    min-height: 18px;
+
+    height: 18px;
+
+    padding: 0;
+
+    accent-color: var(--primary-color);
+
+    cursor: pointer;
+
+}
+
+
+/* ==========================================
+   RADIO
+========================================== */
+
+input[type="radio"] {
+
+    width: 18px;
+
+    min-height: 18px;
+
+    height: 18px;
+
+    padding: 0;
+
+    accent-color: var(--primary-color);
+
+    cursor: pointer;
+
+}
+
+
+/* ==========================================
+   GRUPOS DE OPCIONES
+========================================== */
+
+.checkbox-group,
+.radio-group {
+
+    display: flex;
+
+    align-items: center;
+
+    flex-wrap: wrap;
+
+    gap: 14px;
+
+}
+
+
+.checkbox-label,
+.radio-label {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    cursor: pointer;
+
+    font-weight: 600;
+
+}
+
+
+/* ==========================================
+   TEXTO DE AYUDA
+========================================== */
+
+.form-help {
+
+    margin-top: 5px;
+
+    color: var(--text-secondary);
+
+    font-size: 0.78rem;
+
+    line-height: 1.4;
+
+}
+
+
+/* ==========================================
+   ERRORES
+========================================== */
+
+.form-error {
+
+    margin-top: 5px;
+
+    color: var(--danger-color);
+
+    font-size: 0.8rem;
+
+    font-weight: 600;
+
+    line-height: 1.4;
+
+}
+
+
+input.error,
+select.error,
+textarea.error {
+
+    border-color: var(--danger-color);
+
+}
+
+
+input.error:focus,
+select.error:focus,
+textarea.error:focus {
+
+    box-shadow:
+        0 0 0 3px var(--danger-light);
+
+}
+
+
+/* ==========================================
+   CAMPO VÁLIDO
+========================================== */
+
+input.success,
+select.success,
+textarea.success {
+
+    border-color: var(--success-color);
+
+}
+
+
+/* ==========================================
+   INPUT CON PREFIJO / SUFIJO
+========================================== */
+
+.input-wrapper {
+
+    position: relative;
+
+    width: 100%;
+
+}
+
+
+.input-prefix,
+.input-suffix {
+
+    position: absolute;
+
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    color: var(--text-secondary);
+
+    font-size: 0.88rem;
+
+    font-weight: 700;
+
+    pointer-events: none;
+
+}
+
+
+.input-prefix {
+
+    left: 13px;
+
+}
+
+
+.input-suffix {
+
+    right: 13px;
+
+}
+
+
+.input-wrapper .input-prefix + input {
+
+    padding-left: 40px;
+
+}
+
+
+.input-wrapper input:has(+ .input-suffix) {
+
+    padding-right: 40px;
+
+}
+
+
+/* ==========================================
+   ACCIONES DEL FORMULARIO
+========================================== */
+
+.form-actions {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: flex-end;
+
+    gap: 10px;
+
+    margin-top: 20px;
+
+}
+
+
+/* ==========================================
+   SEPARADOR
+========================================== */
+
+.form-divider {
+
+    width: 100%;
+
+    height: 1px;
+
+    margin: 20px 0;
+
+    background: var(--border-color);
+
+}
+
+
+/* ==========================================
+   GRUPO DE BOTONES
+========================================== */
+
+.button-group {
+
+    display: flex;
+
+    align-items: center;
+
+    flex-wrap: wrap;
+
+    gap: 10px;
+
+}
+
+
+/* ==========================================
+   RESPONSIVE BÁSICO DE FORMULARIOS
+========================================== */
+
+@media (max-width: 700px) {
+
+    .form-row {
+
+        grid-template-columns: 1fr;
+
+        gap: 0;
+
+    }
+
+
+    .form-actions {
+
+        flex-direction: column-reverse;
+
+        align-items: stretch;
+
+    }
+
+
+    .form-actions .button {
+
+        width: 100%;
+
+    }
+
+
+    .button-group {
+
+        width: 100%;
+
+    }
+
+}
