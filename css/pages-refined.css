@@ -752,7 +752,7 @@ Crédito, Préstamos, Análisis y Reportes.
 
 #creditView .credit-cards-list {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(min(340px, 100%), 1fr));
     gap: 18px;
 }
 
@@ -806,6 +806,73 @@ Crédito, Préstamos, Análisis y Reportes.
     height: 100%;
     border-radius: 999px;
     background: var(--pg-grad);
+}
+
+
+/* Fechas de cada tarjeta: próxima fecha bajo el día */
+#creditView .credit-dates small {
+    display: block;
+    margin-top: 2px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+/* Acciones de cada tarjeta */
+#creditView .credit-card-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px solid var(--pg-line);
+}
+
+#creditView .credit-card-actions button {
+    min-height: 38px;
+    padding: 0 16px;
+    border: 1px solid rgba(37, 99, 235, 0.18);
+    border-radius: 12px;
+    background: var(--pg-chip);
+    color: var(--pg-chip-text);
+    font: inherit;
+    font-size: 0.82rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease;
+}
+
+#creditView .credit-card-actions button:hover {
+    background: var(--pg-grad);
+    border-color: transparent;
+    color: #ffffff;
+    transform: translateY(-2px);
+}
+
+#creditView .credit-card-actions button.is-danger {
+    background: rgba(220, 38, 38, 0.08);
+    border-color: rgba(220, 38, 38, 0.16);
+    color: var(--pg-bad);
+}
+
+#creditView .credit-card-actions button.is-danger:hover {
+    background: var(--pg-bad);
+    color: #ffffff;
+}
+
+/* Vista previa de fechas dentro del modal */
+.credit-date-preview {
+    margin: 4px 0 0;
+    padding: 12px 14px;
+    border-radius: 14px;
+    background: var(--pg-chip, rgba(37, 99, 235, 0.07));
+    font-size: 0.82rem;
+    line-height: 1.6;
+    color: var(--text-secondary);
+}
+
+.credit-date-preview b {
+    color: var(--text-primary, inherit);
 }
 
 

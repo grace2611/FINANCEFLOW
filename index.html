@@ -1516,6 +1516,16 @@
 
                 </div>
 
+
+                <button
+                    type="button"
+                    class="btn-primary"
+                    id="openCreditCardModal">
+
+                    + Nueva tarjeta
+
+                </button>
+
             </div>
 
 
@@ -3291,6 +3301,216 @@
                         class="btn-primary">
 
                         Guardar evento
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    <!-- ==========================================
+     MODAL · TARJETA DE CRÉDITO
+========================================== -->
+
+    <div
+        class="modal-overlay"
+        id="creditCardModal"
+        aria-hidden="true">
+
+        <div
+            class="modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="creditCardModalTitle">
+
+            <div class="modal-header">
+
+                <div>
+
+                    <span class="modal-kicker">
+                        FinanceFlow
+                    </span>
+
+                    <h3 id="creditCardModalTitle">
+                        Nueva tarjeta
+                    </h3>
+
+                </div>
+
+                <button
+                    type="button"
+                    class="modal-close"
+                    id="closeCreditCardModal"
+                    aria-label="Cerrar">
+
+                    ×
+
+                </button>
+
+            </div>
+
+
+            <form id="creditCardForm" novalidate>
+
+                <div
+                    class="form-error"
+                    id="creditCardFormError"
+                    role="alert"
+                    aria-live="polite">
+                </div>
+
+                <div class="form-group">
+
+                    <label for="creditCardName">
+                        Nombre de la tarjeta
+                    </label>
+
+                    <input
+                        type="text"
+                        id="creditCardName"
+                        placeholder="Ej. Visa BCP"
+                        maxlength="40"
+                        autocomplete="off"
+                        required>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="creditCardLimit">
+                        Límite de crédito
+                    </label>
+
+                    <div class="money-input">
+
+                        <span>S/</span>
+
+                        <input
+                            type="number"
+                            id="creditCardLimit"
+                            min="0.01"
+                            step="0.01"
+                            inputmode="decimal"
+                            placeholder="0.00"
+                            required>
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="creditCardUsed">
+                        Monto utilizado actualmente
+                    </label>
+
+                    <div class="money-input">
+
+                        <span>S/</span>
+
+                        <input
+                            type="number"
+                            id="creditCardUsed"
+                            min="0"
+                            step="0.01"
+                            inputmode="decimal"
+                            value="0">
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="creditCardClosingDay">
+                        Día de facturación (cierre)
+                    </label>
+
+                    <input
+                        type="number"
+                        id="creditCardClosingDay"
+                        min="1"
+                        max="31"
+                        step="1"
+                        inputmode="numeric"
+                        placeholder="Ej. 15"
+                        required>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="creditCardPaymentDay">
+                        Día de pago
+                    </label>
+
+                    <input
+                        type="number"
+                        id="creditCardPaymentDay"
+                        min="1"
+                        max="31"
+                        step="1"
+                        inputmode="numeric"
+                        placeholder="Ej. 5"
+                        required>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="creditCardGoal">
+                        Meta de gasto mensual (opcional)
+                    </label>
+
+                    <div class="money-input">
+
+                        <span>S/</span>
+
+                        <input
+                            type="number"
+                            id="creditCardGoal"
+                            min="0"
+                            step="0.01"
+                            inputmode="decimal"
+                            placeholder="0.00">
+
+                    </div>
+
+                </div>
+
+
+                <p
+                    class="credit-date-preview"
+                    id="creditCardPreview">
+                </p>
+
+
+                <div class="modal-actions">
+
+                    <button
+                        type="button"
+                        class="btn-secondary"
+                        id="cancelCreditCard">
+
+                        Cancelar
+
+                    </button>
+
+                    <button
+                        type="submit"
+                        class="btn-primary"
+                        id="creditCardSubmit">
+
+                        Guardar tarjeta
 
                     </button>
 

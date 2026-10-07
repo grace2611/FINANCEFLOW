@@ -56,106 +56,19 @@ function getCalendarEvents() {
 
 
     /*
-    TARJETA DE CRÉDITO
+    TARJETAS DE CRÉDITO
+    Próxima fecha de facturación y de pago de cada tarjeta activa.
     */
 
-    const creditCard =
-        typeof getPrimaryCreditCard === "function"
-            ? getPrimaryCreditCard()
-            : null;
+    if (typeof getCreditCardUpcomingEvents === "function") {
 
-    if (
-        creditCard &&
-        creditCard.paymentDay
-    ) {
+        getCreditCardUpcomingEvents().forEach(event => {
 
-        const today =
-            new Date();
-
-
-        let paymentYear =
-            today.getFullYear();
-
-
-        let paymentMonth =
-            today.getMonth();
-
-
-        const paymentDay =
-            Number(
-                creditCard.paymentDay
-            );
-
-
-        /*
-        Si el día de pago de este mes
-        ya pasó, mostramos el siguiente mes.
-        */
-
-        if (
-            today.getDate() >
-            paymentDay
-        ) {
-
-            paymentMonth++;
-
-            if (paymentMonth > 11) {
-
-                paymentMonth = 0;
-
-                paymentYear++;
-
-            }
-
-        }
-
-
-        const month =
-            String(
-                paymentMonth + 1
-            ).padStart(
-                2,
-                "0"
-            );
-
-
-        const day =
-            String(
-                paymentDay
-            ).padStart(
-                2,
-                "0"
-            );
-
-
-        events.push({
-
-            id:
-                `credit-payment-${paymentYear}-${month}`,
-
-            date:
-                `${paymentYear}-${month}-${day}`,
-
-            title:
-                `Pago ${creditCard.name}`,
-
-            description:
-                "Fecha programada de pago.",
-
-            amount:
-                Number(
-                    creditCard.used || 0
-                ),
-
-            type:
-                "expense",
-
-            icon:
-                "💳"
+            events.push(event);
 
         });
 
-    }    
+    }
 
     /*
     EVENTOS CREADOS POR EL USUARIO ("Nuevo evento")
@@ -966,8 +879,8 @@ function calendarEventKind(event) {
 
 /*
 Eventos de un mes concreto. Además de los eventos guardados,
-el día de pago de la tarjeta de crédito se repite cada mes
-(desde hoy en adelante) para que el calendario no se vea vacío.
+la facturación y el pago de cada tarjeta de crédito se repiten
+cada mes (desde hoy en adelante).
 */
 
 function getCalendarMonthEvents(year, month) {
@@ -979,51 +892,20 @@ function getCalendarMonthEvents(year, month) {
             event => String(event.date).startsWith(prefix)
         );
 
-    const creditCard =
-        typeof getPrimaryCreditCard === "function"
-            ? getPrimaryCreditCard()
-            : null;
+    if (typeof getCreditCardEventsForMonth === "function") {
 
-    if (creditCard && creditCard.paymentDay) {
+        getCreditCardEventsForMonth(year, month).forEach(event => {
 
-        const lastDay =
-            new Date(year, month + 1, 0).getDate();
+            const exists =
+                events.some(item => item.id === event.id);
 
-        const day =
-            Math.min(
-                Math.max(1, Number(creditCard.paymentDay)),
-                lastDay
-            );
+            if (!exists && isCalendarEventUpcoming(event.date)) {
 
-        const date = calendarISO(year, month, day);
+                events.push(event);
 
-        const id =
-            `credit-payment-${year}-${calendarPad(month + 1)}`;
+            }
 
-        const exists =
-            events.some(event => event.id === id);
-
-        if (!exists && isCalendarEventUpcoming(date)) {
-
-            events.push({
-
-                id,
-
-                date,
-
-                title: `Pago ${creditCard.name}`,
-
-                description: "Fecha programada de pago.",
-
-                amount: Number(creditCard.used || 0),
-
-                type: "expense",
-
-                icon: "💳"
-
-            });
-
-        }
+        });
 
     }
 
