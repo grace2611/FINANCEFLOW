@@ -1322,20 +1322,11 @@ Crédito, Préstamos, Análisis y Reportes.
         border-color 0.2s ease;
 }
 
-#accountsGrid .account-card-actions button::before {
-    font-size: 0.95rem;
-    line-height: 1;
-}
-
 /* Editar · azul suave */
 #accountsGrid .account-card-actions button[data-action="edit-account"] {
     background: var(--pg-chip);
     border-color: rgba(37, 99, 235, 0.18);
     color: var(--pg-chip-text);
-}
-
-#accountsGrid .account-card-actions button[data-action="edit-account"]::before {
-    content: "✎";
 }
 
 #accountsGrid .account-card-actions button[data-action="edit-account"]:hover {
@@ -1353,10 +1344,6 @@ Crédito, Préstamos, Análisis y Reportes.
     color: var(--pg-bad);
 }
 
-#accountsGrid .account-card-actions button[data-action="deactivate-account"]::before {
-    content: "⏻";
-}
-
 #accountsGrid .account-card-actions button[data-action="deactivate-account"]:hover {
     background: var(--pg-bad);
     border-color: transparent;
@@ -1370,10 +1357,6 @@ Crédito, Préstamos, Análisis y Reportes.
     background: rgba(22, 163, 74, 0.09);
     border-color: rgba(22, 163, 74, 0.18);
     color: var(--pg-good);
-}
-
-#accountsGrid .account-card-actions button[data-action="reactivate-account"]::before {
-    content: "⏻";
 }
 
 #accountsGrid .account-card-actions button[data-action="reactivate-account"]:hover {

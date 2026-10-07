@@ -240,9 +240,9 @@ function createAccount(data) {
 /**
  * Edita los datos básicos de una cuenta.
  *
- * El saldo NO se modifica aquí.
- * Los movimientos y transferencias
- * son responsables de modificarlo.
+ * El saldo se puede corregir manualmente
+ * (data.balance). Los movimientos y
+ * transferencias lo siguen ajustando.
  */
 function updateAccount(id, data) {
 
@@ -310,6 +310,31 @@ function updateAccount(id, data) {
 
         account.description =
             data.description.trim();
+
+    }
+
+
+    if (
+        data.balance !== undefined &&
+        data.balance !== ""
+    ) {
+
+        const newBalance =
+            Number(data.balance);
+
+        if (
+            Number.isNaN(newBalance) ||
+            newBalance < 0
+        ) {
+
+            throw new Error(
+                "El saldo no es válido."
+            );
+
+        }
+
+        account.balance =
+            newBalance;
 
     }
 

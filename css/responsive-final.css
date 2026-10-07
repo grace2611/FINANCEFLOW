@@ -80,9 +80,56 @@ canvas {
        desplazable en horizontal */
 @media (max-width: 600px) {
 
+    /* El sidebar moderno trae relleno de escritorio (22px arriba / 14px
+       a los lados) que en la barra inferior dejaba solo ~30px de alto
+       y recortaba los iconos. Aquí se ajusta para que se vean completos. */
     .sidebar {
-        padding-bottom: calc(8px + env(safe-area-inset-bottom, 0px));
+        box-sizing: border-box;
+        padding: 6px 8px calc(6px + env(safe-area-inset-bottom, 0px));
         height: calc(68px + env(safe-area-inset-bottom, 0px));
+        align-items: center;
+        overflow: hidden;
+    }
+
+    .sidebar-menu {
+        align-self: stretch;
+        display: flex;
+        align-items: center;
+    }
+
+    .sidebar-menu ul {
+        height: 100%;
+        align-items: center;
+    }
+
+    .sidebar-menu li {
+        min-height: 52px;
+        height: 52px;
+        overflow: visible;
+    }
+
+    .sidebar .sidebar-menu li .nav-icon {
+        width: 38px;
+        min-width: 38px;
+        height: 38px;
+        flex: 0 0 auto;
+    }
+
+    .sidebar .sidebar-menu li .nav-icon svg {
+        width: 22px;
+        height: 22px;
+        flex: 0 0 auto;
+    }
+
+    .sidebar-footer {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .theme-compact {
+        width: 42px;
+        height: 42px;
     }
 
     /* Antes Crédito, Préstamos, Análisis y Reportes estaban ocultos */

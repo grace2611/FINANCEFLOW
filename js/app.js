@@ -3383,12 +3383,12 @@ function openEditAccountModal(accountId) {
             account.balance;
 
         /*
-        El saldo no se modifica
+        El saldo se puede editar
         desde la edición.
         */
 
         balanceInput.disabled =
-            true;
+            false;
 
     }
 
@@ -3628,6 +3628,11 @@ function handleAccountSubmit(event) {
                 type:
                     document.querySelector(
                         "#accountType"
+                    ).value,
+
+                balance:
+                    document.querySelector(
+                        "#accountBalance"
                     ).value,
 
                 description:
