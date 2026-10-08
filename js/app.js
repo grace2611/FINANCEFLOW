@@ -4100,24 +4100,42 @@ function clearFinancialData() {
     }
 
 
-    localStorage.removeItem(
-        FINANCEFLOW_STORAGE_KEY
-    );
+    /*
+    Los datos también se borran en la nube; si no, volverían
+    a bajar desde otro dispositivo.
+    */
+
+    const cloudCleared =
+        window.FinanceFlowSync &&
+        typeof window.FinanceFlowSync.clearCloud === "function"
+            ? window.FinanceFlowSync.clearCloud()
+            : Promise.resolve();
 
 
-    showNotification(
-        "Los datos financieros fueron eliminados.",
-        "success"
-    );
-
-
-    setTimeout(
+    cloudCleared.then(
         () => {
 
-            window.location.reload();
+            localStorage.removeItem(
+                FINANCEFLOW_STORAGE_KEY
+            );
 
-        },
-        700
+
+            showNotification(
+                "Los datos financieros fueron eliminados.",
+                "success"
+            );
+
+
+            setTimeout(
+                () => {
+
+                    window.location.reload();
+
+                },
+                700
+            );
+
+        }
     );
 
 }

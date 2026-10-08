@@ -101,7 +101,72 @@ function toPublicUser(user) {
 
 }
 
+/* ==========================================
+   NUBE (Cloud Firestore) · datos de cada cuenta
+   Se carga solo cuando hace falta, para que un
+   problema con Firestore nunca bloquee el acceso.
+   Documento: users/{uid}
+========================================== */
+
+let firestoreModule = null;
+
+function loadFirestore() {
+
+    if (!firestoreModule) {
+
+        firestoreModule =
+            import(
+                "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js"
+            ).then(module => ({
+                module,
+                db: module.getFirestore(app)
+            }));
+
+        /* Si falló la descarga, permite reintentar luego */
+
+        firestoreModule.catch(() => {
+
+            firestoreModule = null;
+
+        });
+
+    }
+
+    return firestoreModule;
+
+}
+
+const cloud = {
+
+    async get(uid) {
+
+        const { module, db } = await loadFirestore();
+
+        const snapshot =
+            await module.getDoc(
+                module.doc(db, "users", uid)
+            );
+
+        return snapshot.exists() ? snapshot.data() : null;
+
+    },
+
+    async set(uid, payload) {
+
+        const { module, db } = await loadFirestore();
+
+        await module.setDoc(
+            module.doc(db, "users", uid),
+            payload
+        );
+
+    }
+
+};
+
 window.FinanceFlowFirebase = {
+
+    cloud,
 
     onAuthChange(callback) {
 

@@ -761,9 +761,117 @@ Depende de js/services/firebase.js (window.FinanceFlowFirebase).
 
         }
 
-        applyProfile(user);
+        syncThenUnlock(user);
 
-        unlockApp();
+    }
+
+    /*
+    Antes de mostrar la app se compara con la copia de la nube:
+    si otro dispositivo guardó datos más recientes se descargan
+    (y la página se recarga con ellos). Si la nube no responde,
+    se entra igual con los datos de este dispositivo.
+    */
+
+    let syncing = false;
+
+    let synced = false;
+
+    function syncThenUnlock(user) {
+
+        const proceed = () => {
+
+            applyProfile(user);
+
+            unlockApp();
+
+            notifySyncProblem();
+
+        };
+
+        const sync = window.FinanceFlowSync;
+
+        if (synced || !sync || !backend || !backend.cloud) {
+
+            proceed();
+
+            return;
+
+        }
+
+        if (syncing) {
+
+            return;
+
+        }
+
+        syncing = true;
+
+        showLoading("Sincronizando tus datos…");
+
+        sync.syncOnLogin()
+
+            .then(result => {
+
+                syncing = false;
+
+                synced = true;
+
+                if (result === "reload") {
+
+                    reloading = true;
+
+                    showLoading("Actualizando tus datos…");
+
+                    window.location.reload();
+
+                    return;
+
+                }
+
+                proceed();
+
+            })
+
+            .catch(() => {
+
+                syncing = false;
+
+                synced = true;
+
+                proceed();
+
+            });
+
+    }
+
+    function notifySyncProblem() {
+
+        const sync = window.FinanceFlowSync;
+
+        if (
+            !sync ||
+            sync.status !== "error" ||
+            storageGet("financeflow_sync_notice", sessionStorage)
+        ) {
+
+            return;
+
+        }
+
+        storageSet("financeflow_sync_notice", "1", sessionStorage);
+
+        setTimeout(() => {
+
+            if (typeof showNotification === "function") {
+
+                showNotification(
+                    "No se pudo sincronizar con la nube. Tus datos se guardan solo en este dispositivo por ahora.",
+                    "error"
+                );
+
+            }
+
+        }, 900);
 
     }
 
@@ -978,6 +1086,17 @@ Depende de js/services/firebase.js (window.FinanceFlowFirebase).
         busy = true;
 
         try {
+
+            /* Sube los últimos cambios antes de salir */
+
+            if (
+                window.FinanceFlowSync &&
+                typeof window.FinanceFlowSync.flush === "function"
+            ) {
+
+                await window.FinanceFlowSync.flush();
+
+            }
 
             if (backend) {
 

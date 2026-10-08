@@ -95,6 +95,18 @@ function loadFinanceFlowData() {
 
 function saveFinanceFlowData() {
 
+    /* Se están aplicando datos de la nube: los de memoria ya
+       son viejos, no deben pisar lo que llegó */
+
+    if (
+        window.FinanceFlowSync &&
+        window.FinanceFlowSync.applying
+    ) {
+
+        return;
+
+    }
+
     try {
 
         localStorage.setItem(
@@ -108,6 +120,17 @@ function saveFinanceFlowData() {
             "Error al guardar los datos de FinanceFlow:",
             error
         );
+
+    }
+
+    /* Copia en la nube (js/services/cloud-sync.js) */
+
+    if (
+        window.FinanceFlowSync &&
+        typeof window.FinanceFlowSync.schedulePush === "function"
+    ) {
+
+        window.FinanceFlowSync.schedulePush();
 
     }
 

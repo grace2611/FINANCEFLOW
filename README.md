@@ -10,7 +10,17 @@ El acceso es solo con **nombre, correo y contraseña** (sin Google ni otros prov
 3. En **Authentication → Settings → Authorized domains** debe estar `localhost` (viene por defecto) y, cuando publiques la app, tu dominio.
 
 Archivos: `js/services/firebase.js` (conexión), `js/auth.js` (pantalla de acceso, sesión y menú del perfil) y `css/auth.css`.
-Los datos de cada cuenta se guardan en el navegador con la clave `financeflow_user_data_<uid>`.
+Los datos de cada cuenta se guardan en el navegador con la clave `financeflow_user_data_<uid>` y se sincronizan entre dispositivos con Cloud Firestore (ver abajo).
+
+## Sincronización entre dispositivos (Cloud Firestore)
+
+Para que tus datos del celular aparezcan en la laptop (y al revés) hay que activar Firestore **una sola vez**:
+
+1. En la consola de Firebase (proyecto `financeflow-de3fc`) abre **Build → Firestore Database → Crear base de datos** (modo producción, la región que prefieras).
+2. Abre la pestaña **Reglas**, pega el contenido de `firestore.rules` y pulsa **Publicar**.
+3. Abre la app en el dispositivo que ya tiene tus datos (el celular) e inicia sesión: sube tu información a la nube. Luego inicia sesión en los demás dispositivos.
+
+Archivos: `js/services/cloud-sync.js` (lógica) y `js/services/firebase.js` (conexión). Cada guardado se sube a `users/{uid}`; al iniciar sesión y al volver a la pestaña se descarga lo más reciente. Antes de reemplazar datos locales se guarda un respaldo en el navegador (`financeflow_backup_<uid>`).
 
 ## Adaptación a celular / tablet y rendimiento
 

@@ -3250,6 +3250,74 @@
 
                 <div class="form-group">
 
+                    <label for="eventRepeat">
+                        Repetir
+                    </label>
+
+                    <select id="eventRepeat">
+
+                        <option value="none">
+                            No se repite
+                        </option>
+
+                        <option value="monthly">
+                            🔁 Todos los meses
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div
+                    class="form-group"
+                    id="eventRepeatEndGroup"
+                    hidden>
+
+                    <label for="eventRepeatEnd">
+                        ¿Hasta cuándo?
+                    </label>
+
+                    <select id="eventRepeatEnd">
+
+                        <option value="never">
+                            Sin fecha de fin
+                        </option>
+
+                        <option value="date">
+                            Hasta una fecha
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div
+                    class="form-group"
+                    id="eventRepeatUntilGroup"
+                    hidden>
+
+                    <label for="eventRepeatUntil">
+                        Repetir hasta
+                    </label>
+
+                    <input
+                        type="date"
+                        id="eventRepeatUntil">
+
+                </div>
+
+
+                <p
+                    class="credit-date-preview"
+                    id="eventRepeatHint"
+                    hidden>
+                </p>
+
+
+                <div class="form-group">
+
                     <label for="eventAmount">
                         Monto
                     </label>
@@ -4329,6 +4397,8 @@
 </div>
     
     <script src="js/data.js"></script>
+
+    <script src="js/services/cloud-sync.js"></script>
 
     <script src="js/utils.js"></script>
 

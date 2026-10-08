@@ -862,7 +862,7 @@ Crédito, Préstamos, Análisis y Reportes.
 
 /* Vista previa de fechas dentro del modal */
 .credit-date-preview {
-    margin: 4px 0 0;
+    margin: 4px 0 14px;
     padding: 12px 14px;
     border-radius: 14px;
     background: var(--pg-chip, rgba(37, 99, 235, 0.07));
@@ -1437,4 +1437,10 @@ Crédito, Préstamos, Análisis y Reportes.
 #accountsGrid .account-card-actions button:focus-visible {
     outline: 3px solid rgba(37, 99, 235, 0.35);
     outline-offset: 2px;
+}
+
+
+/* Opciones de repetición del modal de eventos */
+#eventModal [hidden] {
+    display: none !important;
 }

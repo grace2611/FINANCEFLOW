@@ -84,30 +84,24 @@ function getCalendarEvents() {
 
             }
 
-            events.push({
+            /* Pago / recordatorio que se repite cada mes:
+               se muestra su próxima fecha */
 
-                id: event.id,
+            if (isRecurringEvent(event)) {
 
-                date: event.date,
+                const next = nextRecurringDate(event);
 
-                title: event.title,
+                if (next) {
 
-                description:
-                    event.description ||
-                    "Evento programado.",
+                    events.push(buildEventOccurrence(event, next));
 
-                amount:
-                    Number(event.amount || 0),
+                }
 
-                type:
-                    event.type || "reminder",
+                return;
 
-                icon:
-                    event.icon || "📌",
+            }
 
-                custom: true
-
-            });
+            events.push(buildEventOccurrence(event, event.date));
 
         });
 
@@ -148,6 +142,192 @@ function isCalendarEventUpcoming(
     );
 
 }
+
+/* ==========================================
+   EVENTOS QUE SE REPITEN CADA MES
+========================================== */
+
+/*
+Un evento guardado puede traer:
+- repeat: "monthly"  → se repite el mismo día de cada mes
+- repeatUntil: "AAAA-MM-DD" → último día en que se repite
+  (vacío = sin fecha de fin)
+Si un mes no tiene ese día (ej. 31 en febrero) se usa el último día.
+*/
+
+function isRecurringEvent(event) {
+
+    return Boolean(
+        event &&
+        event.repeat === "monthly" &&
+        event.date
+    );
+
+}
+
+function recurringDateInMonth(event, year, month) {
+
+    const start =
+        new Date(`${event.date}T00:00:00`);
+
+    if (Number.isNaN(start.getTime())) {
+
+        return null;
+
+    }
+
+    const startIndex =
+        start.getFullYear() * 12 + start.getMonth();
+
+    if (year * 12 + month < startIndex) {
+
+        return null;
+
+    }
+
+    const lastDay =
+        new Date(year, month + 1, 0).getDate();
+
+    const day =
+        Math.min(start.getDate(), lastDay);
+
+    const iso =
+        `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+
+    if (iso < event.date) {
+
+        return null;
+
+    }
+
+    if (event.repeatUntil && iso > event.repeatUntil) {
+
+        return null;
+
+    }
+
+    return iso;
+
+}
+
+/*
+Próxima fecha (hoy o después) de un evento mensual.
+*/
+
+function nextRecurringDate(event) {
+
+    const today = new Date();
+
+    today.setHours(0, 0, 0, 0);
+
+    let year = today.getFullYear();
+
+    let month = today.getMonth();
+
+    for (let i = 0; i < 600; i++) {
+
+        const iso = recurringDateInMonth(event, year, month);
+
+        if (iso && new Date(`${iso}T00:00:00`) >= today) {
+
+            return iso;
+
+        }
+
+        if (
+            event.repeatUntil &&
+            `${year}-${String(month + 1).padStart(2, "0")}` >
+                event.repeatUntil.slice(0, 7)
+        ) {
+
+            return null;
+
+        }
+
+        month++;
+
+        if (month > 11) {
+
+            month = 0;
+
+            year++;
+
+        }
+
+    }
+
+    return null;
+
+}
+
+function describeRecurrence(event) {
+
+    if (!isRecurringEvent(event)) {
+
+        return "";
+
+    }
+
+    if (!event.repeatUntil) {
+
+        return "Se repite cada mes";
+
+    }
+
+    const until =
+        new Date(`${event.repeatUntil}T00:00:00`)
+            .toLocaleDateString(
+                "es-PE",
+                { day: "2-digit", month: "short", year: "numeric" }
+            );
+
+    return `Se repite cada mes hasta ${until}`;
+
+}
+
+function buildEventOccurrence(event, date) {
+
+    const recurring = isRecurringEvent(event);
+
+    const base =
+        event.description || "";
+
+    return {
+
+        id: event.id,
+
+        occurrenceKey: `${event.id}@${date}`,
+
+        date,
+
+        title: event.title,
+
+        description:
+            recurring
+                ? (
+                    base
+                        ? `${base} · ${describeRecurrence(event)}`
+                        : describeRecurrence(event)
+                )
+                : (base || "Evento programado."),
+
+        amount:
+            Number(event.amount || 0),
+
+        type:
+            event.type || "reminder",
+
+        icon:
+            event.icon || "📌",
+
+        custom: true,
+
+        recurring
+
+    };
+
+}
+
 
 /* ==========================================
    FORMATEAR FECHA
@@ -533,6 +713,8 @@ function openEventModal(prefillDate) {
 
     }
 
+    updateEventRepeatUI();
+
     modal.hidden = false;
 
     modal.classList.add("is-open");
@@ -542,6 +724,132 @@ function openEventModal(prefillDate) {
     document.body.classList.add("modal-open");
 
     document.querySelector("#eventTitle")?.focus();
+
+}
+
+/*
+Muestra u oculta las opciones de repetición y explica
+en una línea cómo se repetirá el evento.
+*/
+
+function updateEventRepeatUI() {
+
+    const repeat =
+        document.querySelector("#eventRepeat")?.value === "monthly";
+
+    const endMode =
+        document.querySelector("#eventRepeatEnd")?.value || "never";
+
+    const date =
+        document.querySelector("#eventDate")?.value || "";
+
+    const endGroup =
+        document.querySelector("#eventRepeatEndGroup");
+
+    const untilGroup =
+        document.querySelector("#eventRepeatUntilGroup");
+
+    const untilInput =
+        document.querySelector("#eventRepeatUntil");
+
+    const hint =
+        document.querySelector("#eventRepeatHint");
+
+    if (endGroup) {
+
+        endGroup.hidden = !repeat;
+
+    }
+
+    if (untilGroup) {
+
+        untilGroup.hidden = !(repeat && endMode === "date");
+
+    }
+
+    if (untilInput && date) {
+
+        untilInput.min = date;
+
+    }
+
+    if (!hint) {
+
+        return;
+
+    }
+
+    if (!repeat || !date) {
+
+        hint.hidden = true;
+
+        hint.textContent = "";
+
+        return;
+
+    }
+
+    const day = Number(date.slice(8, 10));
+
+    let text =
+        `Se repetirá el día ${day} de cada mes` +
+        (day > 28 ? " (en meses más cortos, el último día)" : "");
+
+    const until =
+        endMode === "date"
+            ? untilInput?.value
+            : "";
+
+    if (until && until >= date) {
+
+        const probe = {
+            date,
+            repeat: "monthly",
+            repeatUntil: until
+        };
+
+        const start = new Date(`${date}T00:00:00`);
+
+        let count = 0;
+
+        for (
+            let i = 0;
+            i < 600;
+            i++
+        ) {
+
+            const iso =
+                recurringDateInMonth(
+                    probe,
+                    start.getFullYear() + Math.floor((start.getMonth() + i) / 12),
+                    (start.getMonth() + i) % 12
+                );
+
+            if (iso) {
+
+                count++;
+
+            } else if (i > 0) {
+
+                break;
+
+            }
+
+        }
+
+        text +=
+            ` hasta el ${new Date(`${until}T00:00:00`).toLocaleDateString("es-PE", { day: "2-digit", month: "short", year: "numeric" })}` +
+            ` (${count} ${count === 1 ? "vez" : "veces"})`;
+
+    } else if (endMode === "never") {
+
+        text += ", sin fecha de fin";
+
+    }
+
+    hint.textContent = text + ".";
+
+    hint.hidden = false;
 
 }
 
@@ -577,6 +885,18 @@ function initializeEventModal() {
         return;
 
     }
+
+    ["#eventRepeat", "#eventRepeatEnd", "#eventRepeatUntil", "#eventDate"]
+        .forEach(selector => {
+
+            const element =
+                document.querySelector(selector);
+
+            element?.addEventListener("change", updateEventRepeatUI);
+
+            element?.addEventListener("input", updateEventRepeatUI);
+
+        });
 
     document
         .querySelector("#closeEventModal")
@@ -625,6 +945,24 @@ function initializeEventModal() {
             document.querySelector("#eventDescription")
                 ?.value.trim() || "";
 
+        const repeat =
+            document.querySelector("#eventRepeat")
+                ?.value === "monthly"
+                ? "monthly"
+                : "none";
+
+        const repeatEnd =
+            document.querySelector("#eventRepeatEnd")
+                ?.value || "never";
+
+        const repeatUntil =
+            repeat === "monthly" && repeatEnd === "date"
+                ? (
+                    document.querySelector("#eventRepeatUntil")
+                        ?.value || ""
+                )
+                : "";
+
         const fail = message => {
 
             if (error) {
@@ -672,6 +1010,31 @@ function initializeEventModal() {
 
         }
 
+        if (repeat === "monthly" && repeatEnd === "date") {
+
+            if (
+                !repeatUntil ||
+                Number.isNaN(
+                    new Date(`${repeatUntil}T00:00:00`).getTime()
+                )
+            ) {
+
+                fail("Elige hasta qué fecha se repite.");
+
+                return;
+
+            }
+
+            if (repeatUntil < date) {
+
+                fail("La fecha final no puede ser anterior a la del evento.");
+
+                return;
+
+            }
+
+        }
+
         const icons = {
             reminder: "📌",
             expense: "💸",
@@ -700,7 +1063,11 @@ function initializeEventModal() {
             description,
 
             icon:
-                icons[type] || "📌"
+                icons[type] || "📌",
+
+            repeat,
+
+            repeatUntil
 
         });
 
@@ -717,7 +1084,9 @@ function initializeEventModal() {
         }
 
         showNotification(
-            "Evento guardado.",
+            repeat === "monthly"
+                ? "Evento guardado. Se repetirá cada mes."
+                : "Evento guardado.",
             "success"
         );
 
@@ -741,7 +1110,17 @@ function initializeEventModal() {
         const id =
             button.dataset.deleteEvent;
 
-        if (!confirm("¿Eliminar este evento?")) {
+        const target =
+            (userData.events || []).find(
+                item => String(item.id) === String(id)
+            );
+
+        const message =
+            isRecurringEvent(target)
+                ? "¿Eliminar este evento recurrente? Se quitará de todos los meses."
+                : "¿Eliminar este evento?";
+
+        if (!confirm(message)) {
 
             return;
 
@@ -782,8 +1161,19 @@ function checkEventNotifications() {
 
     userData.events.forEach(event => {
 
+        const nextDate =
+            isRecurringEvent(event)
+                ? nextRecurringDate(event)
+                : event.date;
+
+        if (!nextDate) {
+
+            return;
+
+        }
+
         const eventDate =
-            new Date(`${event.date}T00:00:00`);
+            new Date(`${nextDate}T00:00:00`);
 
         const days =
             Math.round(
@@ -809,7 +1199,7 @@ function checkEventNotifications() {
             message: event.title,
 
             referenceId:
-                `event_${days === 0 ? "today" : "tomorrow"}_${event.id}`
+                `event_${days === 0 ? "today" : "tomorrow"}_${event.id}_${nextDate}`
 
         });
 
@@ -891,6 +1281,35 @@ function getCalendarMonthEvents(year, month) {
         getCalendarEvents().filter(
             event => String(event.date).startsWith(prefix)
         );
+
+    if (Array.isArray(userData.events)) {
+
+        userData.events.forEach(event => {
+
+            if (!isRecurringEvent(event)) {
+
+                return;
+
+            }
+
+            const date =
+                recurringDateInMonth(event, year, month);
+
+            if (
+                date &&
+                isCalendarEventUpcoming(date) &&
+                !events.some(
+                    item => item.id === event.id && item.date === date
+                )
+            ) {
+
+                events.push(buildEventOccurrence(event, date));
+
+            }
+
+        });
+
+    }
 
     if (typeof getCreditCardEventsForMonth === "function") {
 
@@ -1019,7 +1438,8 @@ function renderFinanceCalendar() {
         const dayEvents =
             inMonth
                 ? (byDate[iso] || [])
-                : getCalendarEvents().filter(event => event.date === iso);
+                : getCalendarMonthEvents(date.getFullYear(), date.getMonth())
+                    .filter(event => event.date === iso);
 
         const classes = ["ffcal-cell"];
 
