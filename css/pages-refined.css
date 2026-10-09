@@ -871,6 +871,14 @@ Crédito, Préstamos, Análisis y Reportes.
     color: var(--text-secondary);
 }
 
+.field-hint {
+    display: block;
+    margin-top: 6px;
+    font-size: 0.74rem;
+    line-height: 1.45;
+    color: var(--text-secondary);
+}
+
 .credit-date-preview b {
     color: var(--text-primary, inherit);
 }

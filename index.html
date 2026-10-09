@@ -3211,7 +3211,28 @@
 
                 <div class="form-group">
 
-                    <label for="eventDate">
+                    <label for="eventDateMode">
+                        ¿Cómo es la fecha?
+                    </label>
+
+                    <select id="eventDateMode">
+
+                        <option value="single">
+                            📅 Un solo día
+                        </option>
+
+                        <option value="range">
+                            ↔️ Desde – hasta (con fecha máxima)
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="eventDate" id="eventDateLabel">
                         Fecha
                     </label>
 
@@ -3219,6 +3240,22 @@
                         type="date"
                         id="eventDate"
                         required>
+
+                </div>
+
+
+                <div
+                    class="form-group"
+                    id="eventEndDateGroup"
+                    hidden>
+
+                    <label for="eventEndDate">
+                        Fecha máxima para pagar (hasta)
+                    </label>
+
+                    <input
+                        type="date"
+                        id="eventEndDate">
 
                 </div>
 
@@ -3516,8 +3553,27 @@
 
                 <div class="form-group">
 
+                    <label for="creditCardPaymentStartDay">
+                        Puedo pagar desde el día
+                    </label>
+
+                    <input
+                        type="number"
+                        id="creditCardPaymentStartDay"
+                        min="1"
+                        max="31"
+                        step="1"
+                        inputmode="numeric"
+                        placeholder="Ej. 20"
+                        required>
+
+                </div>
+
+
+                <div class="form-group">
+
                     <label for="creditCardPaymentDay">
-                        Día de pago
+                        Fecha máxima de pago (hasta el día)
                     </label>
 
                     <input
@@ -3529,6 +3585,10 @@
                         inputmode="numeric"
                         placeholder="Ej. 5"
                         required>
+
+                    <small class="field-hint">
+                        Si pagas desde el 20 hasta el 5, el rango cruza de un mes al siguiente. Si solo tienes un día, pon el mismo número en ambos.
+                    </small>
 
                 </div>
 

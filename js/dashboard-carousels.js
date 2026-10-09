@@ -660,7 +660,11 @@ Este archivo:
                 number: "••••  ••••  ••••  " + digits,
                 holder: String(holderName).toUpperCase(),
                 paymentLabel: "PAGO",
-                paymentValue: card.paymentDay ? "Día " + card.paymentDay : "—",
+                paymentValue: card.paymentDay
+                    ? (typeof describeCreditPaymentRange === "function"
+                        ? describeCreditPaymentRange(card).replace("Del día ", "Días ").replace(" al ", "→")
+                        : "Día " + card.paymentDay)
+                    : "—",
                 available: available,
                 used: used,
                 limit: limit,

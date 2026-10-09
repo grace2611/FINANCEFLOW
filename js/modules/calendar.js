@@ -85,23 +85,24 @@ function getCalendarEvents() {
             }
 
             /* Pago / recordatorio que se repite cada mes:
-               se muestra su próxima fecha */
+               se muestra su próxima fecha (y, si tiene rango,
+               también el ciclo que ya está abierto hoy) */
 
             if (isRecurringEvent(event)) {
 
-                const next = nextRecurringDate(event);
+                currentRecurringStarts(event).forEach(start => {
 
-                if (next) {
+                    expandEventOccurrences(event, start)
+                        .forEach(item => events.push(item));
 
-                    events.push(buildEventOccurrence(event, next));
-
-                }
+                });
 
                 return;
 
             }
 
-            events.push(buildEventOccurrence(event, event.date));
+            expandEventOccurrences(event, event.date)
+                .forEach(item => events.push(item));
 
         });
 
@@ -284,6 +285,187 @@ function describeRecurrence(event) {
     return `Se repite cada mes hasta ${until}`;
 
 }
+
+/* ==========================================
+   EVENTOS CON RANGO (DESDE – HASTA)
+========================================== */
+
+/*
+Un evento puede tener endDate: la fecha máxima para pagar.
+Entre event.date ("puedo pagar desde") y endDate es el rango.
+Si no tiene endDate es un pago de un solo día.
+*/
+
+function calendarAddDays(iso, days) {
+
+    const date = new Date(`${iso}T00:00:00`);
+
+    date.setDate(date.getDate() + days);
+
+    return calendarISO(
+        date.getFullYear(),
+        date.getMonth(),
+        date.getDate()
+    );
+
+}
+
+function eventSpanDays(event) {
+
+    if (!event || !event.endDate || !event.date) {
+
+        return 0;
+
+    }
+
+    const span =
+        Math.round(
+            (
+                new Date(`${event.endDate}T00:00:00`) -
+                new Date(`${event.date}T00:00:00`)
+            ) / (1000 * 60 * 60 * 24)
+        );
+
+    return span > 0 ? span : 0;
+
+}
+
+/*
+Fechas de inicio de un evento mensual que hay que mostrar hoy:
+la próxima y, si tiene rango, la anterior cuyo plazo aún no vence.
+*/
+
+function currentRecurringStarts(event) {
+
+    const starts = [];
+
+    const span = eventSpanDays(event);
+
+    const today = calendarTodayISO();
+
+    if (span > 0) {
+
+        const now = new Date();
+
+        [-1, 0].forEach(offset => {
+
+            const probe =
+                new Date(now.getFullYear(), now.getMonth() + offset, 1);
+
+            const iso =
+                recurringDateInMonth(
+                    event,
+                    probe.getFullYear(),
+                    probe.getMonth()
+                );
+
+            if (
+                iso &&
+                iso < today &&
+                calendarAddDays(iso, span) >= today
+            ) {
+
+                starts.push(iso);
+
+            }
+
+        });
+
+    }
+
+    const next = nextRecurringDate(event);
+
+    if (next) {
+
+        starts.push(next);
+
+    }
+
+    return starts;
+
+}
+
+/*
+Convierte una ocurrencia en uno o dos eventos:
+- sin rango: un solo evento en esa fecha
+- con rango: "Ya puedes pagar" el primer día y
+  "Último día" en la fecha máxima
+*/
+
+function expandEventOccurrences(event, startISO) {
+
+    const first = buildEventOccurrence(event, startISO);
+
+    const span = eventSpanDays(event);
+
+    if (!span) {
+
+        return [first];
+
+    }
+
+    const endISO = calendarAddDays(startISO, span);
+
+    const range =
+        { start: startISO, end: endISO, label: event.title };
+
+    const isPayment = (event.type || "reminder") === "expense";
+
+    const endLabel =
+        formatCalendarDate(endISO);
+
+    const open = {
+
+        ...first,
+
+        occurrenceKey: `${event.id}@${startISO}:open`,
+
+        title:
+            isPayment
+                ? `Ya puedes pagar: ${event.title}`
+                : `Desde hoy: ${event.title}`,
+
+        description:
+            `Fecha máxima: ${endLabel}.` +
+            (event.description ? ` ${event.description}` : ""),
+
+        amount: 0,
+
+        type: "reminder",
+
+        icon: "🟢",
+
+        range
+
+    };
+
+    const deadline = {
+
+        ...first,
+
+        occurrenceKey: `${event.id}@${startISO}:end`,
+
+        date: endISO,
+
+        title:
+            isPayment
+                ? `Último día para pagar: ${event.title}`
+                : `Hasta hoy: ${event.title}`,
+
+        description:
+            `Desde el ${formatCalendarDate(startISO)} hasta el ${endLabel}.` +
+            (event.description ? ` ${event.description}` : ""),
+
+        icon: "⏰",
+
+        range
+
+    };
+
+    return [open, deadline];
+
+}
+
 
 function buildEventOccurrence(event, date) {
 
@@ -713,6 +895,28 @@ function openEventModal(prefillDate) {
 
     }
 
+    const endInput =
+        document.querySelector("#eventEndDate");
+
+    if (endInput) {
+
+        endInput.value = "";
+
+        endInput.min = dateInput?.value || "";
+
+    }
+
+    const modeSelect =
+        document.querySelector("#eventDateMode");
+
+    if (modeSelect) {
+
+        modeSelect.value = "single";
+
+    }
+
+    updateEventRangeUI();
+
     updateEventRepeatUI();
 
     modal.hidden = false;
@@ -724,6 +928,56 @@ function openEventModal(prefillDate) {
     document.body.classList.add("modal-open");
 
     document.querySelector("#eventTitle")?.focus();
+
+}
+
+/*
+Alterna entre "un solo día" y "desde – hasta".
+*/
+
+function updateEventRangeUI() {
+
+    const range =
+        document.querySelector("#eventDateMode")?.value === "range";
+
+    const endGroup =
+        document.querySelector("#eventEndDateGroup");
+
+    const label =
+        document.querySelector("#eventDateLabel");
+
+    const endInput =
+        document.querySelector("#eventEndDate");
+
+    const date =
+        document.querySelector("#eventDate")?.value || "";
+
+    if (endGroup) {
+
+        endGroup.hidden = !range;
+
+    }
+
+    if (label) {
+
+        label.textContent =
+            range
+                ? "Puedo pagar desde"
+                : "Fecha";
+
+    }
+
+    if (endInput) {
+
+        endInput.required = range;
+
+        if (date) {
+
+            endInput.min = date;
+
+        }
+
+    }
 
 }
 
@@ -886,6 +1140,18 @@ function initializeEventModal() {
 
     }
 
+    ["#eventDateMode", "#eventDate", "#eventEndDate"]
+        .forEach(selector => {
+
+            const element =
+                document.querySelector(selector);
+
+            element?.addEventListener("change", updateEventRangeUI);
+
+            element?.addEventListener("input", updateEventRangeUI);
+
+        });
+
     ["#eventRepeat", "#eventRepeatEnd", "#eventRepeatUntil", "#eventDate"]
         .forEach(selector => {
 
@@ -930,6 +1196,18 @@ function initializeEventModal() {
         const date =
             document.querySelector("#eventDate")
                 ?.value || "";
+
+        const isRange =
+            document.querySelector("#eventDateMode")
+                ?.value === "range";
+
+        const endDate =
+            isRange
+                ? (
+                    document.querySelector("#eventEndDate")
+                        ?.value || ""
+                )
+                : "";
 
         const type =
             document.querySelector("#eventType")
@@ -1010,6 +1288,31 @@ function initializeEventModal() {
 
         }
 
+        if (isRange) {
+
+            if (
+                !endDate ||
+                Number.isNaN(
+                    new Date(`${endDate}T00:00:00`).getTime()
+                )
+            ) {
+
+                fail("Elige la fecha máxima del rango.");
+
+                return;
+
+            }
+
+            if (endDate <= date) {
+
+                fail("La fecha máxima debe ser posterior a la fecha de inicio. Si es un solo día, elige \"Un solo día\".");
+
+                return;
+
+            }
+
+        }
+
         if (repeat === "monthly" && repeatEnd === "date") {
 
             if (
@@ -1067,7 +1370,9 @@ function initializeEventModal() {
 
             repeat,
 
-            repeatUntil
+            repeatUntil,
+
+            ...(endDate ? { endDate } : {})
 
         });
 
@@ -1161,45 +1466,76 @@ function checkEventNotifications() {
 
     userData.events.forEach(event => {
 
-        const nextDate =
+        const span = eventSpanDays(event);
+
+        const starts =
             isRecurringEvent(event)
-                ? nextRecurringDate(event)
-                : event.date;
+                ? currentRecurringStarts(event)
+                : [event.date];
 
-        if (!nextDate) {
+        starts.forEach(nextDate => {
 
-            return;
+            if (!nextDate) {
 
-        }
+                return;
 
-        const eventDate =
-            new Date(`${nextDate}T00:00:00`);
+            }
 
-        const days =
-            Math.round(
-                (eventDate - today) /
-                (1000 * 60 * 60 * 24)
+            const notify = (date, title, message, key) => {
+
+                const days =
+                    Math.round(
+                        (new Date(`${date}T00:00:00`) - today) /
+                        (1000 * 60 * 60 * 24)
+                    );
+
+                if (days !== 0 && days !== 1) {
+
+                    return;
+
+                }
+
+                createUniqueNotification({
+
+                    type: "event",
+
+                    title: title(days),
+
+                    message,
+
+                    referenceId:
+                        `${key}_${days === 0 ? "today" : "tomorrow"}_${event.id}_${nextDate}`
+
+                });
+
+            };
+
+            if (span > 0) {
+
+                notify(
+                    nextDate,
+                    days => days === 0 ? "Ya puedes pagar hoy" : "Puedes pagar desde mañana",
+                    event.title,
+                    "event_open"
+                );
+
+                notify(
+                    calendarAddDays(nextDate, span),
+                    days => days === 0 ? "Hoy es el último día para pagar" : "Mañana es el último día para pagar",
+                    event.title,
+                    "event_end"
+                );
+
+                return;
+
+            }
+
+            notify(
+                nextDate,
+                days => days === 0 ? "Evento para hoy" : "Evento para mañana",
+                event.title,
+                "event"
             );
-
-        if (days !== 0 && days !== 1) {
-
-            return;
-
-        }
-
-        createUniqueNotification({
-
-            type: "event",
-
-            title:
-                days === 0
-                    ? "Evento para hoy"
-                    : "Evento para mañana",
-
-            message: event.title,
-
-            referenceId:
-                `event_${days === 0 ? "today" : "tomorrow"}_${event.id}_${nextDate}`
 
         });
 
@@ -1292,20 +1628,46 @@ function getCalendarMonthEvents(year, month) {
 
             }
 
-            const date =
-                recurringDateInMonth(event, year, month);
+            /* El inicio del rango puede caer en el mes anterior */
 
-            if (
-                date &&
-                isCalendarEventUpcoming(date) &&
-                !events.some(
-                    item => item.id === event.id && item.date === date
-                )
-            ) {
+            [-1, 0].forEach(offset => {
 
-                events.push(buildEventOccurrence(event, date));
+                const probe =
+                    new Date(year, month + offset, 1);
 
-            }
+                const start =
+                    recurringDateInMonth(
+                        event,
+                        probe.getFullYear(),
+                        probe.getMonth()
+                    );
+
+                if (!start) {
+
+                    return;
+
+                }
+
+                expandEventOccurrences(event, start).forEach(item => {
+
+                    if (
+                        item.date.startsWith(prefix) &&
+                        isCalendarEventUpcoming(item.date) &&
+                        !events.some(
+                            other =>
+                                other.id === item.id &&
+                                other.date === item.date &&
+                                other.occurrenceKey === item.occurrenceKey
+                        )
+                    ) {
+
+                        events.push(item);
+
+                    }
+
+                });
+
+            });
 
         });
 
@@ -1329,6 +1691,104 @@ function getCalendarMonthEvents(year, month) {
     }
 
     return events;
+
+}
+
+/*
+Franjas "puedes pagar": tarjetas con rango y eventos propios con
+fecha máxima, que tocan el rango de fechas dado.
+*/
+
+function getCalendarRangeWindows(fromISO, toISO) {
+
+    const windows = [];
+
+    const today = calendarTodayISO();
+
+    const keep = window => {
+
+        if (window.end >= fromISO && window.start <= toISO && window.end >= today) {
+
+            windows.push(window);
+
+        }
+
+    };
+
+    if (typeof getCreditPaymentWindows === "function") {
+
+        getCreditPaymentWindows(fromISO, toISO).forEach(keep);
+
+    }
+
+    if (Array.isArray(userData.events)) {
+
+        const from = new Date(`${fromISO}T00:00:00`);
+
+        userData.events.forEach(event => {
+
+            const span = eventSpanDays(event);
+
+            if (!span) {
+
+                return;
+
+            }
+
+            const label =
+                `${event.icon || "📌"} ${event.title}`;
+
+            if (isRecurringEvent(event)) {
+
+                for (let i = -1; i <= 2; i++) {
+
+                    const probe =
+                        new Date(from.getFullYear(), from.getMonth() + i, 1);
+
+                    const start =
+                        recurringDateInMonth(
+                            event,
+                            probe.getFullYear(),
+                            probe.getMonth()
+                        );
+
+                    if (start) {
+
+                        keep({
+                            id: `${event.id}@${start}`,
+                            label,
+                            start,
+                            end: calendarAddDays(start, span),
+                            kind: calendarEventKind(event)
+                        });
+
+                    }
+
+                }
+
+                return;
+
+            }
+
+            keep({
+                id: String(event.id),
+                label,
+                start: event.date,
+                end: event.endDate,
+                kind: calendarEventKind(event)
+            });
+
+        });
+
+    }
+
+    return windows;
+
+}
+
+function describeCalendarWindow(window) {
+
+    return `${window.label}: del ${formatCalendarDate(window.start)} al ${formatCalendarDate(window.end)}`;
 
 }
 
@@ -1418,6 +1878,18 @@ function renderFinanceCalendar() {
 
     const cells = [];
 
+    const gridStart =
+        new Date(state.year, state.month, 1 - offset);
+
+    const gridEnd =
+        new Date(state.year, state.month, 1 - offset + totalCells - 1);
+
+    const rangeWindows =
+        getCalendarRangeWindows(
+            calendarISO(gridStart.getFullYear(), gridStart.getMonth(), gridStart.getDate()),
+            calendarISO(gridEnd.getFullYear(), gridEnd.getMonth(), gridEnd.getDate())
+        );
+
     for (let i = 0; i < totalCells; i++) {
 
         const date =
@@ -1451,6 +1923,24 @@ function renderFinanceCalendar() {
 
         if (dayEvents.length) classes.push("has-events");
 
+        const dayWindows =
+            rangeWindows.filter(
+                window =>
+                    iso >= window.start &&
+                    iso <= window.end &&
+                    iso >= todayISO
+            );
+
+        if (dayWindows.length) {
+
+            classes.push("in-pay-window");
+
+            if (dayWindows.some(window => window.start === iso)) classes.push("pay-window-start");
+
+            if (dayWindows.some(window => window.end === iso)) classes.push("pay-window-end");
+
+        }
+
         const chips =
             dayEvents
                 .slice(0, 2)
@@ -1480,6 +1970,11 @@ function renderFinanceCalendar() {
             (
                 dayEvents.length
                     ? `, ${dayEvents.length} ${dayEvents.length === 1 ? "evento" : "eventos"}`
+                    : ""
+            ) +
+            (
+                dayWindows.length
+                    ? `, dentro de plazo de pago (${dayWindows.map(describeCalendarWindow).join("; ")})`
                     : ""
             );
 
@@ -1587,9 +2082,51 @@ function renderFinanceCalendarDay() {
         getCalendarMonthEvents(date.getFullYear(), dayMonth)
             .filter(event => event.date === state.selected);
 
+    /* Plazos de pago que cubren este día */
+
+    const dayWindows =
+        state.selected >= todayISO
+            ? getCalendarRangeWindows(state.selected, state.selected)
+                .filter(
+                    window =>
+                        state.selected >= window.start &&
+                        state.selected <= window.end
+                )
+            : [];
+
+    const windowsHTML =
+        dayWindows.map(window => {
+
+            const left =
+                Math.round(
+                    (new Date(`${window.end}T00:00:00`) - date) /
+                    (1000 * 60 * 60 * 24)
+                );
+
+            const leftText =
+                left === 0
+                    ? "Hoy es el último día"
+                    : left === 1
+                        ? "Queda 1 día"
+                        : `Quedan ${left} días`;
+
+            return `
+
+                <div class="ffcal-window">
+
+                    <strong>${escapeHTML(window.label)}</strong>
+
+                    <span>Puedes pagar del ${escapeHTML(formatCalendarDate(window.start))} al ${escapeHTML(formatCalendarDate(window.end))} · ${leftText}</span>
+
+                </div>
+
+            `;
+
+        }).join("");
+
     if (!dayEvents.length) {
 
-        list.innerHTML = `
+        list.innerHTML = windowsHTML + `
 
             <div class="ffcal-empty">
 
@@ -1606,6 +2143,7 @@ function renderFinanceCalendarDay() {
     }
 
     list.innerHTML =
+        windowsHTML +
         dayEvents.map(event => {
 
             const kind = calendarEventKind(event);

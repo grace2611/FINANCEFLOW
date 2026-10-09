@@ -239,42 +239,151 @@ function describeCreditDays(date) {
 
 
 /* ==========================================
-   EVENTOS PARA EL CALENDARIO
+   VENTANA DE PAGO (DESDE – HASTA)
 ========================================== */
 
-function buildCreditCardEvent(card, kind, date) {
+/*
+Cada tarjeta tiene:
+- paymentStartDay: primer día del mes en que ya se puede pagar
+- paymentDay:      último día para pagar (fecha máxima)
+Si la ventana cruza de mes (ej. desde el 20 hasta el 5),
+el inicio cae en el mes anterior a la fecha máxima.
+Las tarjetas antiguas sin paymentStartDay se tratan como un solo día.
+*/
 
-    const iso = creditISO(date);
+function hasCreditPaymentWindow(card) {
 
-    const monthKey = iso.slice(0, 7);
+    return (
+        isValidCreditDay(card.paymentStartDay) &&
+        Number(card.paymentStartDay) !== Number(card.paymentDay)
+    );
 
-    if (kind === "payment") {
+}
 
-        return {
 
-            id: `credit-payment-${card.id}-${monthKey}`,
+/*
+Ciclo de pago cuya fecha máxima cae en (year, month).
+*/
 
-            cardId: card.id,
+function getCreditPaymentCycle(card, year, month) {
 
-            date: iso,
+    const end =
+        creditDateInMonth(year, month, card.paymentDay);
 
-            title: `Pago ${card.name}`,
+    if (!hasCreditPaymentWindow(card)) {
 
-            description: "Fecha límite de pago de tu tarjeta.",
-
-            amount: Number(card.used) || 0,
-
-            type: "expense",
-
-            icon: "💳"
-
-        };
+        return { start: end, end, hasWindow: false };
 
     }
 
+    let start =
+        creditDateInMonth(year, month, card.paymentStartDay);
+
+    if (start > end) {
+
+        start =
+            creditDateInMonth(year, month - 1, card.paymentStartDay);
+
+    }
+
+    return { start, end, hasWindow: true };
+
+}
+
+
+/*
+Ciclo vigente: el primero cuya fecha máxima es hoy o posterior.
+*/
+
+function getNextCreditPaymentCycle(card) {
+
+    const today = creditToday();
+
+    for (let i = 0; i < 3; i++) {
+
+        const cycle =
+            getCreditPaymentCycle(
+                card,
+                today.getFullYear(),
+                today.getMonth() + i
+            );
+
+        if (cycle.end >= today) {
+
+            return cycle;
+
+        }
+
+    }
+
+    return getCreditPaymentCycle(
+        card,
+        today.getFullYear(),
+        today.getMonth() + 3
+    );
+
+}
+
+
+function creditDaysFromToday(date) {
+
+    return Math.round(
+        (date - creditToday()) /
+        (1000 * 60 * 60 * 24)
+    );
+
+}
+
+
+/*
+Texto de estado del pago de una tarjeta:
+- aún no abre → "Abre el 20 oct · en 3 días"
+- ya abierto  → "Abierto · máximo 05 nov (en 6 días)"
+*/
+
+function describeCreditPaymentStatus(card) {
+
+    const cycle = getNextCreditPaymentCycle(card);
+
+    const today = creditToday();
+
+    if (!cycle.hasWindow) {
+
+        return `Límite ${formatCreditDate(cycle.end)} · ${describeCreditDays(cycle.end)}`;
+
+    }
+
+    if (cycle.start > today) {
+
+        return `Abre el ${formatCreditDate(cycle.start)} (${describeCreditDays(cycle.start)}) · máximo ${formatCreditDate(cycle.end)}`;
+
+    }
+
+    return `Ya puedes pagar · máximo ${formatCreditDate(cycle.end)} (${describeCreditDays(cycle.end)})`;
+
+}
+
+
+function describeCreditPaymentRange(card) {
+
+    return hasCreditPaymentWindow(card)
+        ? `Del día ${card.paymentStartDay} al ${card.paymentDay}`
+        : `Día ${card.paymentDay}`;
+
+}
+
+
+/* ==========================================
+   EVENTOS PARA EL CALENDARIO
+========================================== */
+
+function buildCreditClosingEvent(card, date) {
+
+    const iso = creditISO(date);
+
     return {
 
-        id: `credit-closing-${card.id}-${monthKey}`,
+        id: `credit-closing-${card.id}-${iso.slice(0, 7)}`,
 
         cardId: card.id,
 
@@ -296,21 +405,128 @@ function buildCreditCardEvent(card, kind, date) {
 
 
 /*
+Eventos de un ciclo de pago:
+- "Ya puedes pagar" el primer día de la ventana (si hay rango)
+- "Último día para pagar" en la fecha máxima, con el monto
+Ambos llevan range { start, end } para pintar la franja en el calendario.
+*/
+
+function buildCreditPaymentEvents(card, cycle) {
+
+    const endISO = creditISO(cycle.end);
+
+    const startISO = creditISO(cycle.start);
+
+    const monthKey = endISO.slice(0, 7);
+
+    const range =
+        cycle.hasWindow
+            ? { start: startISO, end: endISO, label: card.name }
+            : null;
+
+    const today = creditToday();
+
+    const open =
+        cycle.hasWindow &&
+        cycle.start <= today &&
+        cycle.end >= today;
+
+    const events = [];
+
+    if (cycle.hasWindow) {
+
+        events.push({
+
+            id: `credit-payopen-${card.id}-${monthKey}`,
+
+            cardId: card.id,
+
+            date: startISO,
+
+            title: `Ya puedes pagar ${card.name}`,
+
+            description:
+                `Ventana de pago abierta. Fecha máxima: ${formatCreditDate(cycle.end)}.`,
+
+            amount: 0,
+
+            type: "reminder",
+
+            icon: "🟢",
+
+            range
+
+        });
+
+    }
+
+    events.push({
+
+        id: `credit-payment-${card.id}-${monthKey}`,
+
+        cardId: card.id,
+
+        date: endISO,
+
+        title: `Pago ${card.name}`,
+
+        description:
+            cycle.hasWindow
+                ? (
+                    open
+                        ? `Último día para pagar (ya puedes pagar desde el ${formatCreditDate(cycle.start)}).`
+                        : `Último día para pagar (puedes pagar desde el ${formatCreditDate(cycle.start)}).`
+                )
+                : "Fecha límite de pago de tu tarjeta.",
+
+        amount: Number(card.used) || 0,
+
+        type: "expense",
+
+        icon: "💳",
+
+        range
+
+    });
+
+    return events;
+
+}
+
+
+/*
 Eventos de todas las tarjetas activas dentro de un mes.
+Se revisan los ciclos que terminan este mes y el siguiente,
+porque el inicio de la ventana puede caer en el mes anterior.
 */
 
 function getCreditCardEventsForMonth(year, month) {
 
+    const prefix =
+        `${year}-${creditPad(month + 1)}-`;
+
     const events = [];
+
+    const add = event => {
+
+        if (
+            event.date.startsWith(prefix) &&
+            !events.some(item => item.id === event.id)
+        ) {
+
+            events.push(event);
+
+        }
+
+    };
 
     getActiveCreditCards().forEach(card => {
 
         if (isValidCreditDay(card.closingDay)) {
 
-            events.push(
-                buildCreditCardEvent(
+            add(
+                buildCreditClosingEvent(
                     card,
-                    "closing",
                     creditDateInMonth(year, month, card.closingDay)
                 )
             );
@@ -319,19 +535,82 @@ function getCreditCardEventsForMonth(year, month) {
 
         if (isValidCreditDay(card.paymentDay)) {
 
-            events.push(
-                buildCreditCardEvent(
+            [0, 1].forEach(offset => {
+
+                buildCreditPaymentEvents(
                     card,
-                    "payment",
-                    creditDateInMonth(year, month, card.paymentDay)
-                )
-            );
+                    getCreditPaymentCycle(card, year, month + offset)
+                ).forEach(add);
+
+            });
 
         }
 
     });
 
     return events;
+
+}
+
+
+/*
+Franjas "puedes pagar" de todas las tarjetas activas que tocan
+el rango de fechas dado (YYYY-MM-DD).
+*/
+
+function getCreditPaymentWindows(fromISO, toISO) {
+
+    const from = new Date(`${fromISO}T00:00:00`);
+
+    const windows = [];
+
+    getActiveCreditCards().forEach(card => {
+
+        if (
+            !isValidCreditDay(card.paymentDay) ||
+            !hasCreditPaymentWindow(card)
+        ) {
+
+            return;
+
+        }
+
+        for (let i = -1; i <= 2; i++) {
+
+            const cycle =
+                getCreditPaymentCycle(
+                    card,
+                    from.getFullYear(),
+                    from.getMonth() + i
+                );
+
+            const start = creditISO(cycle.start);
+
+            const end = creditISO(cycle.end);
+
+            if (end >= fromISO && start <= toISO) {
+
+                windows.push({
+
+                    id: `credit-window-${card.id}-${end.slice(0, 7)}`,
+
+                    label: `💳 ${card.name}`,
+
+                    start,
+
+                    end,
+
+                    kind: "expense"
+
+                });
+
+            }
+
+        }
+
+    });
+
+    return windows;
 
 }
 
@@ -349,9 +628,8 @@ function getCreditCardUpcomingEvents() {
         if (isValidCreditDay(card.closingDay)) {
 
             events.push(
-                buildCreditCardEvent(
+                buildCreditClosingEvent(
                     card,
-                    "closing",
                     getNextCreditDate(card.closingDay)
                 )
             );
@@ -360,13 +638,10 @@ function getCreditCardUpcomingEvents() {
 
         if (isValidCreditDay(card.paymentDay)) {
 
-            events.push(
-                buildCreditCardEvent(
-                    card,
-                    "payment",
-                    getNextCreditDate(card.paymentDay)
-                )
-            );
+            buildCreditPaymentEvents(
+                card,
+                getNextCreditPaymentCycle(card)
+            ).forEach(event => events.push(event));
 
         }
 
@@ -456,10 +731,18 @@ function readCreditCardData(data, currentId) {
 
     }
 
+    if (!isValidCreditDay(data.paymentStartDay)) {
+
+        throw new Error(
+            "Indica desde qué día puedes pagar (entre 1 y 31)."
+        );
+
+    }
+
     if (!isValidCreditDay(data.paymentDay)) {
 
         throw new Error(
-            "El día de pago debe estar entre 1 y 31."
+            "La fecha máxima de pago debe estar entre 1 y 31."
         );
 
     }
@@ -490,6 +773,8 @@ function readCreditCardData(data, currentId) {
         used,
 
         closingDay: Number(data.closingDay),
+
+        paymentStartDay: Number(data.paymentStartDay),
 
         paymentDay: Number(data.paymentDay),
 
@@ -583,6 +868,30 @@ function checkCreditDateNotifications() {
                 (new Date(`${event.date}T00:00:00`) - creditToday()) /
                 (1000 * 60 * 60 * 24)
             );
+
+        if (event.id.startsWith("credit-payopen-")) {
+
+            if (days === 0) {
+
+                createUniqueNotification({
+
+                    type: "credit",
+
+                    title: "Ya puedes pagar tu tarjeta",
+
+                    message:
+                        `${event.title}. ${event.description}`,
+
+                    referenceId:
+                        `credit_open_${cardId}_${event.date}`
+
+                });
+
+            }
+
+            return;
+
+        }
 
         if (event.id.startsWith("credit-payment-")) {
 
@@ -723,9 +1032,6 @@ function buildCreditCardHTML(card) {
     const nextClosing =
         getNextCreditDate(card.closingDay);
 
-    const nextPayment =
-        getNextCreditDate(card.paymentDay);
-
     const goalHTML =
         Number(card.monthlyGoal) > 0
             ? `<div>
@@ -805,9 +1111,9 @@ function buildCreditCardHTML(card) {
 
                     <div>
                         <span>Pago</span>
-                        <strong>Día ${escapeHTML(card.paymentDay)}</strong>
+                        <strong>${escapeHTML(describeCreditPaymentRange(card))}</strong>
                         <small>
-                            ${formatCreditDate(nextPayment)} · ${describeCreditDays(nextPayment)}
+                            ${escapeHTML(describeCreditPaymentStatus(card))}
                         </small>
                     </div>
 
@@ -869,6 +1175,9 @@ function updateCreditDatePreview() {
     const closing =
         document.querySelector("#creditCardClosingDay")?.value;
 
+    const paymentStart =
+        document.querySelector("#creditCardPaymentStartDay")?.value;
+
     const payment =
         document.querySelector("#creditCardPaymentDay")?.value;
 
@@ -886,10 +1195,17 @@ function updateCreditDatePreview() {
 
     if (isValidCreditDay(payment)) {
 
-        const date = getNextCreditDate(payment);
+        const draft = {
+            paymentDay: Number(payment),
+            paymentStartDay: isValidCreditDay(paymentStart) ? Number(paymentStart) : null
+        };
+
+        const cycle = getNextCreditPaymentCycle(draft);
 
         parts.push(
-            `Próximo pago: <b>${formatCreditDate(date)}</b> (${describeCreditDays(date)})`
+            cycle.hasWindow
+                ? `Podrás pagar del <b>${formatCreditDate(cycle.start)}</b> al <b>${formatCreditDate(cycle.end)}</b> · no te pases del <b>${formatCreditDate(cycle.end)}</b>`
+                : `Próximo pago: <b>${formatCreditDate(cycle.end)}</b> (${describeCreditDays(cycle.end)})`
         );
 
     }
@@ -942,6 +1258,10 @@ function openCreditCardModal(cardId) {
         field("#creditCardLimit").value = card.limit;
         field("#creditCardUsed").value = card.used;
         field("#creditCardClosingDay").value = card.closingDay;
+        field("#creditCardPaymentStartDay").value =
+            isValidCreditDay(card.paymentStartDay)
+                ? card.paymentStartDay
+                : "";
         field("#creditCardPaymentDay").value = card.paymentDay;
         field("#creditCardGoal").value = card.monthlyGoal || "";
 
@@ -1039,7 +1359,7 @@ function initializeCreditCards() {
 
     });
 
-    ["#creditCardClosingDay", "#creditCardPaymentDay"].forEach(selector => {
+    ["#creditCardClosingDay", "#creditCardPaymentStartDay", "#creditCardPaymentDay"].forEach(selector => {
 
         document
             .querySelector(selector)
@@ -1133,6 +1453,8 @@ function initializeCreditCards() {
             used: value("#creditCardUsed"),
 
             closingDay: value("#creditCardClosingDay"),
+
+            paymentStartDay: value("#creditCardPaymentStartDay"),
 
             paymentDay: value("#creditCardPaymentDay"),
 
