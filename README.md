@@ -28,3 +28,12 @@ Archivos: `js/services/cloud-sync.js` (lógica) y `js/services/firebase.js` (con
 - `js/mobile-nav.js`: centra la sección activa en la barra inferior.
 - `js/dashboard-scroll.js`: ya no mide el layout en tablet/celular.
 - La fuente de Google carga sin bloquear el primer pintado.
+
+## PWA (instalable en Android)
+
+- `manifest.json`: nombre, iconos, colores y modo `standalone`. Usa rutas relativas (`./`), así funciona en GitHub Pages dentro de `/nombre-del-repositorio/`.
+- `sw.js`: service worker. Solo guarda archivos estáticos (HTML, CSS, JS, iconos, SDK de Firebase con versión fija y la fuente). Las solicitudes de Firebase Authentication y Firestore **no se interceptan ni se guardan**.
+- `js/pwa.js`: registra el service worker (solo en https o localhost).
+- `assets/icons/`: iconos 192, 512, maskable 512 y apple-touch.
+- Para publicar una actualización y forzar renovar la caché, cambia `CACHE_VERSION` en `sw.js` (v1 → v2).
+- Sin Internet solo se muestra la estructura de la app: el inicio de sesión y la sincronización siguen necesitando conexión.

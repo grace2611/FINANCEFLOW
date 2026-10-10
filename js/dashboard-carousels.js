@@ -547,20 +547,8 @@ Este archivo:
                 })
                 : [];
 
-            if (creditCards.length) {
-
-                return creditCards.map(function (card) {
-
-                    return Object.assign({ __ffcSource: "credit" }, card);
-
-                });
-
-            }
-
-            // Aún no tienes tarjetas de crédito registradas (userData.creditCards
-            // sigue vacío porque la app todavía no tiene un flujo para agregarlas).
-            // Mientras tanto, se muestran tus cuentas reales (Yape, bancos,
-            // efectivo, etc.) para que el carrusel y el gráfico no queden vacíos.
+            // Se muestran TODAS: primero tus cuentas (Yape, bancos, efectivo...)
+            // y después tus tarjetas de crédito.
             const accounts = Array.isArray(userData.accounts)
                 ? userData.accounts.filter(function (account) {
                     return account && account.active !== false;
@@ -571,7 +559,11 @@ Este archivo:
 
                 return Object.assign({ __ffcSource: "account" }, account);
 
-            });
+            }).concat(creditCards.map(function (card) {
+
+                return Object.assign({ __ffcSource: "credit" }, card);
+
+            }));
 
         }
 

@@ -767,7 +767,7 @@ function buildTimelineItem(event) {
    PRÓXIMOS EVENTOS DEL DASHBOARD
 ========================================== */
 
-const DASHBOARD_EVENTS_LIMIT = 3;
+const DASHBOARD_EVENTS_LIMIT = 30;
 
 function renderUpcomingEvents() {
 

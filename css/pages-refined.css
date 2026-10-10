@@ -550,6 +550,15 @@ Crédito, Préstamos, Análisis y Reportes.
     color: var(--text-primary);
 }
 
+#goalsView .goal-manage-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid var(--pg-line);
+}
+
 #goalsView .goal-add-money {
     align-self: flex-start;
 }
@@ -856,6 +865,39 @@ Crédito, Préstamos, Análisis y Reportes.
 }
 
 #creditView .credit-card-actions button.is-danger:hover {
+    background: var(--pg-bad);
+    color: #ffffff;
+}
+
+/* Botones Editar / Eliminar de cada meta */
+#goalsView .goal-manage-actions button {
+    min-height: 38px;
+    padding: 0 16px;
+    border: 1px solid rgba(37, 99, 235, 0.18);
+    border-radius: 12px;
+    background: var(--pg-chip);
+    color: var(--pg-chip-text);
+    font: inherit;
+    font-size: 0.82rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease;
+}
+
+#goalsView .goal-manage-actions button:hover {
+    background: var(--pg-grad);
+    border-color: transparent;
+    color: #ffffff;
+    transform: translateY(-2px);
+}
+
+#goalsView .goal-manage-actions button.is-danger {
+    background: rgba(220, 38, 38, 0.08);
+    border-color: rgba(220, 38, 38, 0.16);
+    color: var(--pg-bad);
+}
+
+#goalsView .goal-manage-actions button.is-danger:hover {
     background: var(--pg-bad);
     color: #ffffff;
 }

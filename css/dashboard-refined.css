@@ -1765,3 +1765,114 @@ html:has(#dashboardView.active)::-webkit-scrollbar,
 }
 
 
+
+
+
+/* =========================================================
+   SCROLL EN "ÚLTIMOS MOVIMIENTOS" Y "PRÓXIMOS EVENTOS"
+   Las tarjetas conservan su tamaño: la lista se desplaza
+   por dentro en lugar de recortar elementos.
+========================================================= */
+
+#dashboardView .dashboard-cell-movements,
+#dashboardView .dashboard-cell-events {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+
+#dashboardView .dashboard-cell-movements > .card-body,
+#dashboardView .dashboard-cell-events > .card-body {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-height: 0;
+}
+
+#dashboardView #recentMovements,
+#dashboardView #upcomingEvents {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding-right: 6px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(100, 116, 139, 0.45) transparent;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Tope de altura para cuando la tarjeta crece con su contenido (tablet / celular) */
+#dashboardView #recentMovements {
+    max-height: 17rem;
+}
+
+#dashboardView #upcomingEvents {
+    max-height: 15rem;
+}
+
+#dashboardView #recentMovements::-webkit-scrollbar,
+#dashboardView #upcomingEvents::-webkit-scrollbar {
+    width: 6px;
+}
+
+#dashboardView #recentMovements::-webkit-scrollbar-thumb,
+#dashboardView #upcomingEvents::-webkit-scrollbar-thumb {
+    border-radius: 999px;
+    background: rgba(100, 116, 139, 0.45);
+}
+
+/* El pie (Ver historial / Ver calendario) queda fijo debajo del scroll */
+#dashboardView .dashboard-cell-movements .recent-movements-footer,
+#dashboardView .dashboard-cell-events .events-footer {
+    flex: 0 0 auto;
+}
+
+/* Ya no se ocultan filas: todas se alcanzan con el scroll */
+@media (min-width: 1201px) and (min-height: 640px) {
+
+    #dashboardView .dashboard-cell-movements .movement-item:nth-child(n+5) {
+        display: flex;
+    }
+
+    #dashboardView .dashboard-cell-movements .movement-item:nth-child(4) {
+        border-bottom: 1px solid var(--dr-divider);
+    }
+
+    #dashboardView .dashboard-cell-movements .movement-item:last-child {
+        border-bottom: none;
+    }
+}
+
+
+/* =========================================================
+   SIN SCROLL NI EFECTOS DE SCROLL EN EL DASHBOARD
+   - sin snap tipo diapositivas
+   - encabezado siempre completo (no se compacta)
+   - escritorio: la página no se desplaza
+========================================================= */
+
+html:has(#dashboardView.active),
+#dashboardView.active > .dashboard-summary-grid {
+    scroll-snap-type: none !important;
+    scroll-padding-top: 0 !important;
+    scroll-behavior: auto;
+}
+
+#dashboardView .dashboard-hero,
+#dashboardView .dashboard-hero * {
+    scroll-snap-align: none !important;
+}
+
+/* El encabezado no cambia nunca de tamaño */
+#dashboardView .dashboard-hero {
+    --hp: 0 !important;
+    transition: none;
+}
+
+@media (min-width: 1201px) and (min-height: 640px) {
+
+    #dashboardView.active > .dashboard-summary-grid {
+        overflow-y: hidden;
+        padding-top: 6px;
+    }
+}

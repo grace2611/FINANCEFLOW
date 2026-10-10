@@ -377,7 +377,7 @@ function renderRecentMovements() {
 
 
     const movements =
-        getSortedMovements().slice(0, 5);
+        getSortedMovements().slice(0, 30);
 
 
     if (!movements.length) {

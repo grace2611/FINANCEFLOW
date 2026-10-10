@@ -9,6 +9,8 @@ Gestiona las metas financieras.
 
 let selectedGoalId = null;
 
+let editingGoalId = null;
+
 /**
  * Devuelve todas las metas.
  */
@@ -402,6 +404,28 @@ function renderGoalsList() {
 
                             </div>
 
+                            <div class="goal-manage-actions">
+
+                                <button
+                                    type="button"
+                                    class="account-action"
+                                    data-goal-edit="${escapeHTML(goal.id)}">
+
+                                    Editar
+
+                                </button>
+
+                                <button
+                                    type="button"
+                                    class="account-action is-danger"
+                                    data-goal-delete="${escapeHTML(goal.id)}">
+
+                                    Eliminar
+
+                                </button>
+
+                            </div>
+
                             ${
                                 completed
                                 ? `
@@ -470,7 +494,7 @@ function initializeGoalButtons() {
 
 }
 
-function openGoalModal() {
+function openGoalModal(goalId) {
 
     const modal =
         document.querySelector(
@@ -485,6 +509,57 @@ function openGoalModal() {
         );
 
         return;
+
+    }
+
+    /* goalId solo es un id real al editar; al crear llega un evento */
+
+    const goal =
+        (typeof goalId === "string" || typeof goalId === "number")
+            ? getGoalById(goalId)
+            : null;
+
+    editingGoalId =
+        goal ? goal.id : null;
+
+    document.querySelector("#goalForm")?.reset();
+
+    const setText = (selector, text) => {
+
+        const element = document.querySelector(selector);
+
+        if (element) {
+
+            element.textContent = text;
+
+        }
+
+    };
+
+    setText("#goalFormError", "");
+
+    setText("#goalModalTitle", goal ? "Editar meta" : "Nueva meta");
+
+    setText(
+        "#goalModal button[type='submit']",
+        goal ? "Guardar cambios" : "Crear meta"
+    );
+
+    setText(
+        "label[for='goalInitialSaved']",
+        goal ? "Ahorrado hasta ahora" : "Ahorro inicial"
+    );
+
+    if (goal) {
+
+        document.querySelector("#goalName").value = goal.name || "";
+
+        document.querySelector("#goalTargetInput").value = goal.target;
+
+        document.querySelector("#goalInitialSaved").value = goal.saved;
+
+        document.querySelector("#goalDescription").value =
+            goal.description || "";
 
     }
 
@@ -534,6 +609,8 @@ function closeGoalModal() {
 
     }
 
+
+    editingGoalId = null;
 
     closeModalSafely(modal);
 
@@ -716,6 +793,149 @@ function createGoal(goalData) {
 
 }
 
+/**
+ * Edita una meta existente.
+ */
+function updateGoal(id, data) {
+
+    const goal = getGoalById(id);
+
+    if (!goal) {
+
+        throw new Error("La meta no existe.");
+
+    }
+
+    const name = String(data.name || "").trim();
+
+    const target = Number(data.target);
+
+    const saved = Number(data.saved);
+
+    if (!name) {
+
+        throw new Error("Ingresa un nombre para la meta.");
+
+    }
+
+    if (!Number.isFinite(target) || target <= 0) {
+
+        throw new Error("El objetivo debe ser mayor a S/ 0.");
+
+    }
+
+    if (!Number.isFinite(saved) || saved < 0) {
+
+        throw new Error("El ahorro no puede ser negativo.");
+
+    }
+
+    if (saved > target) {
+
+        throw new Error("Lo ahorrado no puede superar el objetivo.");
+
+    }
+
+    goal.name = name;
+
+    goal.target = target;
+
+    goal.saved = saved;
+
+    goal.description = String(data.description || "").trim();
+
+    saveFinanceFlowData();
+
+    return goal;
+
+}
+
+
+/**
+ * Elimina una meta.
+ */
+function deleteGoal(id) {
+
+    userData.goals =
+        userData.goals.filter(
+            goal => String(goal.id) !== String(id)
+        );
+
+    saveFinanceFlowData();
+
+}
+
+
+/**
+ * Refresca todo lo que muestra metas
+ * (página Metas, dashboard y carrusel).
+ */
+function refreshGoalDependentUI() {
+
+    if (typeof refreshFinanceFlowUI === "function") {
+
+        refreshFinanceFlowUI();
+
+        return;
+
+    }
+
+    renderGoalsPage();
+
+    renderDashboard();
+
+}
+
+
+/* Botones Editar / Eliminar de cada meta */
+
+document.addEventListener("click", event => {
+
+    const editButton =
+        event.target.closest("[data-goal-edit]");
+
+    if (editButton) {
+
+        openGoalModal(editButton.dataset.goalEdit);
+
+        return;
+
+    }
+
+    const deleteButton =
+        event.target.closest("[data-goal-delete]");
+
+    if (!deleteButton) {
+
+        return;
+
+    }
+
+    const goal =
+        getGoalById(deleteButton.dataset.goalDelete);
+
+    if (
+        !goal ||
+        !confirm(`¿Eliminar la meta "${goal.name}"? Se perderá lo ahorrado registrado en ella.`)
+    ) {
+
+        return;
+
+    }
+
+    deleteGoal(goal.id);
+
+    refreshGoalDependentUI();
+
+    if (typeof showNotification === "function") {
+
+        showNotification("Meta eliminada.", "success");
+
+    }
+
+});
+
+
 function handleGoalSubmit(event) {
 
     event.preventDefault();
@@ -801,6 +1021,28 @@ console.log(
 
         error.textContent =
             "El ahorro inicial no puede superar el objetivo.";
+
+        return;
+
+    }
+
+    if (editingGoalId !== null) {
+
+        try {
+
+            updateGoal(editingGoalId, { name, target, saved, description });
+
+        } catch (err) {
+
+            error.textContent = err.message;
+
+            return;
+
+        }
+
+        closeGoalModal();
+
+        refreshGoalDependentUI();
 
         return;
 
